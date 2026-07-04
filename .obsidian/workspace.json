@@ -1,0 +1,225 @@
+{
+  "main": {
+    "id": "100cd52f097c0d45",
+    "type": "split",
+    "children": [
+      {
+        "id": "3c2ae68798e62fa0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ba16e69663b06a42",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "深度分析_特朗普就任以来非农注水模式_2026-07-04.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "深度分析_特朗普就任以来非农注水模式_2026-07-04"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "bc38e1f3af58d7a1",
+    "type": "split",
+    "children": [
+      {
+        "id": "98012c3d82e8090e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "33b6c5903b8cc725",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "895698c991fa3c58",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "66144120bd0dbad7",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "041242b9a5c8958b",
+    "type": "split",
+    "children": [
+      {
+        "id": "41d1c0b5227f269c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3e051332fff85be7",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "特朗普就任以来月度经济数据详解.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "特朗普就任以来月度经济数据详解 的反向链接列表"
+            }
+          },
+          {
+            "id": "dd9855bf0f61140c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "特朗普就任以来月度经济数据详解.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "特朗普就任以来月度经济数据详解 的出链列表"
+            }
+          },
+          {
+            "id": "2a5a0716e5e6f515",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "d8485472d42e0bda",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "3d3fd63b4a5920be",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "特朗普就任以来月度经济数据详解.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "特朗普就任以来月度经济数据详解 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "ba16e69663b06a42",
+  "lastOpenFiles": [
+    "季度复盘_2026Q2_2026-07-04.md",
+    "00_知识图谱索引.md",
+    "NFP博弈论分析_特朗普任期.md",
+    "README.md.tmp.5476.0d59f66f84ac",
+    "00_知识图谱索引.md.tmp.5476.7571dbbb7605",
+    "00_知识图谱索引.md.tmp.5476.fb7427032321",
+    "季度复盘_2026Q2_2026-07-04.md.tmp.5476.fb6c0fe540ff",
+    "模拟投资组合_方法论实战验证_2026-07-04.md",
+    "模拟投资组合_方法论实战验证_2026-07-04.md.tmp.5476.400d306e26b9",
+    "提醒系统_2026下半年关键事件.md",
+    "提醒系统_2026下半年关键事件.md.tmp.5476.28ae5e40bec6",
+    "README.md.tmp.5476.d6636733f32b",
+    "00_知识图谱索引.md.tmp.5476.c84402c32582",
+    "00_知识图谱索引.md.tmp.5476.544aeba5a0c1",
+    "操作手册_日常实战整合版_2026-07-04.md",
+    "操作手册_日常实战整合版_2026-07-04.md.tmp.5476.5b2a0c5afab4",
+    "事件追踪笔记体系_2026-07-04.md",
+    "案例库_非农分析实战记录.md",
+    "6月非农数据后与CLAUDE  深谈.md",
+    "深度对话_6月非农后深谈方法论_2026-07-04.md",
+    "2026年5月美国经济数据汇总.md",
+    "README.md",
+    "推演_2026下半年数据博弈节奏_2026-07-04.md",
+    "2026年7月非农数据跟踪_占位.md",
+    "月度跟踪_非农分析模板.md",
+    "深度分析_特朗普就任以来非农注水模式_2026-07-04.md",
+    "方法论_非农注水识别手册.md",
+    "速查_非农注水识别.md",
+    "5月非农注水与多方共识_2026-07-04.md",
+    "特朗普就任以来月度经济数据详解.md",
+    "特朗普就任以来美国经济数据全览.md",
+    "2026年6月美国经济数据汇总.md",
+    "2020-2026美国月度经济数据全览.md",
+    "nfp_cpi_analysis_full_record_2026-07.md",
+    "创建链接.md",
+    "欢迎.md"
+  ]
+}

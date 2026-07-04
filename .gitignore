@@ -1,0 +1,30 @@
+# Obsidian
+.obsidian/workspace
+.obsidian/cache
+.obsidian/themes
+.obsidian/plugins
+.trash/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary
+*.tmp
+*.swp
+*.bak
+*~
+
+# Editor
+.vscode/
+.idea/
+
+# Large files
+*.zip
+*.rar
+*.7z
+*.pdf
+
+# Logs
+*.log
