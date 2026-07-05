@@ -1,24 +1,24 @@
 {
   "main": {
-    "id": "100cd52f097c0d45",
+    "id": "a930ed10487a6b12",
     "type": "split",
     "children": [
       {
-        "id": "3c2ae68798e62fa0",
+        "id": "a743ae872077981a",
         "type": "tabs",
         "children": [
           {
-            "id": "ba16e69663b06a42",
+            "id": "7a05489cec97cb4b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "深度分析_特朗普就任以来非农注水模式_2026-07-04.md",
+                "file": "AI项目控制台/financial-alert-system/任务进度.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "深度分析_特朗普就任以来非农注水模式_2026-07-04"
+              "title": "任务进度"
             }
           }
         ]
@@ -27,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "bc38e1f3af58d7a1",
+    "id": "eb3433f4c6172c5f",
     "type": "split",
     "children": [
       {
-        "id": "98012c3d82e8090e",
+        "id": "998e103b2f6c3840",
         "type": "tabs",
         "children": [
           {
-            "id": "33b6c5903b8cc725",
+            "id": "52bd2df436432781",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,7 +48,7 @@
             }
           },
           {
-            "id": "895698c991fa3c58",
+            "id": "3a37d40dc77c4f33",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -65,7 +65,7 @@
             }
           },
           {
-            "id": "66144120bd0dbad7",
+            "id": "e46bfea6240df0ff",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -81,20 +81,19 @@
     "width": 300
   },
   "right": {
-    "id": "041242b9a5c8958b",
+    "id": "0e8c7e581f551bb3",
     "type": "split",
     "children": [
       {
-        "id": "41d1c0b5227f269c",
+        "id": "2b47b63167732020",
         "type": "tabs",
         "children": [
           {
-            "id": "3e051332fff85be7",
+            "id": "50755c3488bf2d65",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "特朗普就任以来月度经济数据详解.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,25 +103,24 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "特朗普就任以来月度经济数据详解 的反向链接列表"
+              "title": "反向链接"
             }
           },
           {
-            "id": "dd9855bf0f61140c",
+            "id": "47535e235beefb65",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "特朗普就任以来月度经济数据详解.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "特朗普就任以来月度经济数据详解 的出链列表"
+              "title": "出链"
             }
           },
           {
-            "id": "2a5a0716e5e6f515",
+            "id": "762458fb6c383bd7",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -137,7 +135,7 @@
             }
           },
           {
-            "id": "d8485472d42e0bda",
+            "id": "f61f13b74795794e",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -151,18 +149,18 @@
             }
           },
           {
-            "id": "3d3fd63b4a5920be",
+            "id": "5a709fab057ba991",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "特朗普就任以来月度经济数据详解.md",
+                "file": "未命名.canvas",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "特朗普就任以来月度经济数据详解 的大纲"
+              "title": "未命名 的大纲"
             }
           }
         ]
@@ -183,43 +181,44 @@
       "bases:新建数据库": false
     }
   },
-  "active": "ba16e69663b06a42",
+  "active": "7a05489cec97cb4b",
   "lastOpenFiles": [
-    "季度复盘_2026Q2_2026-07-04.md",
-    "00_知识图谱索引.md",
-    "NFP博弈论分析_特朗普任期.md",
-    "README.md.tmp.5476.0d59f66f84ac",
-    "00_知识图谱索引.md.tmp.5476.7571dbbb7605",
-    "00_知识图谱索引.md.tmp.5476.fb7427032321",
-    "季度复盘_2026Q2_2026-07-04.md.tmp.5476.fb6c0fe540ff",
-    "模拟投资组合_方法论实战验证_2026-07-04.md",
-    "模拟投资组合_方法论实战验证_2026-07-04.md.tmp.5476.400d306e26b9",
-    "提醒系统_2026下半年关键事件.md",
-    "提醒系统_2026下半年关键事件.md.tmp.5476.28ae5e40bec6",
-    "README.md.tmp.5476.d6636733f32b",
-    "00_知识图谱索引.md.tmp.5476.c84402c32582",
-    "00_知识图谱索引.md.tmp.5476.544aeba5a0c1",
-    "操作手册_日常实战整合版_2026-07-04.md",
-    "操作手册_日常实战整合版_2026-07-04.md.tmp.5476.5b2a0c5afab4",
-    "事件追踪笔记体系_2026-07-04.md",
-    "案例库_非农分析实战记录.md",
-    "6月非农数据后与CLAUDE  深谈.md",
-    "深度对话_6月非农后深谈方法论_2026-07-04.md",
-    "2026年5月美国经济数据汇总.md",
-    "README.md",
-    "推演_2026下半年数据博弈节奏_2026-07-04.md",
-    "2026年7月非农数据跟踪_占位.md",
-    "月度跟踪_非农分析模板.md",
-    "深度分析_特朗普就任以来非农注水模式_2026-07-04.md",
-    "方法论_非农注水识别手册.md",
-    "速查_非农注水识别.md",
-    "5月非农注水与多方共识_2026-07-04.md",
-    "特朗普就任以来月度经济数据详解.md",
-    "特朗普就任以来美国经济数据全览.md",
-    "2026年6月美国经济数据汇总.md",
-    "2020-2026美国月度经济数据全览.md",
-    "nfp_cpi_analysis_full_record_2026-07.md",
-    "创建链接.md",
-    "欢迎.md"
+    "AI项目控制台/financial-alert-system/第三层验证指标_2026-07-05.md",
+    "AI项目控制台/financial-alert-system/美元美债黄金BTC二级传导_2026-07-05.md",
+    "AI项目控制台/financial-alert-system/核心Target输出排序_2026-07-05.md",
+    "AI项目控制台/00_项目总索引.md",
+    "AI项目控制台/minimal-login-demo/任务进度.md",
+    "90_系统配置/欢迎.md",
+    "90_系统配置/创建链接.md",
+    "90_系统配置/Obsidian_Git_插件配置指南.md",
+    "90_系统配置",
+    "06_对话记录/nfp_cpi_analysis_full_record_2026-07.md",
+    "06_对话记录/6月非农数据后与CLAUDE 深谈.md",
+    "06_对话记录",
+    "05_投资复盘/模拟投资组合_方法论实战验证_2026-07-04.md",
+    "05_投资复盘/季度复盘_2026Q2_2026-07-04.md",
+    "05_投资复盘",
+    "04_推演跟踪/提醒系统_2026下半年关键事件.md",
+    "04_推演跟踪/推演_2026下半年数据博弈节奏_2026-07-04.md",
+    "04_推演跟踪/2026年7月非农数据跟踪_占位.md",
+    "04_推演跟踪",
+    "03_分析案例/深度分析_特朗普就任以来非农注水模式_2026-07-04.md",
+    "03_分析案例/NFP博弈论分析_特朗普任期.md",
+    "03_分析案例/NFP博弈论分析_特朗普任期 (1).md",
+    "03_分析案例/5月非农注水与多方共识_2026-07-04.md",
+    "03_分析案例/4月非农数据分析全记录.md",
+    "03_分析案例",
+    "02_数据/特朗普就任以来美国经济数据全览.md",
+    "02_数据/特朗普就任以来月度经济数据详解.md",
+    "02_数据/2026年6月美国经济数据汇总.md",
+    "02_数据/2026年5月美国经济数据汇总.md",
+    "02_数据/2020-2026美国月度经济数据全览.md",
+    "02_数据",
+    "01_方法论/速查_非农注水识别.md",
+    "01_方法论",
+    "AI项目控制台/minimal-login-demo",
+    "AI项目控制台/financial-alert-system",
+    "AI项目控制台",
+    "未命名.canvas"
   ]
 }
