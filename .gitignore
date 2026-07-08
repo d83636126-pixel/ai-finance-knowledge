@@ -1,6 +1,5 @@
 # Obsidian
 .obsidian/workspace
-.obsidian/workspace.json
 .obsidian/cache
 .obsidian/themes
 .obsidian/plugins
@@ -29,6 +28,3 @@ desktop.ini
 
 # Logs
 *.log
-
-# Local data (not synced)
-02_数据/

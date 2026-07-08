@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AI项目控制台/financial-alert-system/任务进度.md",
+                "file": "02_数据/数据工具/BLS非农官方数据抓取工具_2026-07-06.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "任务进度"
+              "title": "BLS非农官方数据抓取工具_2026-07-06"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 380.5
   },
   "right": {
     "id": "0e8c7e581f551bb3",
@@ -178,47 +178,48 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "obsidian-translator:Translate": false
     }
   },
   "active": "7a05489cec97cb4b",
   "lastOpenFiles": [
-    "4月非农数据分析全记录.md",
-    "AI项目控制台/financial-alert-system/第三层验证指标_2026-07-05.md",
-    "AI项目控制台/financial-alert-system/美元美债黄金BTC二级传导_2026-07-05.md",
-    "AI项目控制台/financial-alert-system/核心Target输出排序_2026-07-05.md",
-    "AI项目控制台/00_项目总索引.md",
-    "AI项目控制台/minimal-login-demo/任务进度.md",
-    "90_系统配置/欢迎.md",
-    "90_系统配置/创建链接.md",
-    "90_系统配置/Obsidian_Git_插件配置指南.md",
-    "90_系统配置",
-    "06_对话记录/nfp_cpi_analysis_full_record_2026-07.md",
-    "06_对话记录/6月非农数据后与CLAUDE 深谈.md",
-    "06_对话记录",
-    "05_投资复盘/模拟投资组合_方法论实战验证_2026-07-04.md",
-    "05_投资复盘/季度复盘_2026Q2_2026-07-04.md",
-    "05_投资复盘",
-    "04_推演跟踪/提醒系统_2026下半年关键事件.md",
-    "04_推演跟踪/推演_2026下半年数据博弈节奏_2026-07-04.md",
-    "04_推演跟踪/2026年7月非农数据跟踪_占位.md",
-    "04_推演跟踪",
-    "03_分析案例/深度分析_特朗普就任以来非农注水模式_2026-07-04.md",
-    "03_分析案例/NFP博弈论分析_特朗普任期.md",
-    "03_分析案例/NFP博弈论分析_特朗普任期 (1).md",
-    "03_分析案例/5月非农注水与多方共识_2026-07-04.md",
-    "03_分析案例/4月非农数据分析全记录.md",
-    "03_分析案例",
-    "02_数据/特朗普就任以来美国经济数据全览.md",
-    "02_数据/特朗普就任以来月度经济数据详解.md",
-    "02_数据/2026年6月美国经济数据汇总.md",
-    "02_数据/2026年5月美国经济数据汇总.md",
-    "02_数据/2020-2026美国月度经济数据全览.md",
-    "02_数据",
-    "01_方法论",
-    "AI项目控制台/minimal-login-demo",
-    "AI项目控制台/financial-alert-system",
-    "AI项目控制台",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_03072025_中文翻译.md",
+    "金融分析系统_AI协作实战指南.md",
+    "AI协作记忆系统/需求拆分.md",
+    "AI协作记忆系统/00_AI记忆入口.md",
+    "AI项目控制台/financial-alert-system/图谱节点补齐清单_2026-07-05.md",
+    "AI项目控制台/financial-alert-system/图谱节点扩展_全球非美国节点_2026-07-05.md",
+    "AI项目控制台/financial-alert-system/图谱中心目标讨论_2026-07-05.md",
+    "AI项目控制台/financial-alert-system/README.md",
+    "AI协作记忆系统/需求自审摘要.md",
+    "AI协作记忆系统/AI协作记忆系统_执行规划.md",
+    "06_对话记录/6月非农数据后与CLAUDE_深谈.md",
+    "AI协作记忆系统/会话交接日志.md",
+    "AI协作记忆系统/AI记录规范.md",
+    "AI协作记忆系统/项目_Codex与Claude协作记忆系统.md",
+    "02_数据/数据工具/BLS非农官方数据抓取工具_2026-07-06.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_03072025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_03072025.json",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01102025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01102025.json",
+    "02_数据/数据工具/BLS非农数据/news_releases",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_07032025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_07032025.json",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_06062025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_06062025.json",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_05022025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_05022025.json",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_04042025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_04042025.json",
+    "02_数据/数据工具/BLS非农数据/news_releases_zh/empsit_01102025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases_zh/empsit_02072025.md",
+    "02_数据/数据工具/BLS非农数据/to_tables.py.tmp.17132.1783323396974",
+    "02_数据/数据工具/BLS非农数据/to_tables.py.tmp.17132.1783323383681",
+    "02_数据/数据工具/BLS非农数据/to_tables.py.tmp.17132.1783322434210",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_09052025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases_zh/empsit_09052025.md",
+    "02_数据/数据工具/BLS非农数据/news_releases_zh/empsit_08012025.md",
     "未命名.canvas"
   ]
 }
