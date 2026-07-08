@@ -28,3 +28,6 @@ desktop.ini
 
 # Logs
 *.log
+
+# Local data (not synced)
+02_数据/
