@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "a743ae872077981a",
+        "id": "39bc62dd9887ce6a",
         "type": "tabs",
         "children": [
           {
-            "id": "7a05489cec97cb4b",
+            "id": "2c865c6bfca86bc1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_数据/数据工具/BLS非农数据/news_releases/empsit_12162025_中文翻译.md",
-                "mode": "source",
+                "file": "README.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "empsit_12162025_中文翻译"
+              "title": "README"
             }
           }
         ]
@@ -179,47 +179,52 @@
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
       "bases:新建数据库": false,
-      "obsidian-translator:Translate": false
+      "obsidian-translator:Translate": false,
+      "obsidian-excalidraw-plugin:新建绘图文件": false,
+      "obsidian-git:Open Git source control": false,
+      "obsidian-kanban:Create new board": false,
+      "templater-obsidian:Templater": false
     }
   },
-  "active": "7a05489cec97cb4b",
+  "active": "2c865c6bfca86bc1",
   "lastOpenFiles": [
+    "index.md",
+    "README.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
+    "未命名 1.base",
+    "未命名 1.canvas",
+    "未命名.base",
+    "未命名.canvas",
+    "AI项目控制台/financial-alert-system/图谱第一批传导边_2026-07-05.md",
+    "AI协作记忆系统/00_AI记忆入口.md",
+    "AI项目控制台/minimal-login-demo/会话交接.md",
+    "AI项目控制台/financial-alert-system/图谱节点缺口对照_2026-07-05.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_07032025_中文翻译.md",
+    "Excalidraw/Drawing 2026-07-09 22.58.01.excalidraw.md",
+    "Untitled Kanban.md",
+    "Excalidraw/Drawing 2026-07-09 22.57.44.excalidraw.md",
+    "Excalidraw/Drawing 2026-07-09 22.57.41.excalidraw.md",
+    "2026-07-09.md",
+    "Excalidraw",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_02072025_中文翻译.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01102025_中文翻译.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01092026_中文翻译.md",
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_12162025_中文翻译.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_11202025_中文翻译.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_09052025_中文翻译.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_08012025_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_07032025_中文翻译.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_07022026_中文翻译.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_06062025_中文翻译.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_06052026_中文翻译.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_05082026_中文翻译.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_05022025_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_04042025_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_04032026_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_03072025_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_03062026_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_02112026_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_02072025_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01102025_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01092026_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01102025.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_12162025_中文翻译.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01092026.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_07022026.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_05082026.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_12162025.md",
-    "02_数据/数据工具/BLS非农官方数据抓取工具_2026-07-06.md",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_11202025.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_07022026.json",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_06052026.md",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_06052026.json",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_05082026.json",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_04032026.json",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_03062026.json",
     "02_数据/数据工具/BLS非农数据/news_releases/empsit_02112026.json",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01092026.json",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_12162025.json",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_11202025.json",
-    "02_数据/数据工具/BLS非农数据/news_releases/empsit_09052025.json",
-    "未命名.canvas"
+    "02_数据/数据工具/BLS非农数据/news_releases/empsit_01092026.json"
   ]
 }
