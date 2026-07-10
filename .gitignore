@@ -28,3 +28,7 @@ desktop.ini
 
 # Logs
 *.log
+
+# Local AI session state
+.claudian/
+*.md.tmp.*
