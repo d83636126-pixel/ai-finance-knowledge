@@ -167,3 +167,15 @@ title: AI 金融知识点
 
 *由 Claude Code (Sonnet 4.6) 协助整理*
 *最后更新：2026年7月4日*
+<<<<<<< HEAD
+=======
+---
+
+## AI协作记忆系统
+
+- [AI记忆入口](./AI协作记忆系统/00_AI记忆入口.html) — Codex / Claude 进入 vault 后优先读取
+- [项目_Codex与Claude协作记忆系统](./AI协作记忆系统/项目_Codex与Claude协作记忆系统.html) — 当前 AI 长期记忆项目主文档
+- [AI记录规范](./AI协作记忆系统/AI记录规范.html) — AI 什么时候写入、怎么写入
+- [会话交接日志](./AI协作记忆系统/会话交接日志.html) — 记录每次推进到哪里
+
+>>>>>>> origin/main
