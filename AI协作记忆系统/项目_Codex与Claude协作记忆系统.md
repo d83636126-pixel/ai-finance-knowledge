@@ -2,11 +2,7 @@
 type: 项目主文档
 tags: [项目, AI协作, Codex, Claude, Obsidian, 第二大脑]
 created: 2026-07-05
-<<<<<<< HEAD
 updated: 2026-07-05
-=======
-updated: 2026-07-07
->>>>>>> origin/main
 status: active
 ---
 
@@ -16,11 +12,7 @@ status: active
 
 把 Obsidian vault 建成 AI 与人共同使用的第二大脑。
 
-<<<<<<< HEAD
 核心不是“存文件”，而是实现：
-=======
-核心不是”存文件”，而是实现：
->>>>>>> origin/main
 
 - 长期记忆：把 AI 容易遗忘的上下文沉淀下来。
 - 项目续接：每次重新打开时，AI 能知道之前做了什么、现在到哪一步、接下来该做什么。
@@ -33,19 +25,6 @@ status: active
 
 - GitHub 仓库：<https://github.com/d83636126-pixel/ai-finance-knowledge>
 - 本机 Codex 克隆路径：`C:\Users\Administrator\Documents\Codex\2026-07-04\new-chat-3\ai-finance-knowledge`
-<<<<<<< HEAD
-- 本机 Obsidian vault 路径：`F:\AI 金融知识点`
-- F 盘 vault 当前根目录：`F:\AI 金融知识点`
-
-## 当前状态
-
-截至 2026-07-05：
-
-- GitHub 仓库已克隆到本机。
-- 仓库已复制到 F 盘 Obsidian vault。
-- 已新增 `AI协作记忆系统` 作为 AI 长期记忆与项目管理入口。
-- 需要后续让 Claude / Codex 继续完善具体项目树和执行规范。
-=======
 - 本机 Obsidian vault 路径：`F:\AI 金融知识点`（当前不可访问，实际使用 D 盘 `D:\AI  金融知识点`）
 - 桌面 vault 路径：`C:\Users\Administrator\Desktop\ai-finance-knowledge`
 
@@ -114,7 +93,6 @@ vault 当前有两个内容轨道，都需要纳入结构化树管理：
 - 2026-07-05：先写项目文档，再做实现，不绕过 Obsidian 直接凭聊天上下文开发。
 - 2026-07-05：代码不塞进 vault，vault 只记录项目控制信息和长期记忆。
 - 2026-07-05：启用默认记录规则——涉及项目长期状态的内容默认写回 Obsidian。
->>>>>>> origin/main
 
 ## 设计原则
 
@@ -198,10 +176,7 @@ AI 负责：
 AI协作记忆系统/
 ├─ 00_AI记忆入口.md
 ├─ 项目_Codex与Claude协作记忆系统.md
-<<<<<<< HEAD
-=======
 ├─ 需求拆分.md
->>>>>>> origin/main
 ├─ AI记录规范.md
 ├─ 会话交接日志.md
 └─ 后续项目/
@@ -231,12 +206,6 @@ AI协作记忆系统/
 
 ## 下一步行动
 
-<<<<<<< HEAD
-- 让 Claude 审阅这套结构，看是否需要调整为它更适合读取的格式。
-- 确定每次 AI 会话结束时必须更新哪些字段。
-- 把现有金融知识库项目也纳入这种“项目主文档 + 子记录”的树状结构。
-- 配置 Obsidian Git，同步 F 盘 vault 到 GitHub。
-=======
 ### 本系统自身（AI 协作记忆系统）
 
 - [ ] 用户审阅大需求和小需求拆分，确认方向是否准确。
@@ -252,14 +221,10 @@ AI协作记忆系统/
 
 - [ ] financial-alert-system：浏览器人工验收核心 target 验证仪表交互。
 - [ ] minimal-login-demo：F 盘恢复访问后读取源码，确认登录实现进度。
->>>>>>> origin/main
 
 ## 相关笔记
 
 - [[AI协作记忆系统/00_AI记忆入口]]
-<<<<<<< HEAD
-=======
 - [[AI协作记忆系统/需求拆分]]
->>>>>>> origin/main
 - [[AI协作记忆系统/AI记录规范]]
 - [[AI协作记忆系统/会话交接日志]]
