@@ -20,10 +20,11 @@ status: active
 
 ## 本机位置
 
-| 机器 | 路径 | 说明 |
+| 类型 | 路径 | 说明 |
 |------|------|------|
-| 当前（2026-07-10） | `C:\Users\Administrator\Downloads\financial-alert-system` | 可运行源码 |
-| 历史 | `F:\financial-alert-system` | 早期机器 |
+| **Obsidian 库（唯一）** | `F:\AI 金融知识点` | 进度/规划只改这里 |
+| 代码（当前） | `C:\Users\Administrator\Downloads\financial-alert-system` | 可运行源码 |
+| 代码（历史） | `F:\financial-alert-system` | 早期机器 |
 
 启动：
 
