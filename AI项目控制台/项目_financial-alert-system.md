@@ -2,7 +2,7 @@
 type: 项目主文档
 tags: [项目, financial-alert-system, 金融预警, 传播图, AI协作]
 created: 2026-07-05
-updated: 2026-07-10
+updated: 2026-07-11
 status: active
 ---
 
@@ -34,28 +34,31 @@ start_server.bat
 → http://127.0.0.1:8000/index.html
 ```
 
-## 当前阶段（2026-07-10）
+## 当前阶段（2026-07-11）
 
-**P1 + P2 已闭环。**
+**P1 + P2 + 可选增强已闭环。进入 V2。**
 
 | 层 | 状态 |
 |----|------|
 | 完整模式图谱 | ✅ |
 | 验证器 9/9 | ✅ |
 | 日历/Inbox 事前事后 | ✅ |
-| Case FOMC/NFP/CPI/PPI | ✅ |
-| Alert↔图谱↔Inbox | ✅ |
-| 推送 | ⏸ 延后 |
+| Case / 盲测样本 / 结果存档 | ✅ |
+| 推导仪表板 | ✅ [[推导仪表板_执行方案_2026-07-11]] |
+| 图谱改进 Phase1–4 | ✅ [[图谱深度研判与改进方案_2026-07-11]] |
+| **V2 盲测可信度** | ⏳ 主线（Phase4 校准已开） |
+| **V2 突发推送分析** | ⏳ 辅线 |
 
-详细进度：[[AI项目控制台/financial-alert-system/任务进度]]  
-路线图：[[AI项目控制台/financial-alert-system/最终用途与路线图_2026-07-10]]
+详细：[[AI项目控制台/financial-alert-system/任务进度]]  
+V2 大纲：[[AI项目控制台/financial-alert-system/需求拆分_V2_2026-07-11]]
+仪表板：[[AI项目控制台/financial-alert-system/推导仪表板_执行方案_2026-07-11]]
 
 ## 边界
 
 - 暂不接真实交易接口 / 自动下单
-- 暂不承诺预测准确率
+- 暂不承诺预测准确率或收益（预判仅为情景）
 - 暂不大改技术栈
-- 推送非当前优先级
+- 推送放在 V2.2，不抢盲测主线
 
 ## 大需求
 
@@ -66,14 +69,15 @@ start_server.bat
 
 ## 下一步行动
 
-1. 可选：事前/事后结果常驻面板
-2. 可选：代码仓推送 GitHub
-3. 延后：P3 推送
+1. V2.0：盲测评分口径 + 批量跑分
+2. V2.1：突发影响分析 + 三情景预判
+3. V2.2：推送闭环
 
 ## 相关笔记
 
 - [[AI项目控制台/00_项目总索引]]
 - [[AI项目控制台/financial-alert-system/需求拆分]]
+- [[AI项目控制台/financial-alert-system/需求拆分_V2_2026-07-11]]
 - [[AI项目控制台/financial-alert-system/任务进度]]
 - [[AI项目控制台/financial-alert-system/决策记录]]
 - [[AI项目控制台/financial-alert-system/最终用途与路线图_2026-07-10]]
