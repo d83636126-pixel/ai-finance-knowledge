@@ -1,0 +1,63 @@
+{
+  "version": "acceptance-registry-v1",
+  "code_root_candidates": [
+    "D:\\financial-alert-system",
+    "F:\\financial-alert-system",
+    "C:\\Users\\Administrator\\Downloads\\financial-alert-system"
+  ],
+  "vault_root_candidates": [
+    "D:\\AI  金融知识点",
+    "D:\\AI 金融知识点",
+    "F:\\AI 金融知识点"
+  ],
+  "mirror_relpath": "AI项目控制台/financial-alert-system/project_status.json",
+  "items": [
+    {
+      "id": "workbench-p0-p4",
+      "title": "传播图研究工作台 P0–P4",
+      "notes": [
+        "AI项目控制台/financial-alert-system/传播图研究工作台整改方案_2026-07-11.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "frontmatter_status_on_pass": "done",
+      "frontmatter_status_on_fail": "acceptance_failed",
+      "evidence": [
+        { "type": "file_exists", "path": "static/research_workbench.js" },
+        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p1.js" },
+        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p2.js" },
+        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p3.js" },
+        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p4.js" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "engineering-gate",
+      "title": "工程门禁 npm check/smoke/acceptance",
+      "notes": [
+        "AI项目控制台/financial-alert-system/工程收口与验真整改方案_2026-07-11.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "frontmatter_status_on_pass": "done",
+      "frontmatter_status_on_fail": "pending",
+      "evidence": [
+        { "type": "file_exists", "path": "package.json" },
+        { "type": "file_exists", "path": "scripts/run_smoke_test.js" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "core-propagation",
+      "title": "传播图核心页面可用",
+      "notes": [
+        "AI项目控制台/financial-alert-system/README.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "evidence": [
+        { "type": "file_exists", "path": "propagation.html" },
+        { "type": "file_exists", "path": "static/propagation_app.js" },
+        { "type": "file_exists", "path": "propagation_graph.json" }
+      ],
+      "pass_requires": "all"
+    }
+  ]
+}

@@ -110,3 +110,20 @@ git push
 
 如果两台机器都修改了同一个文件，可能会出现 Git 冲突，需要手动合并。
 
+---
+
+## 异地登录（状态不滞后）
+
+换电脑 / 异地登录时，仅 `git pull` 笔记不够：还要把**本机代码探针结果**写回 Obsidian。
+
+完整步骤见：
+
+- [[90_系统配置/异地登录自动同步落地_2026-07-11]]
+- [[AI项目控制台/financial-alert-system/_sync/README]]
+
+新机器一键：
+
+```powershell
+powershell -File ".\90_系统配置\bootstrap_remote_machine.ps1"
+```
+

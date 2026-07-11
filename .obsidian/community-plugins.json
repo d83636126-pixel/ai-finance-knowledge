@@ -6,5 +6,6 @@
   "obsidian-git",
   "obsidian-kanban",
   "templater-obsidian",
-  "realclaudian"
+  "realclaudian",
+  "obsidian-local-rest-api"
 ]

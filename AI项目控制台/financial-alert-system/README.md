@@ -1,3 +1,23 @@
+﻿<!-- AUTO:STATUS:BEGIN -->
+
+> [!important] AUTO STATUS (do not hand-edit this block)
+> generated_at: 2026-07-11T12:52:05.1043153Z
+> code_root: `D:\financial-alert-system`
+> git: `4b93180` / `master`
+> source: code probes + `_sync/acceptance_registry.json`
+
+| item | status | evidence |
+|---|---|---|
+| 传播图核心页面可用 | ACCEPTED | OK:propagation.html / OK:static/propagation_app.js / OK:propagation_graph.json |
+
+sync:
+```bat
+powershell -NoProfile -ExecutionPolicy Bypass -File "D:\AI  金融知识点\AI项目控制台\financial-alert-system\_sync\sync_vault_status.ps1"
+```
+
+<!-- AUTO:STATUS:END -->
+
+
 # financial-alert-system
 
 > [!warning] 2026-07-11 路径纠正与分叉提示
