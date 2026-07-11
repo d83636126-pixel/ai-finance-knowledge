@@ -1,7 +1,7 @@
 # financial-alert-system
 
-> [!success] 2026-07-11 复核
-> 源码正式路径为 `F:\financial-alert-system`。当前图谱为 124 节点 / 287 边；P1 与 P2 主线已闭环。本文已由“文档推断版”更新为当前项目说明。
+> [!warning] 2026-07-11 路径纠正与分叉提示
+> 正式源码目录应为 `F:\financial-alert-system`。复核发现，P1/P2 最新实现暂存在 Downloads 副本，而 F 盘正式目录尚未包含部分新文件。完成安全同步与回归前，不应把 Downloads 继续当作正式源码根目录，也不应声称 F 盘已经包含全部最新能力。
 
 金融预警与传播图系统——把宏观事件、政策冲击、流动性变化、风险资产反应等因素结构化，通过图谱辅助判断市场传导路径。
 
@@ -11,15 +11,16 @@
 
 | 项 | 路径 |
 |---|---|
-| 源码（唯一正式） | `F:\financial-alert-system` |
-| 启动 | `start_server.bat` |
+| 正式源码目标 | `F:\financial-alert-system` |
+| 最新实现暂存副本 | `C:\Users\Administrator\Downloads\financial-alert-system` |
+| 当前启动脚本 | Downloads 副本中有 `start_server.bat`；F 盘尚未同步 |
 | Propagation | `http://127.0.0.1:8000/propagation.html` |
 | Dashboard | `http://127.0.0.1:8000/index.html` |
 | 正式 Obsidian 库 | `F:\AI 金融知识点` |
 
-> **路径约定（2026-07-11）**：代码只维护 `F:\financial-alert-system`。`C:\Users\Administrator\Downloads\financial-alert-system` 仅为过渡副本，不再作为执行路径。
+正式开发和后续 Git 仓应以 F 盘为准。下一步需先比较并安全合并 Downloads 的新增实现，不能直接用覆盖方式抹掉 F 盘独有内容。
 
-## 目录结构（2026-07-11 实机复核）
+## 目标目录结构（当前完整实现见 Downloads，待同步至 F 盘）
 
 ```
 financial-alert-system/
@@ -134,8 +135,9 @@ node local_server.js
 
 ## 当前阶段
 
-- P1：宏观传导研究、日历/Inbox、事前/事后、数据佐证，已完成。
-- P2：Alert ↔ 图谱 ↔ Inbox，已完成。
+- 产品实现层：P1 与 P2 已在 Downloads 副本完成并通过既有验收。
+- 正式源码层：F 盘尚未同步 P1/P2 的全部新增文件，当前存在工程阻塞。
+- 下一工程动作：先做双目录差异清单、备份与安全合并，再在 F 盘重新回归。
 - 下一优先：NFP/CPI 历史样本与防数据穿越的历史盲测。
 - 第二优先：事前/事后结果常驻面板最小版。
 - P3：推送、Cron、无人值守扫描，明确延后。

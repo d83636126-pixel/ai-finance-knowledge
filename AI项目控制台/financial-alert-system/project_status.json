@@ -1,0 +1,85 @@
+{
+  "version": "project-status-v1",
+  "generated_at": "2026-07-11T09:39:10.635Z",
+  "product": "financial-alert-system",
+  "phase": {
+    "workbench": "P0-P4 done",
+    "engineering": "P0-P2 done",
+    "next": "FRED key refresh for live credibility; incremental UI split"
+  },
+  "git": {
+    "commit": "795eba990d8c42b871984993245744c324383c68",
+    "short": "795eba9",
+    "branch": "master",
+    "dirty": true,
+    "baseline_tag": "baseline-f-drive-2026-07-11",
+    "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
+  },
+  "graph": {
+    "nodes": 127,
+    "edges": 324,
+    "updated_at": "2026-07-11T09:28:56.779Z",
+    "edges_with_source": 228,
+    "core_edges": 116,
+    "core_edges_with_source_url": 116,
+    "core_source_url_pct": 100
+  },
+  "credibility": {
+    "note": "图谱标注 ≠ 实时验证。总览四层：接口连通 / 数据新鲜 / 路径确认 / 路径失效。",
+    "core_source_url_pct": 100,
+    "market_snapshot_mode": "manual",
+    "market_snapshot_updated_at": "2026-07-05T00:00:00+08:00",
+    "verifier_slot_counts": {
+      "no_data": 8
+    }
+  },
+  "files": {
+    "static/propagation_app.js": 5647,
+    "static/research_workbench.js": 1359,
+    "static/propagation_engine.js": 1916,
+    "static/data.js": 1529,
+    "index.html": 2962
+  },
+  "npm_scripts": [
+    "check",
+    "smoke",
+    "acceptance",
+    "status",
+    "test"
+  ],
+  "security": {
+    "default_host": "127.0.0.1",
+    "non_loopback_requires_token": true,
+    "max_body_bytes_default": 2097152
+  },
+  "paths": {
+    "code_root": "F:\\\\financial-alert-system",
+    "vault": "F:\\\\AI 金融知识点"
+  },
+  "meta": {
+    "run_at": "2026-07-11T09:39:10.635Z",
+    "cwd": "F:\\financial-alert-system",
+    "node": "v25.2.1",
+    "platform": "win32",
+    "git_commit": "795eba990d8c42b871984993245744c324383c68",
+    "git_commit_short": "795eba9",
+    "git_branch": "master",
+    "git_dirty": true,
+    "git_tag_baseline": "baseline-f-drive-2026-07-11",
+    "graph": {
+      "nodes": 127,
+      "edges": 324,
+      "updated_at": "2026-07-11T09:28:56.779Z",
+      "edges_with_source": 228,
+      "core_edges": 116,
+      "core_edges_with_source_url": 116,
+      "core_source_url_pct": 100
+    },
+    "external_network": false,
+    "has_fred_key": false,
+    "has_access_token": false,
+    "host_hint": "127.0.0.1",
+    "test_base": "http://127.0.0.1:8000",
+    "suite": "project_status"
+  }
+}
