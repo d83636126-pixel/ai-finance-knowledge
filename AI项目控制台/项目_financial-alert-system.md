@@ -23,8 +23,8 @@ status: active
 | 类型 | 路径 | 说明 |
 |------|------|------|
 | **Obsidian 库（唯一）** | `F:\AI 金融知识点` | 进度/规划只改这里 |
-| 代码（当前） | `C:\Users\Administrator\Downloads\financial-alert-system` | 可运行源码 |
-| 代码（历史） | `F:\financial-alert-system` | 早期机器 |
+| **代码（唯一正式）** | `F:\financial-alert-system` | 可运行源码 |
+| 代码（过渡副本） | `C:\Users\Administrator\Downloads\financial-alert-system` | 勿再作为执行路径 |
 
 启动：
 

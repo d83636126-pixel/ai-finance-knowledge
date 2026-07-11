@@ -1,12 +1,25 @@
 # financial-alert-system
 
-> ⚠️ **源码状态**：本项目源代码（`static/`、`*.html`、`local_server.js`、`propagation_graph.json`）在当前机器上丢失。以下 README 根据 Obsidian 设计文档重建，标记为"文档级 README"，待源码恢复后验证。
+> [!success] 2026-07-11 复核
+> 源码正式路径为 `F:\financial-alert-system`。当前图谱为 124 节点 / 287 边；P1 与 P2 主线已闭环。本文已由“文档推断版”更新为当前项目说明。
 
 金融预警与传播图系统——把宏观事件、政策冲击、流动性变化、风险资产反应等因素结构化，通过图谱辅助判断市场传导路径。
 
 **中心目标**：全球风险状态 → 资产篮子（BTC / Nasdaq / Gold / USD / Treasury）
 
-## 目录结构（设计文档推断）
+## 当前路径
+
+| 项 | 路径 |
+|---|---|
+| 源码（唯一正式） | `F:\financial-alert-system` |
+| 启动 | `start_server.bat` |
+| Propagation | `http://127.0.0.1:8000/propagation.html` |
+| Dashboard | `http://127.0.0.1:8000/index.html` |
+| 正式 Obsidian 库 | `F:\AI 金融知识点` |
+
+> **路径约定（2026-07-11）**：代码只维护 `F:\financial-alert-system`。`C:\Users\Administrator\Downloads\financial-alert-system` 仅为过渡副本，不再作为执行路径。
+
+## 目录结构（2026-07-11 实机复核）
 
 ```
 financial-alert-system/
@@ -17,7 +30,14 @@ financial-alert-system/
 ├── propagation.html             # 传播图交互页面（图谱可视化+路径/Case报告）
 ├── architecture.html            # 架构说明页面
 ├── static/                      # 前端静态资源
-│   └── propagation_engine.js    # 传播路径搜索引擎（核心）
+│   ├── propagation_engine.js    # 传播路径搜索引擎（核心）
+│   ├── propagation_app.js       # 完整模式应用入口
+│   ├── propagation_quickload.js # 快速加载与状态处理
+│   ├── scenario_reasoner.js     # 事前/事后分析
+│   ├── case_catalog.js          # FOMC/NFP/CPI/PPI Case
+│   ├── alert_graph_bridge.js    # Alert ↔ 图谱 ↔ Inbox
+│   ├── major_events.js          # 主要事件数据
+│   └── ingest/                  # 日历、Inbox、分类、数据抓取桥接
 └── README.md
 ```
 
@@ -25,7 +45,7 @@ financial-alert-system/
 
 ### 传播引擎（`static/propagation_engine.js`）
 
-核心函数（从设计文档中提取）：
+核心函数：
 
 | 函数 | 功能 |
 |------|------|
@@ -44,7 +64,7 @@ financial-alert-system/
 - 核心 Target 验证仪表：路径/Case 报告顶部，5 张卡片可点击展开详情
 - 验证指标收集：自动从 `verifies` 边读取验证点并去重
 
-关键 UI 函数（从设计文档中提取）：
+关键 UI 函数：
 
 | 函数 | 功能 |
 |------|------|
@@ -112,6 +132,21 @@ node local_server.js
 - 暂不承诺预测准确率
 - 暂不大改技术栈
 
+## 当前阶段
+
+- P1：宏观传导研究、日历/Inbox、事前/事后、数据佐证，已完成。
+- P2：Alert ↔ 图谱 ↔ Inbox，已完成。
+- 下一优先：NFP/CPI 历史样本与防数据穿越的历史盲测。
+- 第二优先：事前/事后结果常驻面板最小版。
+- P3：推送、Cron、无人值守扫描，明确延后。
+
 ## 相关文档
 
 本项目设计文档和进度记录在 Obsidian vault `AI项目控制台/financial-alert-system/` 中。
+
+- [[AI项目控制台/financial-alert-system/需求拆分]]
+- [[AI项目控制台/financial-alert-system/需求拆分_可选增强_2026-07-11]]
+- [[AI项目控制台/financial-alert-system/任务进度]]
+- [[AI项目控制台/financial-alert-system/最终用途与路线图_2026-07-10]]
+- [[AI项目控制台/financial-alert-system/决策记录]]
+- [[AI项目控制台/financial-alert-system/会话交接]]
