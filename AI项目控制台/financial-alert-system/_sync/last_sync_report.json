@@ -1,122 +1,124 @@
 ﻿{
-    "version":  "project-status-v1",
-    "generated_at":  "2026-07-11T12:52:05.1043153Z",
-    "product":  "financial-alert-system",
-    "source_of_truth":  "acceptance_registry.json + live code probes",
-    "git":  {
-                "commit":  "4b9318017757a4c268c43f2e3871d2c96729d536",
-                "short":  "4b93180",
-                "branch":  "master",
-                "dirty":  false,
-                "remote":  "https://github.com/d83636126-pixel/financial-alert-system.git"
-            },
-    "paths":  {
-                  "code_root":  "D:\\financial-alert-system",
-                  "vault_root":  "D:\\AI  金融知识点"
-              },
-    "files":  {
-                  "static/propagation_app.js":  5460,
-                  "static/propagation_engine.js":  1907,
-                  "static/data.js":  1522,
-                  "index.html":  2961
-              },
-    "acceptance":  [
-                       {
-                           "id":  "workbench-p0-p4",
-                           "title":  "传播图研究工作台 P0–P4",
-                           "passed":  false,
-                           "status":  "not_accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "static/research_workbench.js",
-                                                "ok":  false,
-                                                "detail":  "MISSING"
-                                            },
-                                            {
-                                                "path":  "scripts/smoke_research_workbench_p1.js",
-                                                "ok":  false,
-                                                "detail":  "MISSING"
-                                            },
-                                            {
-                                                "path":  "scripts/smoke_research_workbench_p2.js",
-                                                "ok":  false,
-                                                "detail":  "MISSING"
-                                            },
-                                            {
-                                                "path":  "scripts/smoke_research_workbench_p3.js",
-                                                "ok":  false,
-                                                "detail":  "MISSING"
-                                            },
-                                            {
-                                                "path":  "scripts/smoke_research_workbench_p4.js",
-                                                "ok":  false,
-                                                "detail":  "MISSING"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/传播图研究工作台整改方案_2026-07-11.md",
-                                         "AI项目控制台/financial-alert-system/任务进度.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "done",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "engineering-gate",
-                           "title":  "工程门禁 npm check/smoke/acceptance",
-                           "passed":  false,
-                           "status":  "not_accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "package.json",
-                                                "ok":  false,
-                                                "detail":  "MISSING"
-                                            },
-                                            {
-                                                "path":  "scripts/run_smoke_test.js",
-                                                "ok":  true,
-                                                "detail":  "exists (80 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/工程收口与验真整改方案_2026-07-11.md",
-                                         "AI项目控制台/financial-alert-system/任务进度.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "done",
-                           "frontmatter_status_on_fail":  "pending"
-                       },
-                       {
-                           "id":  "core-propagation",
-                           "title":  "传播图核心页面可用",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "propagation.html",
-                                                "ok":  true,
-                                                "detail":  "exists (785 lines)"
-                                            },
-                                            {
-                                                "path":  "static/propagation_app.js",
-                                                "ok":  true,
-                                                "detail":  "exists (5460 lines)"
-                                            },
-                                            {
-                                                "path":  "propagation_graph.json",
-                                                "ok":  true,
-                                                "detail":  "exists (3740 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/README.md",
-                                         "AI项目控制台/financial-alert-system/任务进度.md"
-                                     ],
-                           "frontmatter_status_on_pass":  null,
-                           "frontmatter_status_on_fail":  null
-                       }
-                   ],
-    "meta":  {
-                 "run_at":  "2026-07-11T12:52:05.1043153Z",
-                 "suite":  "sync_vault_status.ps1",
-                 "platform":  "win32"
-             }
+  "version": "project-status-v1",
+  "generated_at": "2026-07-12T02:30:16.0943111Z",
+  "product": "financial-alert-system",
+  "source_of_truth": "acceptance_registry.json + live code probes",
+  "git": {
+    "commit": "3910dc681d8e59dc7947cef19fc3d310a0acd2f5",
+    "short": "3910dc6",
+    "branch": "master",
+    "dirty": false,
+    "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
+  },
+  "paths": {
+    "code_root": "F:\\financial-alert-system",
+    "vault_root": "F:\\AI 金融知识点"
+  },
+  "files": {
+    "static/propagation_app.js": 5647,
+    "static/research_workbench.js": 1358,
+    "static/propagation_engine.js": 1915,
+    "static/data.js": 1528,
+    "index.html": 2961,
+    "package.json": 15
+  },
+  "acceptance": [
+    {
+      "id": "workbench-p0-p4",
+      "title": "传播图研究工作台 P0–P4",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "static/research_workbench.js",
+          "ok": true,
+          "detail": "exists (1358 lines)"
+        },
+        {
+          "path": "scripts/smoke_research_workbench_p1.js",
+          "ok": true,
+          "detail": "exists (77 lines)"
+        },
+        {
+          "path": "scripts/smoke_research_workbench_p2.js",
+          "ok": true,
+          "detail": "exists (81 lines)"
+        },
+        {
+          "path": "scripts/smoke_research_workbench_p3.js",
+          "ok": true,
+          "detail": "exists (77 lines)"
+        },
+        {
+          "path": "scripts/smoke_research_workbench_p4.js",
+          "ok": true,
+          "detail": "exists (93 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/传播图研究工作台整改方案_2026-07-11.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "frontmatter_status_on_pass": "done",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "engineering-gate",
+      "title": "工程门禁 npm check/smoke/acceptance",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "package.json",
+          "ok": true,
+          "detail": "exists (15 lines)"
+        },
+        {
+          "path": "scripts/run_smoke_test.js",
+          "ok": true,
+          "detail": "exists (80 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/工程收口与验真整改方案_2026-07-11.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "frontmatter_status_on_pass": "done",
+      "frontmatter_status_on_fail": "pending"
+    },
+    {
+      "id": "core-propagation",
+      "title": "传播图核心页面可用",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "propagation.html",
+          "ok": true,
+          "detail": "exists (954 lines)"
+        },
+        {
+          "path": "static/propagation_app.js",
+          "ok": true,
+          "detail": "exists (5647 lines)"
+        },
+        {
+          "path": "propagation_graph.json",
+          "ok": true,
+          "detail": "exists (4956 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/README.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "frontmatter_status_on_pass": null,
+      "frontmatter_status_on_fail": null
+    }
+  ],
+  "meta": {
+    "run_at": "2026-07-12T02:30:16.0943111Z",
+    "suite": "sync_vault_status.ps1",
+    "platform": "win32"
+  }
 }

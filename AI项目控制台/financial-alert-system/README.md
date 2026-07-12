@@ -1,9 +1,9 @@
 ﻿<!-- AUTO:STATUS:BEGIN -->
 
 > [!important] AUTO STATUS (do not hand-edit this block)
-> generated_at: 2026-07-11T12:52:05.1043153Z
-> code_root: `D:\financial-alert-system`
-> git: `4b93180` / `master`
+> generated_at: 2026-07-12T02:30:16.0943111Z
+> code_root: `F:\financial-alert-system`
+> git: `3910dc6` / `master`
 > source: code probes + `_sync/acceptance_registry.json`
 
 | item | status | evidence |
@@ -12,7 +12,7 @@
 
 sync:
 ```bat
-powershell -NoProfile -ExecutionPolicy Bypass -File "D:\AI  金融知识点\AI项目控制台\financial-alert-system\_sync\sync_vault_status.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File "F:\AI 金融知识点\AI项目控制台\financial-alert-system\_sync\sync_vault_status.ps1"
 ```
 
 <!-- AUTO:STATUS:END -->

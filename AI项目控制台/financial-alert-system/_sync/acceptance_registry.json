@@ -1,14 +1,14 @@
 {
   "version": "acceptance-registry-v1",
   "code_root_candidates": [
-    "D:\\financial-alert-system",
     "F:\\financial-alert-system",
+    "D:\\financial-alert-system",
     "C:\\Users\\Administrator\\Downloads\\financial-alert-system"
   ],
   "vault_root_candidates": [
-    "D:\\AI  金融知识点",
+    "F:\\AI 金融知识点",
     "D:\\AI 金融知识点",
-    "F:\\AI 金融知识点"
+    "D:\\AI  金融知识点"
   ],
   "mirror_relpath": "AI项目控制台/financial-alert-system/project_status.json",
   "items": [
