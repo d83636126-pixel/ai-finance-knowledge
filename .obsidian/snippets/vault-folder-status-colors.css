@@ -1,0 +1,43 @@
+/* vault-folder-status-colors
+ * 左侧文件列表：按文件夹路径着色（与 00_状态色标说明 看板一致）
+ * 启用：设置 → 外观 → CSS 代码片段 → vault-folder-status-colors
+ * 色标：绿=稳态 黄=进行中 橙=日程 红=阻塞 灰=暂停
+ */
+
+/* 🟢 稳态 */
+.nav-folder-title[data-path="01_方法论"],
+.nav-folder-title[data-path="02_数据"],
+.nav-folder-title[data-path="06_对话记录"] {
+  color: #2d8a4e !important;
+  font-weight: 600;
+}
+
+/* 🟠 日程待办 */
+.nav-folder-title[data-path="03_分析案例"] {
+  color: #c47a00 !important;
+  font-weight: 600;
+}
+
+/* 🟡 进行中 */
+.nav-folder-title[data-path="04_推演跟踪"],
+.nav-folder-title[data-path="90_系统配置"],
+.nav-folder-title[data-path="AI协作记忆系统"],
+.nav-folder-title[data-path="AI项目控制台"],
+.nav-folder-title[data-path="AI项目控制台/NFP月度跟踪"],
+.nav-folder-title[data-path="AI项目控制台/financial-alert-system"] {
+  color: #c9a227 !important;
+  font-weight: 600;
+}
+
+/* ⚪ 暂停 */
+.nav-folder-title[data-path="05_投资复盘"],
+.nav-folder-title[data-path="AI项目控制台/minimal-login-demo"] {
+  color: #8a8a8a !important;
+  font-weight: 500;
+}
+
+/* 根目录色标说明文件：略强调，方便点到「之上」 */
+.nav-file-title[data-path="00_状态色标说明.md"] {
+  color: #5b7cfa !important;
+  font-weight: 700;
+}
