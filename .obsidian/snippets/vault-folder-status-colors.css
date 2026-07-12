@@ -1,14 +1,15 @@
-/* AUTO-GENERATED 鈥?edit folder_status.yml then re-run this script */
-/* In-progress uses soft BLUE bar, not harsh yellow/gold */
+/* AUTO-GENERATED — edit folder_status.yml then re-run sync_folder_status_colors.ps1 */
+/* In-progress = soft BLUE left bar (not harsh yellow/gold) */
 
-.nav-folder-title[data-path] { border-left: 3px solid transparent; padding-left: 6px; font-weight: 500; }
-
-.nav-folder-title[data-path="01_方法论"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
+.nav-folder-title[data-path] {
+  border-left: 3px solid transparent;
+  padding-left: 6px;
+  font-weight: 500;
 }
 
-.nav-folder-title[data-path="02_数据"] {
+.nav-folder-title[data-path="01_方法论"],
+.nav-folder-title[data-path="02_数据"],
+.nav-folder-title[data-path="06_对话记录"] {
   border-left-color: #3d9a6a !important;
   color: #2f6f4e !important;
 }
@@ -18,46 +19,17 @@
   color: #9a7040 !important;
 }
 
-.nav-folder-title[data-path="04_推演跟踪"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-folder-title[data-path="05_投资复盘"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-.nav-folder-title[data-path="06_对话记录"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-folder-title[data-path="90_系统配置"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-folder-title[data-path="AI协作记忆系统"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-folder-title[data-path="AI项目控制台"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-folder-title[data-path="AI项目控制台/NFP月度跟踪"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
+.nav-folder-title[data-path="04_推演跟踪"],
+.nav-folder-title[data-path="90_系统配置"],
+.nav-folder-title[data-path="AI协作记忆系统"],
+.nav-folder-title[data-path="AI项目控制台"],
+.nav-folder-title[data-path="AI项目控制台/NFP月度跟踪"],
 .nav-folder-title[data-path="AI项目控制台/financial-alert-system"] {
   border-left-color: #5b9fd4 !important;
   color: #3d6f9c !important;
 }
 
+.nav-folder-title[data-path="05_投资复盘"],
 .nav-folder-title[data-path="AI项目控制台/minimal-login-demo"] {
   border-left-color: #a0a6b0 !important;
   color: #6e737a !important;
