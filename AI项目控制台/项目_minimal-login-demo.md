@@ -55,7 +55,7 @@ npm run test
 
 ## 小需求拆分
 
-详见：[[AI项目控制台/minimal-login-demo/需求拆分]]
+原明细笔记已移出库，待项目恢复时重新拆分。
 
 ## 当前阶段
 
@@ -87,8 +87,4 @@ npm run test
 ## 相关笔记
 
 - [[AI项目控制台/00_项目总索引]]
-- [[AI项目控制台/minimal-login-demo/需求拆分]]
-- [[AI项目控制台/minimal-login-demo/任务进度]]
-- [[AI项目控制台/minimal-login-demo/决策记录]]
-- [[AI项目控制台/minimal-login-demo/会话交接]]
 - [[AI协作记忆系统/AI记录规范]]

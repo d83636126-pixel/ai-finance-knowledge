@@ -1,13 +1,13 @@
 ﻿{
   "version": "project-status-v1",
-  "generated_at": "2026-07-12T02:30:16.0943111Z",
+  "generated_at": "2026-07-12T08:13:51.9707939Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + live code probes",
   "git": {
     "commit": "3910dc681d8e59dc7947cef19fc3d310a0acd2f5",
     "short": "3910dc6",
     "branch": "master",
-    "dirty": false,
+    "dirty": true,
     "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
   },
   "paths": {
@@ -16,11 +16,11 @@
   },
   "files": {
     "static/propagation_app.js": 5647,
-    "static/research_workbench.js": 1358,
-    "static/propagation_engine.js": 1915,
-    "static/data.js": 1528,
+    "static/research_workbench.js": 1397,
+    "static/propagation_engine.js": 1925,
+    "static/data.js": 1546,
     "index.html": 2961,
-    "package.json": 15
+    "package.json": 19
   },
   "acceptance": [
     {
@@ -32,27 +32,27 @@
         {
           "path": "static/research_workbench.js",
           "ok": true,
-          "detail": "exists (1358 lines)"
+          "detail": "exists (1397 lines)"
         },
         {
           "path": "scripts/smoke_research_workbench_p1.js",
           "ok": true,
-          "detail": "exists (77 lines)"
+          "detail": "exists (79 lines)"
         },
         {
           "path": "scripts/smoke_research_workbench_p2.js",
           "ok": true,
-          "detail": "exists (81 lines)"
+          "detail": "exists (83 lines)"
         },
         {
           "path": "scripts/smoke_research_workbench_p3.js",
           "ok": true,
-          "detail": "exists (77 lines)"
+          "detail": "exists (79 lines)"
         },
         {
           "path": "scripts/smoke_research_workbench_p4.js",
           "ok": true,
-          "detail": "exists (93 lines)"
+          "detail": "exists (95 lines)"
         }
       ],
       "notes": [
@@ -71,7 +71,7 @@
         {
           "path": "package.json",
           "ok": true,
-          "detail": "exists (15 lines)"
+          "detail": "exists (19 lines)"
         },
         {
           "path": "scripts/run_smoke_test.js",
@@ -117,7 +117,7 @@
     }
   ],
   "meta": {
-    "run_at": "2026-07-12T02:30:16.0943111Z",
+    "run_at": "2026-07-12T08:13:51.9707939Z",
     "suite": "sync_vault_status.ps1",
     "platform": "win32"
   }
