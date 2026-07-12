@@ -1,7 +1,8 @@
 # 🔧 Obsidian Git 插件配置指南
 
-> 创建日期：2026年7月4日
-> 目的：通过 Obsidian Git 插件实现知识库的**自动备份到 GitHub**
+> 创建日期：2026年7月4日  
+> **状态（2026-07-12）**：本机主副本已安装并启用 `obsidian-git`；半自动备份已开——**每 10 分钟 auto-commit，每 30 分钟 auto-push**；开机 auto-pull。  
+> 目的：知识库自动备份到 GitHub（`ai-finance-knowledge`）
 
 ---
 
