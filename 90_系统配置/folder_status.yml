@@ -1,0 +1,43 @@
+# Folder status — single source of truth. Edit status, then run sync_folder_status_colors.ps1
+# status: green | blue | orange | red | gray
+# blue = in progress (soft blue, not harsh yellow)
+
+updated: 2026-07-13
+
+folders:
+  - path: 01_方法论
+    status: green
+    note: steady reference
+  - path: 02_数据
+    status: green
+    note: steady reference
+  - path: 03_分析案例
+    status: orange
+    note: wait 8/8 July NFP case
+  - path: 04_推演跟踪
+    status: blue
+    note: NFP pre-release + Walsh calendar
+  - path: 05_投资复盘
+    status: gray
+    note: paused
+  - path: 06_对话记录
+    status: green
+    note: archive
+  - path: 90_系统配置
+    status: blue
+    note: sync and color maintenance
+  - path: AI协作记忆系统
+    status: blue
+    note: open 3.4 / 4.7
+  - path: AI项目控制台
+    status: blue
+    note: NFP + FAS active
+  - path: AI项目控制台/NFP月度跟踪
+    status: blue
+    note: July pre-release run
+  - path: AI项目控制台/financial-alert-system
+    status: blue
+    note: conditional pass / V2
+  - path: AI项目控制台/minimal-login-demo
+    status: gray
+    note: inactive
