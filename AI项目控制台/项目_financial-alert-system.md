@@ -50,7 +50,7 @@ start_server.bat
 ## 当前阶段（2026-07-12）
 
 **研究工作台 P1–P4：功能通过；项目整体：有条件通过。**  
-报告：[[AI项目控制台/financial-alert-system/🟠_验收报告_研究工作台_有条件通过_2026-07-12]]
+报告：[[AI项目控制台/financial-alert-system/验收报告_研究工作台_有条件通过_2026-07-12]]
 
 | 层 | 状态 |
 |----|------|
@@ -61,8 +61,8 @@ start_server.bat
 | V2 盲测可信度 | ⏳ 主线 |
 | V2 突发推送分析 | ⏳ 辅线 |
 
-详细：[[AI项目控制台/financial-alert-system/🔵_任务进度]]  
-V2：[[AI项目控制台/financial-alert-system/🔵_需求拆分_V2_2026-07-11]]
+详细：[[AI项目控制台/financial-alert-system/任务进度]]  
+V2：[[AI项目控制台/financial-alert-system/需求拆分_V2_2026-07-11]]
 
 ## 边界（暂不做）
 
@@ -80,7 +80,7 @@ V2：[[AI项目控制台/financial-alert-system/🔵_需求拆分_V2_2026-07-11]
 
 ## 关键决策
 
-见 [[AI项目控制台/financial-alert-system/🟢_决策记录]]（含是否已被推翻字段实践）。
+见 [[AI项目控制台/financial-alert-system/决策记录]]（含是否已被推翻字段实践）。
 
 ## 下一步行动
 
@@ -97,9 +97,9 @@ V2：[[AI项目控制台/financial-alert-system/🔵_需求拆分_V2_2026-07-11]
 ## 相关笔记
 
 - [[AI项目控制台/00_项目总索引]]
-- [[AI项目控制台/financial-alert-system/🔵_需求拆分]]
-- [[AI项目控制台/financial-alert-system/🔵_需求拆分_V2_2026-07-11]]
-- [[AI项目控制台/financial-alert-system/🔵_任务进度]]
-- [[AI项目控制台/financial-alert-system/🟢_决策记录]]
-- [[AI项目控制台/financial-alert-system/🔵_会话交接]]
-- [[AI协作记忆系统/🟢_AI记录规范]]
+- [[AI项目控制台/financial-alert-system/需求拆分]]
+- [[AI项目控制台/financial-alert-system/需求拆分_V2_2026-07-11]]
+- [[AI项目控制台/financial-alert-system/任务进度]]
+- [[AI项目控制台/financial-alert-system/决策记录]]
+- [[AI项目控制台/financial-alert-system/会话交接]]
+- [[AI协作记忆系统/AI记录规范]]

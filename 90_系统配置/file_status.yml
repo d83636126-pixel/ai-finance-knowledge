@@ -1,95 +1,52 @@
-# File-level status — rename to <emoji>_<basename>.md
-# Edit status, then run sync_folder_status_colors.ps1
+# File-level status OVERRIDES (scheme C)
+# Files inherit their folder color via CSS by default.
+# List a file here ONLY when its status differs from the parent folder,
+# or when it is a root-level note that needs a color.
+# path: bare name WITHOUT emoji prefix. Do not rename files for status.
 # status: green | blue | orange | red | gray
-# Only list files that should show a marker in the file explorer.
-# Folder indexes (00_<emoji>索引.md) are handled by folder_status.yml — do not list them here.
-# Steady archives in green folders can stay unmarked (omit them).
 
 updated: 2026-07-13
 
 files:
-  # --- AI协作记忆系统 ---
-  - path: AI协作记忆系统/00_AI记忆入口.md
+  # Root notes (no parent folder color)
+  - path: 00_知识库总导航.md
     status: blue
-    note: entry live
-  - path: AI协作记忆系统/会话交接日志.md
+  - path: 00_状态色标说明.md
     status: blue
-    note: handoff live
-  - path: AI协作记忆系统/需求拆分.md
-    status: blue
-    note: open 3.4 / 4.7 / 4.5
-  - path: AI协作记忆系统/任务进度.md
-    status: blue
-    note: live progress
-  - path: AI协作记忆系统/AI协作记忆系统_执行规划.md
-    status: blue
-    note: planning live
-  - path: AI协作记忆系统/项目_Codex与Claude协作记忆系统.md
-    status: blue
-    note: project doc active
+  - path: 00_知识图谱索引.md
+    status: green
+
+  # Within blue folders but steady (override to green)
   - path: AI协作记忆系统/决策记录.md
     status: green
-    note: append-only steady
   - path: AI协作记忆系统/AI记录规范.md
     status: green
-    note: rules steady
   - path: AI协作记忆系统/需求自审摘要.md
     status: green
-    note: snapshot
   - path: AI协作记忆系统/金融分析系统_AI协作实战指南.md
     status: green
-    note: guide steady
-
-  # --- AI项目控制台 root ---
-  - path: AI项目控制台/00_项目总索引.md
-    status: blue
-    note: project jump table
-  - path: AI项目控制台/项目_NFP月度跟踪.md
-    status: blue
-    note: active project
-  - path: AI项目控制台/项目_financial-alert-system.md
-    status: blue
-    note: active project
-  - path: AI项目控制台/项目_minimal-login-demo.md
-    status: gray
-    note: inactive
   - path: AI项目控制台/autonomous-loop-framework.md
     status: green
-    note: reference
-
-  # --- NFP ---
-  - path: AI项目控制台/NFP月度跟踪/发布前检查清单_7月非农_2026-07-12.md
-    status: blue
-    note: pre-release checklist
-  - path: AI项目控制台/NFP月度跟踪/任务进度.md
-    status: blue
-  - path: AI项目控制台/NFP月度跟踪/需求拆分.md
-    status: blue
-  - path: AI项目控制台/NFP月度跟踪/会话交接.md
-    status: blue
   - path: AI项目控制台/NFP月度跟踪/决策记录.md
     status: green
-
-  # --- FAS control surface ---
-  - path: AI项目控制台/financial-alert-system/任务进度.md
-    status: blue
-  - path: AI项目控制台/financial-alert-system/需求拆分.md
-    status: blue
-  - path: AI项目控制台/financial-alert-system/需求拆分_V2_2026-07-11.md
-    status: blue
-  - path: AI项目控制台/financial-alert-system/会话交接.md
-    status: blue
   - path: AI项目控制台/financial-alert-system/决策记录.md
     status: green
-  - path: AI项目控制台/financial-alert-system/研究工作台后续整改计划_2026-07-12.md
-    status: blue
+  - path: 90_系统配置/Obsidian_Git_插件配置指南.md
+    status: green
+  - path: 90_系统配置/多机器同步Obsidian库指南.md
+    status: green
+
+  # Within blue folders but scheduled (override to orange)
+  - path: 04_推演跟踪/提醒系统_2026下半年关键事件.md
+    status: orange
+  - path: 04_推演跟踪/2026-07-14_CPI-PPI-银行财报-美伊冲突_交叉窗口.md
+    status: orange
   - path: AI项目控制台/financial-alert-system/验收报告_研究工作台_有条件通过_2026-07-12.md
     status: orange
-    note: conditional pass follow-ups
-  - path: AI项目控制台/financial-alert-system/沃什五大工作组_监控框架任务书.md
-    status: blue
 
-  # --- minimal-login-demo ---
+  # Within blue console but inactive project docs (override to gray)
+  - path: AI项目控制台/项目_minimal-login-demo.md
+    status: gray
   - path: AI项目控制台/minimal-login-demo/需求拆分.md
     status: gray
   - path: AI项目控制台/minimal-login-demo/任务进度.md
@@ -98,35 +55,3 @@ files:
     status: gray
   - path: AI项目控制台/minimal-login-demo/会话交接.md
     status: gray
-
-  # --- 04_推演跟踪 live ---
-  - path: 04_推演跟踪/2026年7月非农数据跟踪_占位.md
-    status: blue
-    note: NFP pre-release body
-  - path: 04_推演跟踪/沃什工作组追踪.md
-    status: blue
-  - path: 04_推演跟踪/沃什五大工作组_提前作业清单_2026-07-11.md
-    status: blue
-  - path: 04_推演跟踪/沃什五组领队背调_2026-07-11.md
-    status: blue
-  - path: 04_推演跟踪/提醒系统_2026下半年关键事件.md
-    status: orange
-    note: calendar
-  - path: 04_推演跟踪/2026-07-14_CPI-PPI-银行财报-美伊冲突_交叉窗口.md
-    status: orange
-
-  # --- 90_系统配置 ---
-  - path: 90_系统配置/文件夹状态.md
-    status: blue
-  - path: 90_系统配置/Obsidian_Git_插件配置指南.md
-    status: green
-  - path: 90_系统配置/多机器同步Obsidian库指南.md
-    status: green
-
-  # --- root live ---
-  - path: 00_知识库总导航.md
-    status: blue
-  - path: 00_状态色标说明.md
-    status: blue
-  - path: 00_知识图谱索引.md
-    status: green
