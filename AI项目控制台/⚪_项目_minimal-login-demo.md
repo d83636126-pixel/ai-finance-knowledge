@@ -32,7 +32,7 @@ status: inactive
 
 ## 大需求
 
-待恢复后确认。草案见 [[AI项目控制台/minimal-login-demo/需求拆分]]。
+待恢复后确认。草案见 [[AI项目控制台/minimal-login-demo/⚪_需求拆分]]。
 
 ## 当前状态
 
@@ -41,7 +41,7 @@ status: inactive
 ## 关键决策
 
 - 不重写 Lovable 相关已发布 Git 历史。
-- 2026-07-12：暂停并占位五件套。详见 [[AI项目控制台/minimal-login-demo/决策记录]]。
+- 2026-07-12：暂停并占位五件套。详见 [[AI项目控制台/minimal-login-demo/⚪_决策记录]]。
 
 ## 下一步行动
 
@@ -59,8 +59,8 @@ status: inactive
 ## 相关笔记
 
 - [[AI项目控制台/00_项目总索引]]
-- [[AI项目控制台/minimal-login-demo/需求拆分]]
-- [[AI项目控制台/minimal-login-demo/任务进度]]
-- [[AI项目控制台/minimal-login-demo/决策记录]]
-- [[AI项目控制台/minimal-login-demo/会话交接]]
-- [[AI协作记忆系统/AI记录规范]]
+- [[AI项目控制台/minimal-login-demo/⚪_需求拆分]]
+- [[AI项目控制台/minimal-login-demo/⚪_任务进度]]
+- [[AI项目控制台/minimal-login-demo/⚪_决策记录]]
+- [[AI项目控制台/minimal-login-demo/⚪_会话交接]]
+- [[AI协作记忆系统/🟢_AI记录规范]]

@@ -1,7 +1,8 @@
-/* AUTO-GENERATED from folder_status.yml */
+/* AUTO-GENERATED from folder_status.yml + file_status.yml */
 /* In-progress = soft BLUE bar */
 
 .nav-folder-title[data-path] { border-left: 3px solid transparent; padding-left: 6px; font-weight: 500; }
+.nav-file-title[data-path] { border-left: 3px solid transparent; padding-left: 6px; }
 
 .nav-folder-title[data-path="01_方法论"] {
   border-left-color: #3d9a6a !important;
@@ -61,4 +62,214 @@
 .nav-folder-title[data-path="AI项目控制台/minimal-login-demo"] {
   border-left-color: #a0a6b0 !important;
   color: #6e737a !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🔵_00_AI记忆入口.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🔵_会话交接日志.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🔵_需求拆分.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🔵_任务进度.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🔵_AI协作记忆系统_执行规划.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🔵_项目_Codex与Claude协作记忆系统.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🟢_决策记录.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🟢_AI记录规范.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🟢_需求自审摘要.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="AI协作记忆系统/🟢_金融分析系统_AI协作实战指南.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/🔵_项目_NFP月度跟踪.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/🔵_项目_financial-alert-system.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/⚪_项目_minimal-login-demo.md"] {
+  border-left-color: #a0a6b0 !important;
+  color: #6e737a !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/🟢_autonomous-loop-framework.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/🔵_发布前检查清单_7月非农_2026-07-12.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/🔵_任务进度.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/🔵_需求拆分.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/🔵_会话交接.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/🟢_决策记录.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/🔵_任务进度.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/🔵_需求拆分.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/🔵_需求拆分_V2_2026-07-11.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/🔵_会话交接.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/🟢_决策记录.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/🔵_研究工作台后续整改计划_2026-07-12.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/🟠_验收报告_研究工作台_有条件通过_2026-07-12.md"] {
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/🔵_沃什五大工作组_监控框架任务书.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/minimal-login-demo/⚪_需求拆分.md"] {
+  border-left-color: #a0a6b0 !important;
+  color: #6e737a !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/minimal-login-demo/⚪_任务进度.md"] {
+  border-left-color: #a0a6b0 !important;
+  color: #6e737a !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/minimal-login-demo/⚪_决策记录.md"] {
+  border-left-color: #a0a6b0 !important;
+  color: #6e737a !important;
+}
+
+.nav-file-title[data-path="AI项目控制台/minimal-login-demo/⚪_会话交接.md"] {
+  border-left-color: #a0a6b0 !important;
+  color: #6e737a !important;
+}
+
+.nav-file-title[data-path="04_推演跟踪/🔵_2026年7月非农数据跟踪_占位.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="04_推演跟踪/🔵_沃什工作组追踪.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="04_推演跟踪/🔵_沃什五大工作组_提前作业清单_2026-07-11.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="04_推演跟踪/🔵_沃什五组领队背调_2026-07-11.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="04_推演跟踪/🟠_提醒系统_2026下半年关键事件.md"] {
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
+}
+
+.nav-file-title[data-path="04_推演跟踪/🟠_2026-07-14_CPI-PPI-银行财报-美伊冲突_交叉窗口.md"] {
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
+}
+
+.nav-file-title[data-path="90_系统配置/🔵_文件夹状态.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="90_系统配置/🟢_Obsidian_Git_插件配置指南.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="90_系统配置/🟢_多机器同步Obsidian库指南.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="🔵_00_知识库总导航.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
+}
+
+.nav-file-title[data-path="🔵_00_状态色标说明.md"] {
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
 }
