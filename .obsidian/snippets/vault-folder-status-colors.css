@@ -1,11 +1,11 @@
 /* AUTO-GENERATED from folder_status.yml + file_status.yml */
-/* Scheme C: indexes keep emoji names; other files use CSS only */
-/* In-progress = soft BLUE */
+/* Scheme D: color computed from workflow + attention */
+/* Indexes keep emoji names; other files use CSS only */
 
 .nav-folder-title[data-path] { border-left: 3px solid transparent; padding-left: 6px; font-weight: 500; }
 .nav-file-title[data-path] { border-left: 3px solid transparent; padding-left: 6px; }
 
-/* folder: 01_方法论 = green */
+/* folder: 01_方法论 = green (done/normal; workflow:done) */
 .nav-folder-title[data-path="01_方法论"] {
   border-left-color: #3d9a6a !important;
   color: #2f6f4e !important;
@@ -15,7 +15,7 @@
   color: #2f6f4e !important;
 }
 
-/* folder: 02_数据 = green */
+/* folder: 02_数据 = green (done/normal; workflow:done) */
 .nav-folder-title[data-path="02_数据"] {
   border-left-color: #3d9a6a !important;
   color: #2f6f4e !important;
@@ -25,7 +25,7 @@
   color: #2f6f4e !important;
 }
 
-/* folder: 03_分析案例 = orange */
+/* folder: 03_分析案例 = orange (waiting/watch; attention:watch) */
 .nav-folder-title[data-path="03_分析案例"] {
   border-left-color: #d4a05a !important;
   color: #9a7040 !important;
@@ -35,7 +35,7 @@
   color: #9a7040 !important;
 }
 
-/* folder: 04_推演跟踪 = blue */
+/* folder: 04_推演跟踪 = blue (active/normal; workflow:active) */
 .nav-folder-title[data-path="04_推演跟踪"] {
   border-left-color: #5b9fd4 !important;
   color: #3d6f9c !important;
@@ -45,7 +45,7 @@
   color: #3d6f9c !important;
 }
 
-/* folder: 05_投资复盘 = gray */
+/* folder: 05_投资复盘 = gray (paused/normal; workflow:paused) */
 .nav-folder-title[data-path="05_投资复盘"] {
   border-left-color: #a0a6b0 !important;
   color: #6e737a !important;
@@ -55,27 +55,27 @@
   color: #6e737a !important;
 }
 
-/* folder: 06_对话记录 = green */
+/* folder: 06_对话记录 = gray (archived/normal; workflow:archived) */
 .nav-folder-title[data-path="06_对话记录"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
+  border-left-color: #a0a6b0 !important;
+  color: #6e737a !important;
 }
 .nav-file-title[data-path^="06_对话记录/"] {
+  border-left-color: #a0a6b0 !important;
+  color: #6e737a !important;
+}
+
+/* folder: 90_系统配置 = green (done/normal; workflow:done) */
+.nav-folder-title[data-path="90_系统配置"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
+}
+.nav-file-title[data-path^="90_系统配置/"] {
   border-left-color: #3d9a6a !important;
   color: #2f6f4e !important;
 }
 
-/* folder: 90_系统配置 = blue */
-.nav-folder-title[data-path="90_系统配置"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-.nav-file-title[data-path^="90_系统配置/"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-/* folder: AI协作记忆系统 = blue */
+/* folder: AI协作记忆系统 = blue (active/normal; workflow:active) */
 .nav-folder-title[data-path="AI协作记忆系统"] {
   border-left-color: #5b9fd4 !important;
   color: #3d6f9c !important;
@@ -85,7 +85,7 @@
   color: #3d6f9c !important;
 }
 
-/* folder: AI项目控制台 = blue */
+/* folder: AI项目控制台 = blue (active/normal; workflow:active) */
 .nav-folder-title[data-path="AI项目控制台"] {
   border-left-color: #5b9fd4 !important;
   color: #3d6f9c !important;
@@ -95,27 +95,27 @@
   color: #3d6f9c !important;
 }
 
-/* folder: AI项目控制台/NFP月度跟踪 = blue */
+/* folder: AI项目控制台/NFP月度跟踪 = orange (waiting/watch; attention:watch) */
 .nav-folder-title[data-path="AI项目控制台/NFP月度跟踪"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
 }
 .nav-file-title[data-path^="AI项目控制台/NFP月度跟踪/"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
 }
 
-/* folder: AI项目控制台/financial-alert-system = blue */
+/* folder: AI项目控制台/financial-alert-system = orange (active/watch; attention:watch) */
 .nav-folder-title[data-path="AI项目控制台/financial-alert-system"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
 }
 .nav-file-title[data-path^="AI项目控制台/financial-alert-system/"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
 }
 
-/* folder: AI项目控制台/minimal-login-demo = gray */
+/* folder: AI项目控制台/minimal-login-demo = gray (archived/normal; workflow:archived) */
 .nav-folder-title[data-path="AI项目控制台/minimal-login-demo"] {
   border-left-color: #a0a6b0 !important;
   color: #6e737a !important;
@@ -139,6 +139,11 @@
 .nav-file-title[data-path="00_知识图谱索引.md"] {
   border-left-color: #3d9a6a !important;
   color: #2f6f4e !important;
+}
+
+.nav-file-title[data-path="00_状态总览.md"] {
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
 }
 
 .nav-file-title[data-path="AI协作记忆系统/决策记录.md"] {
@@ -251,14 +256,14 @@
   color: #6e737a !important;
 }
 
-.nav-file-title[data-path="06_对话记录/00_🟢索引.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
+.nav-file-title[data-path="06_对话记录/00_⚪索引.md"] {
+  border-left-color: #a0a6b0 !important;
+  color: #6e737a !important;
 }
 
-.nav-file-title[data-path="90_系统配置/00_🔵索引.md"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
+.nav-file-title[data-path="90_系统配置/00_🟢索引.md"] {
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
 }
 
 .nav-file-title[data-path="AI协作记忆系统/00_🔵索引.md"] {
@@ -271,14 +276,14 @@
   color: #3d6f9c !important;
 }
 
-.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/00_🔵索引.md"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
+.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/00_🟠索引.md"] {
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
 }
 
-.nav-file-title[data-path="AI项目控制台/financial-alert-system/00_🔵索引.md"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
+.nav-file-title[data-path="AI项目控制台/financial-alert-system/00_🟠索引.md"] {
+  border-left-color: #d4a05a !important;
+  color: #9a7040 !important;
 }
 
 .nav-file-title[data-path="AI项目控制台/minimal-login-demo/00_⚪索引.md"] {
