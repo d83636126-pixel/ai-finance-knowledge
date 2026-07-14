@@ -210,14 +210,20 @@ try {
     }
 
     $materialChanged = ($null -eq $previous -or $previous.material_fingerprint -ne $materialFingerprint)
-    $state | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $statePath -Encoding utf8
 
     if ($materialChanged) {
         if (-not (Test-Path -LiteralPath $vaultSyncScript)) { throw "Vault sync script not found: $vaultSyncScript" }
-        & $vaultSyncScript -CodeRoot $CodeRoot -VaultRoot $VaultRoot | Out-Null
-        if ($LASTEXITCODE -notin @($null, 0)) { throw "Vault sync script exited with code $LASTEXITCODE" }
+        # Run the legacy vault writer in a clean PowerShell process so this
+        # script's StrictMode does not turn optional registry fields into errors.
+        $pwshExecutable = (Get-Command pwsh.exe -ErrorAction Stop).Source
+        & $pwshExecutable -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File $vaultSyncScript | Out-Null
+        if ($LASTEXITCODE -ne 0) { throw "Vault sync script exited with code $LASTEXITCODE" }
         Write-SyncLog 'INFO' 'Material state changed; Obsidian project status was refreshed.'
     }
+
+    # Commit runtime state only after any required Obsidian refresh succeeds.
+    # A failed refresh will therefore be retried on the next scheduled run.
+    $state | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $statePath -Encoding utf8
 
     Write-SyncLog 'INFO' "Sync completed. commit=$localCommit runner=$runnerAvailable vault_refresh=$materialChanged"
 }

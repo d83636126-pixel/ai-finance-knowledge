@@ -1,6 +1,6 @@
 ﻿{
   "version": "project-status-v1",
-  "generated_at": "2026-07-14T08:00:30.7492125Z",
+  "generated_at": "2026-07-14T11:12:06.4229259Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + live code probes",
   "git": {
@@ -18,9 +18,9 @@
     "static/propagation_app.js": 5713,
     "static/research_workbench.js": 2024,
     "static/propagation_engine.js": 1925,
-    "static/data.js": 2088,
-    "index.html": 2980,
-    "package.json": 58
+    "static/data.js": 2284,
+    "index.html": 2983,
+    "package.json": 66
   },
   "acceptance": [
     {
@@ -71,7 +71,7 @@
         {
           "path": "package.json",
           "ok": true,
-          "detail": "exists (58 lines)"
+          "detail": "exists (66 lines)"
         },
         {
           "path": "scripts/run_smoke_test.js",
@@ -124,22 +124,22 @@
         {
           "path": "micro-layer/micro_layer.js",
           "ok": true,
-          "detail": "exists (983 lines)"
+          "detail": "exists (1213 lines)"
         },
         {
           "path": "micro-layer/micro_dashboard.js",
           "ok": true,
-          "detail": "exists (690 lines)"
+          "detail": "exists (778 lines)"
         },
         {
           "path": "micro-layer/tests/smoke_micro_layer.js",
           "ok": true,
-          "detail": "exists (206 lines)"
+          "detail": "exists (226 lines)"
         },
         {
           "path": "micro-layer/tests/smoke_micro_page.js",
           "ok": true,
-          "detail": "exists (116 lines)"
+          "detail": "exists (120 lines)"
         },
         {
           "path": "scripts/probe_micro_p1_legs.js",
@@ -162,17 +162,17 @@
         {
           "path": "micro-layer/micro_layer.js",
           "ok": true,
-          "detail": "exists (983 lines)"
+          "detail": "exists (1213 lines)"
         },
         {
           "path": "micro-layer/tests/smoke_micro_layer.js",
           "ok": true,
-          "detail": "exists (206 lines)"
+          "detail": "exists (226 lines)"
         },
         {
           "path": "static/data.js",
           "ok": true,
-          "detail": "exists (2088 lines)"
+          "detail": "exists (2284 lines)"
         }
       ],
       "notes": [
@@ -233,7 +233,7 @@
         {
           "path": "micro-layer/micro_layer.js",
           "ok": true,
-          "detail": "exists (983 lines)"
+          "detail": "exists (1213 lines)"
         }
       ],
       "notes": [
@@ -261,7 +261,7 @@
         {
           "path": "micro-layer/micro_layer.js",
           "ok": true,
-          "detail": "exists (983 lines)"
+          "detail": "exists (1213 lines)"
         },
         {
           "path": "artifacts/micro_calibration_book.json",
@@ -294,12 +294,12 @@
         {
           "path": "micro-layer/micro_layer.js",
           "ok": true,
-          "detail": "exists (983 lines)"
+          "detail": "exists (1213 lines)"
         },
         {
           "path": "micro-layer/micro_dashboard.js",
           "ok": true,
-          "detail": "exists (690 lines)"
+          "detail": "exists (778 lines)"
         }
       ],
       "notes": [
@@ -382,7 +382,7 @@
         {
           "path": "micro-layer/micro_layer.js",
           "ok": true,
-          "detail": "exists (983 lines)"
+          "detail": "exists (1213 lines)"
         },
         {
           "path": "micro-layer/micro_calibrator.js",
@@ -397,7 +397,7 @@
         {
           "path": "micro-layer/micro_dashboard.js",
           "ok": true,
-          "detail": "exists (690 lines)"
+          "detail": "exists (778 lines)"
         },
         {
           "path": "micro-layer/micro_execution_gate.js",
@@ -424,7 +424,7 @@
     }
   ],
   "meta": {
-    "run_at": "2026-07-14T08:00:30.7492125Z",
+    "run_at": "2026-07-14T11:12:06.4229259Z",
     "suite": "sync_vault_status.ps1",
     "platform": "win32"
   }
