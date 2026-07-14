@@ -1,6 +1,6 @@
 ﻿{
   "version": "project-status-v1",
-  "generated_at": "2026-07-14T11:12:06.4229259Z",
+  "generated_at": "2026-07-14T14:01:59.6964801Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + live code probes",
   "git": {
@@ -20,7 +20,7 @@
     "static/propagation_engine.js": 1925,
     "static/data.js": 2284,
     "index.html": 2983,
-    "package.json": 66
+    "package.json": 72
   },
   "acceptance": [
     {
@@ -71,7 +71,7 @@
         {
           "path": "package.json",
           "ok": true,
-          "detail": "exists (66 lines)"
+          "detail": "exists (72 lines)"
         },
         {
           "path": "scripts/run_smoke_test.js",
@@ -129,7 +129,7 @@
         {
           "path": "micro-layer/micro_dashboard.js",
           "ok": true,
-          "detail": "exists (778 lines)"
+          "detail": "exists (816 lines)"
         },
         {
           "path": "micro-layer/tests/smoke_micro_layer.js",
@@ -139,7 +139,7 @@
         {
           "path": "micro-layer/tests/smoke_micro_page.js",
           "ok": true,
-          "detail": "exists (120 lines)"
+          "detail": "exists (50 lines)"
         },
         {
           "path": "scripts/probe_micro_p1_legs.js",
@@ -299,7 +299,7 @@
         {
           "path": "micro-layer/micro_dashboard.js",
           "ok": true,
-          "detail": "exists (778 lines)"
+          "detail": "exists (816 lines)"
         }
       ],
       "notes": [
@@ -372,7 +372,7 @@
         {
           "path": "micro-layer/tests/smoke_micro_s2_integration.js",
           "ok": true,
-          "detail": "exists (319 lines)"
+          "detail": "exists (322 lines)"
         },
         {
           "path": "micro-layer/micro_source_trust.js",
@@ -397,7 +397,7 @@
         {
           "path": "micro-layer/micro_dashboard.js",
           "ok": true,
-          "detail": "exists (778 lines)"
+          "detail": "exists (816 lines)"
         },
         {
           "path": "micro-layer/micro_execution_gate.js",
@@ -424,7 +424,7 @@
     }
   ],
   "meta": {
-    "run_at": "2026-07-14T11:12:06.4229259Z",
+    "run_at": "2026-07-14T14:01:59.6964801Z",
     "suite": "sync_vault_status.ps1",
     "platform": "win32"
   }
