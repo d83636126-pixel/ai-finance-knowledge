@@ -1,4 +1,4 @@
-﻿<!-- AUTO:STATUS:BEGIN -->
+<!-- AUTO:STATUS:BEGIN -->
 
 > [!important] AUTO STATUS (do not hand-edit this block)
 > generated_at: 2026-07-14T11:12:06.4229259Z
@@ -166,9 +166,9 @@ node local_server.js
 
 本项目设计文档和进度记录在 Obsidian vault `AI项目控制台/financial-alert-system/` 中。
 
-- [[AI项目控制台/financial-alert-system/需求拆分]]
-- [[AI项目控制台/financial-alert-system/需求拆分_可选增强_2026-07-11]]
+- [[AI项目控制台/financial-alert-system/01_项目治理/01_愿景与需求/需求拆分]]
+- [[AI项目控制台/financial-alert-system/01_项目治理/01_愿景与需求/需求拆分_可选增强_2026-07-11]]
 - [[AI项目控制台/financial-alert-system/任务进度]]
-- [[AI项目控制台/financial-alert-system/最终用途与路线图_2026-07-10]]
+- [[AI项目控制台/financial-alert-system/01_项目治理/01_愿景与需求/最终用途与路线图_2026-07-10]]
 - [[AI项目控制台/financial-alert-system/决策记录]]
 - [[AI项目控制台/financial-alert-system/会话交接]]
