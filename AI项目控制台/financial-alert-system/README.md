@@ -1,9 +1,9 @@
 ﻿<!-- AUTO:STATUS:BEGIN -->
 
 > [!important] AUTO STATUS (do not hand-edit this block)
-> generated_at: 2026-07-13T10:45:58.8268431Z
+> generated_at: 2026-07-14T08:00:30.7492125Z
 > code_root: `F:\financial-alert-system`
-> git: `2ba307d` / `master` (dirty)
+> git: `da8fdfb` / `master` (dirty)
 > source: code probes + `_sync/acceptance_registry.json`
 
 | item | status | evidence |

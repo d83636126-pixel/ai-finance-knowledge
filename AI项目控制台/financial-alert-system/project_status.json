@@ -1,431 +1,431 @@
 ﻿{
-    "version":  "project-status-v1",
-    "generated_at":  "2026-07-13T10:45:58.8268431Z",
-    "product":  "financial-alert-system",
-    "source_of_truth":  "acceptance_registry.json + live code probes",
-    "git":  {
-                "commit":  "2ba307df06148b5d27b787c5b7d6626f1f537820",
-                "short":  "2ba307d",
-                "branch":  "master",
-                "dirty":  true,
-                "remote":  "https://github.com/d83636126-pixel/financial-alert-system.git"
-            },
-    "paths":  {
-                  "code_root":  "F:\\financial-alert-system",
-                  "vault_root":  "F:\\AI 金融知识点"
-              },
-    "files":  {
-                  "static/propagation_app.js":  5713,
-                  "static/research_workbench.js":  1973,
-                  "static/propagation_engine.js":  1925,
-                  "static/data.js":  2024,
-                  "index.html":  2980,
-                  "package.json":  29
-              },
-    "acceptance":  [
-                       {
-                           "id":  "workbench-p0-p4",
-                           "title":  "传播图研究工作台 P0–P4",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "static/research_workbench.js",
-                                                "ok":  true,
-                                                "detail":  "exists (1973 lines)"
-                                            },
-                                            {
-                                                "path":  "scripts/smoke_research_workbench_p1.js",
-                                                "ok":  true,
-                                                "detail":  "exists (96 lines)"
-                                            },
-                                            {
-                                                "path":  "scripts/smoke_research_workbench_p2.js",
-                                                "ok":  true,
-                                                "detail":  "exists (96 lines)"
-                                            },
-                                            {
-                                                "path":  "scripts/smoke_research_workbench_p3.js",
-                                                "ok":  true,
-                                                "detail":  "exists (78 lines)"
-                                            },
-                                            {
-                                                "path":  "scripts/smoke_research_workbench_p4.js",
-                                                "ok":  true,
-                                                "detail":  "exists (115 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/传播图研究工作台整改方案_2026-07-11.md",
-                                         "AI项目控制台/financial-alert-system/任务进度.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "done",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "engineering-gate",
-                           "title":  "工程门禁 npm check/smoke/acceptance",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "package.json",
-                                                "ok":  true,
-                                                "detail":  "exists (29 lines)"
-                                            },
-                                            {
-                                                "path":  "scripts/run_smoke_test.js",
-                                                "ok":  true,
-                                                "detail":  "exists (80 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/工程收口与验真整改方案_2026-07-11.md",
-                                         "AI项目控制台/financial-alert-system/任务进度.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "done",
-                           "frontmatter_status_on_fail":  "pending"
-                       },
-                       {
-                           "id":  "core-propagation",
-                           "title":  "传播图核心页面可用",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "propagation.html",
-                                                "ok":  true,
-                                                "detail":  "exists (1360 lines)"
-                                            },
-                                            {
-                                                "path":  "static/propagation_app.js",
-                                                "ok":  true,
-                                                "detail":  "exists (5713 lines)"
-                                            },
-                                            {
-                                                "path":  "propagation_graph.json",
-                                                "ok":  true,
-                                                "detail":  "exists (5001 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/README.md",
-                                         "AI项目控制台/financial-alert-system/任务进度.md"
-                                     ],
-                           "frontmatter_status_on_pass":  null,
-                           "frontmatter_status_on_fail":  null
-                       },
-                       {
-                           "id":  "crypto-micro-layer-p1",
-                           "title":  "加密微观层 MVP + P1 数据口径",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "micro-layer/micro_layer.js",
-                                                "ok":  true,
-                                                "detail":  "exists (976 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_dashboard.js",
-                                                "ok":  true,
-                                                "detail":  "exists (290 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_layer.js",
-                                                "ok":  true,
-                                                "detail":  "exists (204 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_page.js",
-                                                "ok":  true,
-                                                "detail":  "exists (33 lines)"
-                                            },
-                                            {
-                                                "path":  "scripts/probe_micro_p1_legs.js",
-                                                "ok":  true,
-                                                "detail":  "exists (60 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "MVP已接入_P1数据口径推进_仓位执行未开放",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "crypto-micro-layer-p2",
-                           "title":  "加密微观层 P2 状态覆盖",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "micro-layer/micro_layer.js",
-                                                "ok":  true,
-                                                "detail":  "exists (976 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_layer.js",
-                                                "ok":  true,
-                                                "detail":  "exists (204 lines)"
-                                            },
-                                            {
-                                                "path":  "static/data.js",
-                                                "ok":  true,
-                                                "detail":  "exists (2024 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "MVP已接入_P1P2推进_仓位执行未开放",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "crypto-micro-layer-p3",
-                           "title":  "加密微观层 P3 历史证明管线",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "micro-layer/micro_calibrator.js",
-                                                "ok":  true,
-                                                "detail":  "exists (608 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_calibration.js",
-                                                "ok":  true,
-                                                "detail":  "exists (86 lines)"
-                                            },
-                                            {
-                                                "path":  "scripts/run_micro_calibration.js",
-                                                "ok":  true,
-                                                "detail":  "exists (101 lines)"
-                                            },
-                                            {
-                                                "path":  "artifacts/micro_calibration_book.json",
-                                                "ok":  true,
-                                                "detail":  "exists (5996 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "MVP已接入_P1P2P3推进_仓位执行未开放",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "crypto-micro-layer-p4",
-                           "title":  "加密微观层 P4 组合约束",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "micro-layer/micro_portfolio.js",
-                                                "ok":  true,
-                                                "detail":  "exists (242 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_portfolio.js",
-                                                "ok":  true,
-                                                "detail":  "exists (57 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_layer.js",
-                                                "ok":  true,
-                                                "detail":  "exists (976 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "MVP已接入_P1至P4推进_仓位执行未开放",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "crypto-micro-layer-p5",
-                           "title":  "加密微观层 P5 执行门禁（不下单）",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "micro-layer/micro_execution_gate.js",
-                                                "ok":  true,
-                                                "detail":  "exists (263 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_execution.js",
-                                                "ok":  true,
-                                                "detail":  "exists (85 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_layer.js",
-                                                "ok":  true,
-                                                "detail":  "exists (976 lines)"
-                                            },
-                                            {
-                                                "path":  "artifacts/micro_calibration_book.json",
-                                                "ok":  true,
-                                                "detail":  "exists (5996 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "MVP已接入_P1至P5门禁落地_校准样本已部分验证_仓位执行未开放",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "micro-source-trust",
-                           "title":  "微观层来源可信度脊梁",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "micro-layer/micro_source_trust.js",
-                                                "ok":  true,
-                                                "detail":  "exists (391 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_source_trust.js",
-                                                "ok":  true,
-                                                "detail":  "exists (87 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_layer.js",
-                                                "ok":  true,
-                                                "detail":  "exists (976 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_dashboard.js",
-                                                "ok":  true,
-                                                "detail":  "exists (290 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/数据源可信度与结构夯实_2026-07-13.md",
-                                         "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "source_trust_v1_landed_advisory_only",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "crypto-micro-layer-s1",
-                           "title":  "微观层 S1 基线与公共契约冻结",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "micro-layer/micro_contracts.js",
-                                                "ok":  true,
-                                                "detail":  "exists (264 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_contracts.js",
-                                                "ok":  true,
-                                                "detail":  "exists (122 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/fixtures/healthy.json",
-                                                "ok":  true,
-                                                "detail":  "exists (91 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/fixtures/source_conflict.json",
-                                                "ok":  true,
-                                                "detail":  "exists (79 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/fixtures/data_missing.json",
-                                                "ok":  true,
-                                                "detail":  "exists (73 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/fixtures/calibration_fail.json",
-                                                "ok":  true,
-                                                "detail":  "exists (78 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/fixtures/portfolio_overrun.json",
-                                                "ok":  true,
-                                                "detail":  "exists (87 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/OWNERS.md",
-                                                "ok":  true,
-                                                "detail":  "exists (34 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/微观层_并行开发路径与顺序_2026-07-13.md",
-                                         "AI项目控制台/financial-alert-system/微观层_S1基线与契约冻结_2026-07-13.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "S1_baseline_contracts_frozen_P1_ready",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       },
-                       {
-                           "id":  "crypto-micro-layer-s2",
-                           "title":  "微观层 S2 第一次统一集成",
-                           "passed":  true,
-                           "status":  "accepted",
-                           "evidence":  [
-                                            {
-                                                "path":  "micro-layer/tests/smoke_micro_s2_integration.js",
-                                                "ok":  true,
-                                                "detail":  "exists (319 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_source_trust.js",
-                                                "ok":  true,
-                                                "detail":  "exists (391 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_layer.js",
-                                                "ok":  true,
-                                                "detail":  "exists (976 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_calibrator.js",
-                                                "ok":  true,
-                                                "detail":  "exists (608 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_portfolio.js",
-                                                "ok":  true,
-                                                "detail":  "exists (242 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_dashboard.js",
-                                                "ok":  true,
-                                                "detail":  "exists (290 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_execution_gate.js",
-                                                "ok":  true,
-                                                "detail":  "exists (263 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/micro_contracts.js",
-                                                "ok":  true,
-                                                "detail":  "exists (264 lines)"
-                                            },
-                                            {
-                                                "path":  "micro-layer/fixtures/healthy.json",
-                                                "ok":  true,
-                                                "detail":  "exists (91 lines)"
-                                            }
-                                        ],
-                           "notes":  [
-                                         "AI项目控制台/financial-alert-system/微观层_并行开发路径与顺序_2026-07-13.md",
-                                         "AI项目控制台/financial-alert-system/微观层_S2统一集成_2026-07-13.md"
-                                     ],
-                           "frontmatter_status_on_pass":  "S2_integrated_P2_ready",
-                           "frontmatter_status_on_fail":  "acceptance_failed"
-                       }
-                   ],
-    "meta":  {
-                 "run_at":  "2026-07-13T10:45:58.8268431Z",
-                 "suite":  "sync_vault_status.ps1",
-                 "platform":  "win32"
-             }
+  "version": "project-status-v1",
+  "generated_at": "2026-07-14T08:00:30.7492125Z",
+  "product": "financial-alert-system",
+  "source_of_truth": "acceptance_registry.json + live code probes",
+  "git": {
+    "commit": "da8fdfb95f939ba959aaab8d221d45c31f27c68d",
+    "short": "da8fdfb",
+    "branch": "master",
+    "dirty": true,
+    "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
+  },
+  "paths": {
+    "code_root": "F:\\financial-alert-system",
+    "vault_root": "F:\\AI 金融知识点"
+  },
+  "files": {
+    "static/propagation_app.js": 5713,
+    "static/research_workbench.js": 2024,
+    "static/propagation_engine.js": 1925,
+    "static/data.js": 2088,
+    "index.html": 2980,
+    "package.json": 58
+  },
+  "acceptance": [
+    {
+      "id": "workbench-p0-p4",
+      "title": "传播图研究工作台 P0–P4",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "static/research_workbench.js",
+          "ok": true,
+          "detail": "exists (2024 lines)"
+        },
+        {
+          "path": "scripts/smoke_research_workbench_p1.js",
+          "ok": true,
+          "detail": "exists (96 lines)"
+        },
+        {
+          "path": "scripts/smoke_research_workbench_p2.js",
+          "ok": true,
+          "detail": "exists (96 lines)"
+        },
+        {
+          "path": "scripts/smoke_research_workbench_p3.js",
+          "ok": true,
+          "detail": "exists (79 lines)"
+        },
+        {
+          "path": "scripts/smoke_research_workbench_p4.js",
+          "ok": true,
+          "detail": "exists (115 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/传播图研究工作台整改方案_2026-07-11.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "frontmatter_status_on_pass": "done",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "engineering-gate",
+      "title": "工程门禁 npm check/smoke/acceptance",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "package.json",
+          "ok": true,
+          "detail": "exists (58 lines)"
+        },
+        {
+          "path": "scripts/run_smoke_test.js",
+          "ok": true,
+          "detail": "exists (80 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/工程收口与验真整改方案_2026-07-11.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "frontmatter_status_on_pass": "done",
+      "frontmatter_status_on_fail": "pending"
+    },
+    {
+      "id": "core-propagation",
+      "title": "传播图核心页面可用",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "propagation.html",
+          "ok": true,
+          "detail": "exists (1360 lines)"
+        },
+        {
+          "path": "static/propagation_app.js",
+          "ok": true,
+          "detail": "exists (5713 lines)"
+        },
+        {
+          "path": "propagation_graph.json",
+          "ok": true,
+          "detail": "exists (5001 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/README.md",
+        "AI项目控制台/financial-alert-system/任务进度.md"
+      ],
+      "frontmatter_status_on_pass": null,
+      "frontmatter_status_on_fail": null
+    },
+    {
+      "id": "crypto-micro-layer-p1",
+      "title": "加密微观层 MVP + P1 数据口径",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "micro-layer/micro_layer.js",
+          "ok": true,
+          "detail": "exists (983 lines)"
+        },
+        {
+          "path": "micro-layer/micro_dashboard.js",
+          "ok": true,
+          "detail": "exists (690 lines)"
+        },
+        {
+          "path": "micro-layer/tests/smoke_micro_layer.js",
+          "ok": true,
+          "detail": "exists (206 lines)"
+        },
+        {
+          "path": "micro-layer/tests/smoke_micro_page.js",
+          "ok": true,
+          "detail": "exists (116 lines)"
+        },
+        {
+          "path": "scripts/probe_micro_p1_legs.js",
+          "ok": true,
+          "detail": "exists (97 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
+      ],
+      "frontmatter_status_on_pass": "MVP已接入_P1数据口径推进_仓位执行未开放",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "crypto-micro-layer-p2",
+      "title": "加密微观层 P2 状态覆盖",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "micro-layer/micro_layer.js",
+          "ok": true,
+          "detail": "exists (983 lines)"
+        },
+        {
+          "path": "micro-layer/tests/smoke_micro_layer.js",
+          "ok": true,
+          "detail": "exists (206 lines)"
+        },
+        {
+          "path": "static/data.js",
+          "ok": true,
+          "detail": "exists (2088 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
+      ],
+      "frontmatter_status_on_pass": "MVP已接入_P1P2推进_仓位执行未开放",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "crypto-micro-layer-p3",
+      "title": "加密微观层 P3 历史证明管线",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "micro-layer/micro_calibrator.js",
+          "ok": true,
+          "detail": "exists (890 lines)"
+        },
+        {
+          "path": "micro-layer/tests/smoke_micro_calibration.js",
+          "ok": true,
+          "detail": "exists (158 lines)"
+        },
+        {
+          "path": "scripts/run_micro_calibration.js",
+          "ok": true,
+          "detail": "exists (119 lines)"
+        },
+        {
+          "path": "artifacts/micro_calibration_book.json",
+          "ok": true,
+          "detail": "exists (9706 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
+      ],
+      "frontmatter_status_on_pass": "MVP已接入_P1P2P3推进_仓位执行未开放",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "crypto-micro-layer-p4",
+      "title": "加密微观层 P4 组合约束",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "micro-layer/micro_portfolio.js",
+          "ok": true,
+          "detail": "exists (242 lines)"
+        },
+        {
+          "path": "micro-layer/tests/smoke_micro_portfolio.js",
+          "ok": true,
+          "detail": "exists (57 lines)"
+        },
+        {
+          "path": "micro-layer/micro_layer.js",
+          "ok": true,
+          "detail": "exists (983 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
+      ],
+      "frontmatter_status_on_pass": "MVP已接入_P1至P4推进_仓位执行未开放",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "crypto-micro-layer-p5",
+      "title": "加密微观层 P5 执行门禁（不下单）",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "micro-layer/micro_execution_gate.js",
+          "ok": true,
+          "detail": "exists (268 lines)"
+        },
+        {
+          "path": "micro-layer/tests/smoke_micro_execution.js",
+          "ok": true,
+          "detail": "exists (88 lines)"
+        },
+        {
+          "path": "micro-layer/micro_layer.js",
+          "ok": true,
+          "detail": "exists (983 lines)"
+        },
+        {
+          "path": "artifacts/micro_calibration_book.json",
+          "ok": true,
+          "detail": "exists (9706 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
+      ],
+      "frontmatter_status_on_pass": "MVP已接入_P1至P5门禁落地_校准样本已部分验证_仓位执行未开放",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "micro-source-trust",
+      "title": "微观层来源可信度脊梁",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "micro-layer/micro_source_trust.js",
+          "ok": true,
+          "detail": "exists (392 lines)"
+        },
+        {
+          "path": "micro-layer/tests/smoke_micro_source_trust.js",
+          "ok": true,
+          "detail": "exists (87 lines)"
+        },
+        {
+          "path": "micro-layer/micro_layer.js",
+          "ok": true,
+          "detail": "exists (983 lines)"
+        },
+        {
+          "path": "micro-layer/micro_dashboard.js",
+          "ok": true,
+          "detail": "exists (690 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/数据源可信度与结构夯实_2026-07-13.md",
+        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
+      ],
+      "frontmatter_status_on_pass": "source_trust_v1_landed_advisory_only",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "crypto-micro-layer-s1",
+      "title": "微观层 S1 基线与公共契约冻结",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "micro-layer/micro_contracts.js",
+          "ok": true,
+          "detail": "exists (264 lines)"
+        },
+        {
+          "path": "micro-layer/tests/smoke_micro_contracts.js",
+          "ok": true,
+          "detail": "exists (122 lines)"
+        },
+        {
+          "path": "micro-layer/fixtures/healthy.json",
+          "ok": true,
+          "detail": "exists (91 lines)"
+        },
+        {
+          "path": "micro-layer/fixtures/source_conflict.json",
+          "ok": true,
+          "detail": "exists (79 lines)"
+        },
+        {
+          "path": "micro-layer/fixtures/data_missing.json",
+          "ok": true,
+          "detail": "exists (73 lines)"
+        },
+        {
+          "path": "micro-layer/fixtures/calibration_fail.json",
+          "ok": true,
+          "detail": "exists (78 lines)"
+        },
+        {
+          "path": "micro-layer/fixtures/portfolio_overrun.json",
+          "ok": true,
+          "detail": "exists (87 lines)"
+        },
+        {
+          "path": "micro-layer/OWNERS.md",
+          "ok": true,
+          "detail": "exists (42 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/微观层_并行开发路径与顺序_2026-07-13.md",
+        "AI项目控制台/financial-alert-system/微观层_S1基线与契约冻结_2026-07-13.md"
+      ],
+      "frontmatter_status_on_pass": "S1_baseline_contracts_frozen_P1_ready",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    },
+    {
+      "id": "crypto-micro-layer-s2",
+      "title": "微观层 S2 第一次统一集成",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [
+        {
+          "path": "micro-layer/tests/smoke_micro_s2_integration.js",
+          "ok": true,
+          "detail": "exists (319 lines)"
+        },
+        {
+          "path": "micro-layer/micro_source_trust.js",
+          "ok": true,
+          "detail": "exists (392 lines)"
+        },
+        {
+          "path": "micro-layer/micro_layer.js",
+          "ok": true,
+          "detail": "exists (983 lines)"
+        },
+        {
+          "path": "micro-layer/micro_calibrator.js",
+          "ok": true,
+          "detail": "exists (890 lines)"
+        },
+        {
+          "path": "micro-layer/micro_portfolio.js",
+          "ok": true,
+          "detail": "exists (242 lines)"
+        },
+        {
+          "path": "micro-layer/micro_dashboard.js",
+          "ok": true,
+          "detail": "exists (690 lines)"
+        },
+        {
+          "path": "micro-layer/micro_execution_gate.js",
+          "ok": true,
+          "detail": "exists (268 lines)"
+        },
+        {
+          "path": "micro-layer/micro_contracts.js",
+          "ok": true,
+          "detail": "exists (264 lines)"
+        },
+        {
+          "path": "micro-layer/fixtures/healthy.json",
+          "ok": true,
+          "detail": "exists (91 lines)"
+        }
+      ],
+      "notes": [
+        "AI项目控制台/financial-alert-system/微观层_并行开发路径与顺序_2026-07-13.md",
+        "AI项目控制台/financial-alert-system/微观层_S2统一集成_2026-07-13.md"
+      ],
+      "frontmatter_status_on_pass": "S2_integrated_P2_ready",
+      "frontmatter_status_on_fail": "acceptance_failed"
+    }
+  ],
+  "meta": {
+    "run_at": "2026-07-14T08:00:30.7492125Z",
+    "suite": "sync_vault_status.ps1",
+    "platform": "win32"
+  }
 }
