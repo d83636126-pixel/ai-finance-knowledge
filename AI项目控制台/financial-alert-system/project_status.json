@@ -1,11 +1,11 @@
 ﻿{
   "version": "project-status-v1",
-  "generated_at": "2026-07-14T14:01:59.6964801Z",
+  "generated_at": "2026-07-15T02:13:01.8153596Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + live code probes",
   "git": {
-    "commit": "da8fdfb95f939ba959aaab8d221d45c31f27c68d",
-    "short": "da8fdfb",
+    "commit": "26a392dbb8d468c73346ac277dc10cc16a99efb4",
+    "short": "26a392d",
     "branch": "master",
     "dirty": true,
     "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
@@ -20,7 +20,7 @@
     "static/propagation_engine.js": 1925,
     "static/data.js": 2284,
     "index.html": 2983,
-    "package.json": 72
+    "package.json": 74
   },
   "acceptance": [
     {
@@ -71,7 +71,7 @@
         {
           "path": "package.json",
           "ok": true,
-          "detail": "exists (72 lines)"
+          "detail": "exists (74 lines)"
         },
         {
           "path": "scripts/run_smoke_test.js",
@@ -424,7 +424,7 @@
     }
   ],
   "meta": {
-    "run_at": "2026-07-14T14:01:59.6964801Z",
+    "run_at": "2026-07-15T02:13:01.8153596Z",
     "suite": "sync_vault_status.ps1",
     "platform": "win32"
   }
