@@ -1,115 +1,43 @@
-﻿# Folder status — scheme D (workflow + attention). Color is computed by sync script.
-# Legacy `status:` still accepted for compatibility; prefer workflow/attention.
-# Edit this file, then: sync_folder_status_colors.ps1 -Sync -Dashboard
+# Folder status — single source of truth. Edit status, then run sync_folder_status_colors.ps1
+# status: green | blue | orange | red | gray
+# blue = in progress (soft blue, not harsh yellow)
 
-version: 2
 updated: 2026-07-13
 
 folders:
   - path: 01_方法论
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    owner: 知识库
-    inherit: true
-    reason: 稳态参考资料
-
+    status: green
+    note: steady reference
   - path: 02_数据
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    owner: 知识库
-    inherit: true
-    reason: 稳态数据归档
-
+    status: green
+    note: steady reference
   - path: 03_分析案例
-    workflow: waiting
-    attention: watch
-    updated: 2026-07-13
-    review_by: 2026-08-08
-    next_action: 等待 8 月就业/案例窗口后补写
-    owner: AI协作
-    inherit: true
-    reason: 等待 8 月 NFP 案例窗口
-
+    status: orange
+    note: wait 8/8 July NFP case
   - path: 04_推演跟踪
-    workflow: active
-    attention: normal
-    updated: 2026-07-13
-    review_by: 2026-07-20
-    next_action: 跟进 CPI/PPI/银行财报交叉窗口
-    owner: AI协作
-    inherit: true
-    reason: NFP 事前与日历窗口推进中
-
+    status: blue
+    note: NFP pre-release + Walsh calendar
   - path: 05_投资复盘
-    workflow: paused
-    attention: normal
-    updated: 2026-07-13
-    owner: 知识库
-    inherit: true
-    reason: 主动暂停
-
+    status: gray
+    note: paused
   - path: 06_对话记录
-    workflow: archived
-    attention: normal
-    updated: 2026-07-13
-    owner: 知识库
-    inherit: true
-    reason: 归档对话，不再维护
-
+    status: green
+    note: archive
   - path: 90_系统配置
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    owner: AI协作
-    inherit: true
-    reason: 方案 D 已落地；日常仅维护 YAML 后 Sync
-
+    status: blue
+    note: sync and color maintenance
   - path: AI协作记忆系统
-    workflow: active
-    attention: normal
-    updated: 2026-07-13
-    review_by: 2026-07-18
-    next_action: 完成剩余 3.4 / 4.7 章节
-    owner: AI协作
-    inherit: true
-    reason: 正常推进
-
+    status: blue
+    note: open 3.4 / 4.7
   - path: AI项目控制台
-    workflow: active
-    attention: normal
-    updated: 2026-07-13
-    review_by: 2026-07-20
-    next_action: 跟进 NFP 与 FAS 子项目复核
-    owner: AI协作
-    inherit: true
-    reason: NFP + FAS 活跃
-
+    status: blue
+    note: NFP + FAS active
   - path: AI项目控制台/NFP月度跟踪
-    workflow: waiting
-    attention: watch
-    updated: 2026-07-13
-    review_by: 2026-08-07
-    next_action: 等待下次就业报告后做事后对比
-    owner: AI协作
-    inherit: true
-    reason: 事件窗口未到
-
+    status: blue
+    note: July pre-release run
   - path: AI项目控制台/financial-alert-system
-    workflow: active
-    attention: watch
-    updated: 2026-07-13
-    review_by: 2026-07-20
-    next_action: 完成证据层 V2 验收（补齐实时数据）
-    owner: AI协作
-    inherit: true
-    reason: 当前证据快照仍以手工数据为主；验收为有条件通过
-
+    status: blue
+    note: conditional pass / V2
   - path: AI项目控制台/minimal-login-demo
-    workflow: archived
-    attention: normal
-    updated: 2026-07-13
-    owner: AI协作
-    inherit: true
-    reason: 非活跃演示项目
+    status: gray
+    note: inactive

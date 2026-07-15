@@ -1,151 +1,57 @@
-﻿# File-level status OVERRIDES (scheme D)
-# Default: inherit folder color via CSS. List a file here ONLY when status differs,
-# or for root-level notes that need a color.
-# Prefer workflow + attention; legacy status still accepted.
+# File-level status OVERRIDES (scheme C)
+# Files inherit their folder color via CSS by default.
+# List a file here ONLY when its status differs from the parent folder,
+# or when it is a root-level note that needs a color.
 # path: bare name WITHOUT emoji prefix. Do not rename files for status.
+# status: green | blue | orange | red | gray
 
-version: 2
 updated: 2026-07-13
 
 files:
   # Root notes (no parent folder color)
   - path: 00_知识库总导航.md
-    workflow: active
-    attention: normal
-    updated: 2026-07-13
-    review_by: 2026-07-27
-    next_action: 保持导航与分区入口同步
-    reason: 根级导航入口
-
+    status: blue
   - path: 00_状态色标说明.md
-    workflow: active
-    attention: normal
-    updated: 2026-07-13
-    review_by: 2026-07-27
-    next_action: 随方案 D 使用说明维护
-    reason: 状态色标用户说明
-
+    status: blue
   - path: 00_知识图谱索引.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态索引
+    status: green
 
-  - path: 00_状态总览.md
-    workflow: active
-    attention: watch
-    updated: 2026-07-13
-    review_by: 2026-07-20
-    next_action: 由 sync -Dashboard 自动重建，勿手改正文
-    reason: 自动状态总览（脚本生成）
-
-  # Within blue/active folders but steady (override to done/green)
+  # Within blue folders but steady (override to green)
   - path: AI协作记忆系统/决策记录.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态决策记录
-
+    status: green
   - path: AI协作记忆系统/AI记录规范.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态规范
-
+    status: green
   - path: AI协作记忆系统/需求自审摘要.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态摘要
-
+    status: green
   - path: AI协作记忆系统/金融分析系统_AI协作实战指南.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态指南
-
+    status: green
   - path: AI项目控制台/autonomous-loop-framework.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态框架文档
-
+    status: green
   - path: AI项目控制台/NFP月度跟踪/决策记录.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态决策记录
-
+    status: green
   - path: AI项目控制台/financial-alert-system/决策记录.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态决策记录
-
+    status: green
   - path: 90_系统配置/Obsidian_Git_插件配置指南.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态指南
-
+    status: green
   - path: 90_系统配置/多机器同步Obsidian库指南.md
-    workflow: done
-    attention: normal
-    updated: 2026-07-13
-    reason: 稳态指南
+    status: green
 
-  # Scheduled / watch overrides
+  # Within blue folders but scheduled (override to orange)
   - path: 04_推演跟踪/提醒系统_2026下半年关键事件.md
-    workflow: scheduled
-    attention: watch
-    updated: 2026-07-13
-    review_by: 2026-07-20
-    next_action: 按关键事件窗口刷新提醒
-    reason: 排期提醒清单
-
+    status: orange
   - path: 04_推演跟踪/2026-07-14_CPI-PPI-银行财报-美伊冲突_交叉窗口.md
-    workflow: scheduled
-    attention: watch
-    updated: 2026-07-13
-    review_by: 2026-07-14
-    next_action: 窗口日跟踪交叉冲击
-    reason: 明日交叉事件窗口
-
+    status: orange
   - path: AI项目控制台/financial-alert-system/验收报告_研究工作台_有条件通过_2026-07-12.md
-    workflow: waiting
-    attention: watch
-    updated: 2026-07-13
-    review_by: 2026-07-20
-    next_action: 补充实时数据验证后关闭条件
-    reason: 当前为有条件通过
+    status: orange
 
-  # Inactive project docs
+  # Within blue console but inactive project docs (override to gray)
   - path: AI项目控制台/项目_minimal-login-demo.md
-    workflow: archived
-    attention: normal
-    updated: 2026-07-13
-    reason: 非活跃项目入口
-
+    status: gray
   - path: AI项目控制台/minimal-login-demo/需求拆分.md
-    workflow: archived
-    attention: normal
-    updated: 2026-07-13
-    reason: 非活跃
-
+    status: gray
   - path: AI项目控制台/minimal-login-demo/任务进度.md
-    workflow: archived
-    attention: normal
-    updated: 2026-07-13
-    reason: 非活跃
-
+    status: gray
   - path: AI项目控制台/minimal-login-demo/决策记录.md
-    workflow: archived
-    attention: normal
-    updated: 2026-07-13
-    reason: 非活跃
-
+    status: gray
   - path: AI项目控制台/minimal-login-demo/会话交接.md
-    workflow: archived
-    attention: normal
-    updated: 2026-07-13
-    reason: 非活跃
+    status: gray

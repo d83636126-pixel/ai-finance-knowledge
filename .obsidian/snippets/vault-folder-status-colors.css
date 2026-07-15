@@ -1,292 +1,64 @@
-/* AUTO-GENERATED from folder_status.yml + file_status.yml */
-/* Scheme D: color computed from workflow + attention */
-/* Indexes keep emoji names; other files use CSS only */
+/* AUTO-GENERATED from folder_status.yml */
+/* In-progress = soft BLUE bar */
 
 .nav-folder-title[data-path] { border-left: 3px solid transparent; padding-left: 6px; font-weight: 500; }
-.nav-file-title[data-path] { border-left: 3px solid transparent; padding-left: 6px; }
 
-/* folder: 01_方法论 = green (done/normal; workflow:done) */
 .nav-folder-title[data-path="01_方法论"] {
   border-left-color: #3d9a6a !important;
   color: #2f6f4e !important;
 }
-.nav-file-title[data-path^="01_方法论/"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
 
-/* folder: 02_数据 = green (done/normal; workflow:done) */
 .nav-folder-title[data-path="02_数据"] {
   border-left-color: #3d9a6a !important;
   color: #2f6f4e !important;
 }
-.nav-file-title[data-path^="02_数据/"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
 
-/* folder: 03_分析案例 = orange (waiting/watch; attention:watch) */
 .nav-folder-title[data-path="03_分析案例"] {
   border-left-color: #d4a05a !important;
   color: #9a7040 !important;
 }
-.nav-file-title[data-path^="03_分析案例/"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
 
-/* folder: 04_推演跟踪 = blue (active/normal; workflow:active) */
 .nav-folder-title[data-path="04_推演跟踪"] {
   border-left-color: #5b9fd4 !important;
   color: #3d6f9c !important;
 }
-.nav-file-title[data-path^="04_推演跟踪/"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
 
-/* folder: 05_投资复盘 = gray (paused/normal; workflow:paused) */
 .nav-folder-title[data-path="05_投资复盘"] {
   border-left-color: #a0a6b0 !important;
   color: #6e737a !important;
 }
-.nav-file-title[data-path^="05_投资复盘/"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
 
-/* folder: 06_对话记录 = gray (archived/normal; workflow:archived) */
 .nav-folder-title[data-path="06_对话记录"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-.nav-file-title[data-path^="06_对话记录/"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
+  border-left-color: #3d9a6a !important;
+  color: #2f6f4e !important;
 }
 
-/* folder: 90_系统配置 = green (done/normal; workflow:done) */
 .nav-folder-title[data-path="90_系统配置"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-.nav-file-title[data-path^="90_系统配置/"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
 }
 
-/* folder: AI协作记忆系统 = blue (active/normal; workflow:active) */
 .nav-folder-title[data-path="AI协作记忆系统"] {
   border-left-color: #5b9fd4 !important;
   color: #3d6f9c !important;
 }
-.nav-file-title[data-path^="AI协作记忆系统/"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
 
-/* folder: AI项目控制台 = blue (active/normal; workflow:active) */
 .nav-folder-title[data-path="AI项目控制台"] {
   border-left-color: #5b9fd4 !important;
   color: #3d6f9c !important;
 }
-.nav-file-title[data-path^="AI项目控制台/"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
 
-/* folder: AI项目控制台/NFP月度跟踪 = orange (waiting/watch; attention:watch) */
 .nav-folder-title[data-path="AI项目控制台/NFP月度跟踪"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-.nav-file-title[data-path^="AI项目控制台/NFP月度跟踪/"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
 }
 
-/* folder: AI项目控制台/financial-alert-system = orange (active/watch; attention:watch) */
 .nav-folder-title[data-path="AI项目控制台/financial-alert-system"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-.nav-file-title[data-path^="AI项目控制台/financial-alert-system/"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
+  border-left-color: #5b9fd4 !important;
+  color: #3d6f9c !important;
 }
 
-/* folder: AI项目控制台/minimal-login-demo = gray (archived/normal; workflow:archived) */
 .nav-folder-title[data-path="AI项目控制台/minimal-login-demo"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-.nav-file-title[data-path^="AI项目控制台/minimal-login-demo/"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-/* file_status.yml overrides (and root files) */
-.nav-file-title[data-path="00_知识库总导航.md"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-file-title[data-path="00_状态色标说明.md"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-file-title[data-path="00_知识图谱索引.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="00_状态总览.md"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-
-.nav-file-title[data-path="AI协作记忆系统/决策记录.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="AI协作记忆系统/AI记录规范.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="AI协作记忆系统/需求自审摘要.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="AI协作记忆系统/金融分析系统_AI协作实战指南.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/autonomous-loop-framework.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/决策记录.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/financial-alert-system/决策记录.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="90_系统配置/Obsidian_Git_插件配置指南.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="90_系统配置/多机器同步Obsidian库指南.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="04_推演跟踪/提醒系统_2026下半年关键事件.md"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-
-.nav-file-title[data-path="04_推演跟踪/2026-07-14_CPI-PPI-银行财报-美伊冲突_交叉窗口.md"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/financial-alert-system/验收报告_研究工作台_有条件通过_2026-07-12.md"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/项目_minimal-login-demo.md"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/minimal-login-demo/需求拆分.md"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/minimal-login-demo/任务进度.md"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/minimal-login-demo/决策记录.md"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/minimal-login-demo/会话交接.md"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-.nav-file-title[data-path="01_方法论/00_🟢索引.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="02_数据/00_🟢索引.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="03_分析案例/00_🟠索引.md"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-
-.nav-file-title[data-path="04_推演跟踪/00_🔵索引.md"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-file-title[data-path="05_投资复盘/00_⚪索引.md"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-.nav-file-title[data-path="06_对话记录/00_⚪索引.md"] {
-  border-left-color: #a0a6b0 !important;
-  color: #6e737a !important;
-}
-
-.nav-file-title[data-path="90_系统配置/00_🟢索引.md"] {
-  border-left-color: #3d9a6a !important;
-  color: #2f6f4e !important;
-}
-
-.nav-file-title[data-path="AI协作记忆系统/00_🔵索引.md"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/00_🔵索引.md"] {
-  border-left-color: #5b9fd4 !important;
-  color: #3d6f9c !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/NFP月度跟踪/00_🟠索引.md"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/financial-alert-system/00_🟠索引.md"] {
-  border-left-color: #d4a05a !important;
-  color: #9a7040 !important;
-}
-
-.nav-file-title[data-path="AI项目控制台/minimal-login-demo/00_⚪索引.md"] {
   border-left-color: #a0a6b0 !important;
   color: #6e737a !important;
 }
