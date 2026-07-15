@@ -1,11 +1,11 @@
 ﻿{
   "version": "project-status-v1",
-  "generated_at": "2026-07-15T02:13:01.8153596Z",
+  "generated_at": "2026-07-15T04:42:10.7036952Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + live code probes",
   "git": {
-    "commit": "26a392dbb8d468c73346ac277dc10cc16a99efb4",
-    "short": "26a392d",
+    "commit": "ffa0093900c0a7c3040d9c0be0fc585259c3316a",
+    "short": "ffa0093",
     "branch": "master",
     "dirty": true,
     "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
@@ -16,11 +16,11 @@
   },
   "files": {
     "static/propagation_app.js": 5713,
-    "static/research_workbench.js": 2024,
+    "static/research_workbench.js": 2039,
     "static/propagation_engine.js": 1925,
     "static/data.js": 2284,
     "index.html": 2983,
-    "package.json": 74
+    "package.json": 75
   },
   "acceptance": [
     {
@@ -32,7 +32,7 @@
         {
           "path": "static/research_workbench.js",
           "ok": true,
-          "detail": "exists (2024 lines)"
+          "detail": "exists (2039 lines)"
         },
         {
           "path": "scripts/smoke_research_workbench_p1.js",
@@ -71,7 +71,7 @@
         {
           "path": "package.json",
           "ok": true,
-          "detail": "exists (74 lines)"
+          "detail": "exists (75 lines)"
         },
         {
           "path": "scripts/run_smoke_test.js",
@@ -139,7 +139,7 @@
         {
           "path": "micro-layer/tests/smoke_micro_page.js",
           "ok": true,
-          "detail": "exists (50 lines)"
+          "detail": "exists (74 lines)"
         },
         {
           "path": "scripts/probe_micro_p1_legs.js",
@@ -424,7 +424,7 @@
     }
   ],
   "meta": {
-    "run_at": "2026-07-15T02:13:01.8153596Z",
+    "run_at": "2026-07-15T04:42:10.7036952Z",
     "suite": "sync_vault_status.ps1",
     "platform": "win32"
   }
