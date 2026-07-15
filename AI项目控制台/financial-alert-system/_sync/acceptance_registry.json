@@ -1,14 +1,14 @@
 {
   "version": "acceptance-registry-v1",
   "code_root_candidates": [
-    "F:\\financial-alert-system",
     "D:\\financial-alert-system",
+    "F:\\financial-alert-system",
     "C:\\Users\\Administrator\\Downloads\\financial-alert-system"
   ],
   "vault_root_candidates": [
-    "F:\\AI 金融知识点",
+    "D:\\AI  金融知识点",
     "D:\\AI 金融知识点",
-    "D:\\AI  金融知识点"
+    "F:\\AI 金融知识点"
   ],
   "mirror_relpath": "AI项目控制台/financial-alert-system/project_status.json",
   "items": [
@@ -56,145 +56,6 @@
         { "type": "file_exists", "path": "propagation.html" },
         { "type": "file_exists", "path": "static/propagation_app.js" },
         { "type": "file_exists", "path": "propagation_graph.json" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "crypto-micro-layer-p1",
-      "title": "加密微观层 MVP + P1 数据口径",
-      "notes": [
-        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-      ],
-      "frontmatter_status_on_pass": "MVP已接入_P1数据口径推进_仓位执行未开放",
-      "frontmatter_status_on_fail": "acceptance_failed",
-      "evidence": [
-        { "type": "file_exists", "path": "micro-layer/micro_layer.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_dashboard.js" },
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_layer.js" },
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_page.js" },
-        { "type": "file_exists", "path": "scripts/probe_micro_p1_legs.js" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "crypto-micro-layer-p2",
-      "title": "加密微观层 P2 状态覆盖",
-      "notes": [
-        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-      ],
-      "frontmatter_status_on_pass": "MVP已接入_P1P2推进_仓位执行未开放",
-      "frontmatter_status_on_fail": "acceptance_failed",
-      "evidence": [
-        { "type": "file_exists", "path": "micro-layer/micro_layer.js" },
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_layer.js" },
-        { "type": "file_exists", "path": "static/data.js" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "crypto-micro-layer-p3",
-      "title": "加密微观层 P3 历史证明管线",
-      "notes": [
-        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-      ],
-      "frontmatter_status_on_pass": "MVP已接入_P1P2P3推进_仓位执行未开放",
-      "frontmatter_status_on_fail": "acceptance_failed",
-      "evidence": [
-        { "type": "file_exists", "path": "micro-layer/micro_calibrator.js" },
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_calibration.js" },
-        { "type": "file_exists", "path": "scripts/run_micro_calibration.js" },
-        { "type": "file_exists", "path": "artifacts/micro_calibration_book.json" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "crypto-micro-layer-p4",
-      "title": "加密微观层 P4 组合约束",
-      "notes": [
-        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-      ],
-      "frontmatter_status_on_pass": "MVP已接入_P1至P4推进_仓位执行未开放",
-      "frontmatter_status_on_fail": "acceptance_failed",
-      "evidence": [
-        { "type": "file_exists", "path": "micro-layer/micro_portfolio.js" },
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_portfolio.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_layer.js" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "crypto-micro-layer-p5",
-      "title": "加密微观层 P5 执行门禁（不下单）",
-      "notes": [
-        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-      ],
-      "frontmatter_status_on_pass": "MVP已接入_P1至P5门禁落地_校准样本已部分验证_仓位执行未开放",
-      "frontmatter_status_on_fail": "acceptance_failed",
-      "evidence": [
-        { "type": "file_exists", "path": "micro-layer/micro_execution_gate.js" },
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_execution.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_layer.js" },
-        { "type": "file_exists", "path": "artifacts/micro_calibration_book.json" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "micro-source-trust",
-      "title": "微观层来源可信度脊梁",
-      "notes": [
-        "AI项目控制台/financial-alert-system/数据源可信度与结构夯实_2026-07-13.md",
-        "AI项目控制台/financial-alert-system/微观层功能实施与验收_2026-07-13.md"
-      ],
-      "frontmatter_status_on_pass": "source_trust_v1_landed_advisory_only",
-      "frontmatter_status_on_fail": "acceptance_failed",
-      "evidence": [
-        { "type": "file_exists", "path": "micro-layer/micro_source_trust.js" },
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_source_trust.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_layer.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_dashboard.js" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "crypto-micro-layer-s1",
-      "title": "微观层 S1 基线与公共契约冻结",
-      "notes": [
-        "AI项目控制台/financial-alert-system/微观层_并行开发路径与顺序_2026-07-13.md",
-        "AI项目控制台/financial-alert-system/微观层_S1基线与契约冻结_2026-07-13.md"
-      ],
-      "frontmatter_status_on_pass": "S1_baseline_contracts_frozen_P1_ready",
-      "frontmatter_status_on_fail": "acceptance_failed",
-      "evidence": [
-        { "type": "file_exists", "path": "micro-layer/micro_contracts.js" },
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_contracts.js" },
-        { "type": "file_exists", "path": "micro-layer/fixtures/healthy.json" },
-        { "type": "file_exists", "path": "micro-layer/fixtures/source_conflict.json" },
-        { "type": "file_exists", "path": "micro-layer/fixtures/data_missing.json" },
-        { "type": "file_exists", "path": "micro-layer/fixtures/calibration_fail.json" },
-        { "type": "file_exists", "path": "micro-layer/fixtures/portfolio_overrun.json" },
-        { "type": "file_exists", "path": "micro-layer/OWNERS.md" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "crypto-micro-layer-s2",
-      "title": "微观层 S2 第一次统一集成",
-      "notes": [
-        "AI项目控制台/financial-alert-system/微观层_并行开发路径与顺序_2026-07-13.md",
-        "AI项目控制台/financial-alert-system/微观层_S2统一集成_2026-07-13.md"
-      ],
-      "frontmatter_status_on_pass": "S2_integrated_P2_ready",
-      "frontmatter_status_on_fail": "acceptance_failed",
-      "evidence": [
-        { "type": "file_exists", "path": "micro-layer/tests/smoke_micro_s2_integration.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_source_trust.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_layer.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_calibrator.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_portfolio.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_dashboard.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_execution_gate.js" },
-        { "type": "file_exists", "path": "micro-layer/micro_contracts.js" },
-        { "type": "file_exists", "path": "micro-layer/fixtures/healthy.json" }
       ],
       "pass_requires": "all"
     }

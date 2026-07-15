@@ -72,8 +72,8 @@ status: active
 - [[06_对话记录/6月非农数据后与CLAUDE_深谈]]
 
 ### 工程交叉（5.4）
-- [[AI项目控制台/financial-alert-system/06_研究专题/01_宏观事件/NFP链路可考证与Case检查项_2026-07-11]]
-- [[AI项目控制台/financial-alert-system/06_研究专题/01_宏观事件/讨论_图谱可信度与非农研究_2026-07-11]]
+- [[AI项目控制台/financial-alert-system/NFP链路可考证与Case检查项_2026-07-11]]
+- [[AI项目控制台/financial-alert-system/讨论_图谱可信度与非农研究_2026-07-11]]
 - [[AI项目控制台/项目_financial-alert-system]]
 
 ## 下一步行动
