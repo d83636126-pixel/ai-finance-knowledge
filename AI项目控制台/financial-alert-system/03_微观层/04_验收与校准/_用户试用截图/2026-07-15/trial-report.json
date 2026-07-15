@@ -1,0 +1,2173 @@
+{
+  "startedAt": "2026-07-15T05:44:33.760Z",
+  "base": "http://127.0.0.1:8000",
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "requestFailures": [],
+  "desktop": {
+    "overview": {
+      "label": "desktop-overview",
+      "url": "http://127.0.0.1:8000/micro-layer/index.html?mode=overview",
+      "title": "微观传导工作台 · 研究准备度",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "document": {
+        "scrollWidth": 1366,
+        "scrollHeight": 2448,
+        "clientWidth": 1366
+      },
+      "horizontalOverflow": false,
+      "selectedSymbol": "BTC",
+      "modes": [
+        {
+          "id": "overview",
+          "label": "研究总览",
+          "active": true,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "id": "transmission",
+          "label": "传导路径",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "id": "evidence",
+          "label": "证据检查",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "id": "observation",
+          "label": "观察回放",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "id": "quality",
+          "label": "数据质量",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "cards": [
+        {
+          "symbol": "BTC",
+          "selected": true,
+          "text": "BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+          "rect": {
+            "x": 266,
+            "y": 1776,
+            "width": 335,
+            "height": 243,
+            "bottom": 2019
+          }
+        },
+        {
+          "symbol": "ETH",
+          "selected": false,
+          "text": "ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+          "rect": {
+            "x": 611,
+            "y": 1776,
+            "width": 335,
+            "height": 243,
+            "bottom": 2019
+          }
+        },
+        {
+          "symbol": "SOL",
+          "selected": false,
+          "text": "SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率",
+          "rect": {
+            "x": 957,
+            "y": 1776,
+            "width": 335,
+            "height": 243,
+            "bottom": 2019
+          }
+        }
+      ],
+      "nav": [
+        {
+          "label": "仪表盘",
+          "href": "http://127.0.0.1:8000/index.html",
+          "active": false
+        },
+        {
+          "label": "推导链",
+          "href": "http://127.0.0.1:8000/propagation.html",
+          "active": false
+        },
+        {
+          "label": "架构",
+          "href": "http://127.0.0.1:8000/architecture.html",
+          "active": false
+        },
+        {
+          "label": "微观工作台",
+          "href": "http://127.0.0.1:8000/micro-layer/index.html",
+          "active": true
+        },
+        {
+          "label": "历史归档 · 旧版卡片",
+          "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+          "active": false
+        }
+      ],
+      "headings": [
+        "微观传导工作台",
+        "研究导航",
+        "研究总览",
+        "结论与边界"
+      ],
+      "statusText": "情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。",
+      "bannerText": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+      "bannerVisible": true,
+      "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:34.962Z 有效期 2026-07-16T17:44:34.962Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → BTC · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:34.962Z 有效期 2026-07-16T17:44:34.962Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 已记录 1 次观察快照 · partially_confirmed 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 下一步 1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation 预期 unspecified → 可观察 funding_pressure, oi_change, futures_basis, spot_vs_mark → 证据 support=3 / contradict=0 / missing=1 → 立场 证据不足 · 偏差 insufficient 多资产比较 · 同一数据时间窗口可比 BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率 首屏三分栏：宏观路径 / 微观证据 / 综合结论。宏观过期或缺失时综合不得显示「已确认」。未知字段显示「尚无证据」。advisory-only · executable=false。",
+      "inspectorText": "结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。",
+      "bodyText": "微观传导工作台 路径级验证 · 人工决策准备度 · advisory-only · 不生成订单 刷新研究快照 BTC ETH SOL 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核） 情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 研究导航 研究总览 传导路径 证据检查 观察回放 数据质量 五种模式共用同一 view model；首屏为研究总览，不在面板内重算路径结论。 研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:34.962Z 有效期 2026-07-16T17:44:34.962Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → BTC · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:34.962Z 有效期 2026-07-16T17:44:34.962Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 已记录 1 次观察快照 · partially_confirmed 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 下一步 1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation 预期 unspecified → 可观察 funding_pressure, oi_change, futures_basis, spot_vs_mark → 证据 support=3 / contradict=0 / missing=1 → 立场 证据不足 · 偏差 insufficient 多资产比较 · 同一数据时间窗口可比 BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率 首屏三分栏：宏观路径 / 微观证据 / 综合结论。宏观过期或缺失时综合不得显示「已确认」。未知字段显示「尚无证据」。advisory-only · executable=false。 结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 安全边界：无下单 / 执行 / 授权 / 目标仓位按钮；executable 恒为 false；正式校准簿不被观察任务改写。",
+      "visibleButtons": [
+        {
+          "label": "刷新研究快照",
+          "id": "refreshWb",
+          "disabled": false,
+          "rect": {
+            "x": 1209,
+            "y": 26,
+            "width": 96,
+            "height": 23,
+            "bottom": 49
+          }
+        },
+        {
+          "label": "研究总览",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "label": "传导路径",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "label": "证据检查",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "label": "观察回放",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "label": "数据质量",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        },
+        {
+          "label": "BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 266,
+            "y": 1776,
+            "width": 335,
+            "height": 243,
+            "bottom": 2019
+          }
+        },
+        {
+          "label": "ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 611,
+            "y": 1776,
+            "width": 335,
+            "height": 243,
+            "bottom": 2019
+          }
+        },
+        {
+          "label": "SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 957,
+            "y": 1776,
+            "width": 335,
+            "height": 243,
+            "bottom": 2019
+          }
+        }
+      ],
+      "rects": {
+        "status": {
+          "x": 61,
+          "y": 156,
+          "width": 1244,
+          "height": 192,
+          "bottom": 348
+        },
+        "layout": {
+          "x": 61,
+          "y": 362,
+          "width": 1244,
+          "height": 2005,
+          "bottom": 2367
+        },
+        "main": {
+          "x": 266,
+          "y": 375,
+          "width": 1026,
+          "height": 1674,
+          "bottom": 2049
+        },
+        "inspector": {
+          "x": 61,
+          "y": 2087,
+          "width": 1244,
+          "height": 280,
+          "bottom": 2367
+        }
+      },
+      "aboveFoldMainRatio": 0.23478674843876893,
+      "bannedControls": 0
+    },
+    "transmission": {
+      "label": "desktop-transmission",
+      "url": "http://127.0.0.1:8000/micro-layer/index.html?mode=transmission",
+      "title": "微观传导工作台 · 研究准备度",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "document": {
+        "scrollWidth": 1366,
+        "scrollHeight": 1509,
+        "clientWidth": 1366
+      },
+      "horizontalOverflow": false,
+      "selectedSymbol": "BTC",
+      "modes": [
+        {
+          "id": "overview",
+          "label": "研究总览",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "id": "transmission",
+          "label": "传导路径",
+          "active": true,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "id": "evidence",
+          "label": "证据检查",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "id": "observation",
+          "label": "观察回放",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "id": "quality",
+          "label": "数据质量",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "cards": [],
+      "nav": [
+        {
+          "label": "仪表盘",
+          "href": "http://127.0.0.1:8000/index.html",
+          "active": false
+        },
+        {
+          "label": "推导链",
+          "href": "http://127.0.0.1:8000/propagation.html",
+          "active": false
+        },
+        {
+          "label": "架构",
+          "href": "http://127.0.0.1:8000/architecture.html",
+          "active": false
+        },
+        {
+          "label": "微观工作台",
+          "href": "http://127.0.0.1:8000/micro-layer/index.html",
+          "active": true
+        },
+        {
+          "label": "历史归档 · 旧版卡片",
+          "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+          "active": false
+        }
+      ],
+      "headings": [
+        "微观传导工作台",
+        "研究导航",
+        "传导路径",
+        "结论与边界"
+      ],
+      "statusText": "情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。",
+      "bannerText": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+      "bannerVisible": true,
+      "mainText": "传导路径 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 路径：fomc_hawkish → BTC · 点击图中节点/边查看逐边证据（右侧检视器） e_macro_mechanism 核心边 方向 down · 时滞 24h · 状态 已过期 机制：宏观情景 → 传导机制 失效：情景失效 证据：ev_macro_ctx e_BTC_funding_rate 核心边 方向 down · 时滞 24h · 状态 有效 机制：funding_rate 边验证 失效：因子失效或来源冲突 证据：ev_BTC_funding_rate e_BTC_open_interest 核心边 方向 down · 时滞 48h · 状态 有效 机制：open_interest 边验证 失效：因子失效或来源冲突 证据：ev_BTC_open_interest e_BTC_price 核心边 方向 down · 时滞 72h · 状态 有效 机制：price 边验证 失效：因子失效或来源冲突 证据：ev_BTC_price",
+      "inspectorText": "结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。",
+      "bodyText": "微观传导工作台 路径级验证 · 人工决策准备度 · advisory-only · 不生成订单 刷新研究快照 BTC ETH SOL 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核） 情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 研究导航 研究总览 传导路径 证据检查 观察回放 数据质量 五种模式共用同一 view model；首屏为研究总览，不在面板内重算路径结论。 传导路径 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 路径：fomc_hawkish → BTC · 点击图中节点/边查看逐边证据（右侧检视器） e_macro_mechanism 核心边 方向 down · 时滞 24h · 状态 已过期 机制：宏观情景 → 传导机制 失效：情景失效 证据：ev_macro_ctx e_BTC_funding_rate 核心边 方向 down · 时滞 24h · 状态 有效 机制：funding_rate 边验证 失效：因子失效或来源冲突 证据：ev_BTC_funding_rate e_BTC_open_interest 核心边 方向 down · 时滞 48h · 状态 有效 机制：open_interest 边验证 失效：因子失效或来源冲突 证据：ev_BTC_open_interest e_BTC_price 核心边 方向 down · 时滞 72h · 状态 有效 机制：price 边验证 失效：因子失效或来源冲突 证据：ev_BTC_price 24h 24h 48h 72h fomc_hawkish 传导机制 资金费率 持仓量 价格状态 BTC partially_confirmed 24/48/72h 结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 安全边界：无下单 / 执行 / 授权 / 目标仓位按钮；executable 恒为 false；正式校准簿不被观察任务改写。",
+      "visibleButtons": [
+        {
+          "label": "刷新研究快照",
+          "id": "refreshWb",
+          "disabled": false,
+          "rect": {
+            "x": 1209,
+            "y": 26,
+            "width": 96,
+            "height": 23,
+            "bottom": 49
+          }
+        },
+        {
+          "label": "研究总览",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "label": "传导路径",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "label": "证据检查",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "label": "观察回放",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "label": "数据质量",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "rects": {
+        "status": {
+          "x": 61,
+          "y": 156,
+          "width": 1244,
+          "height": 192,
+          "bottom": 348
+        },
+        "layout": {
+          "x": 61,
+          "y": 362,
+          "width": 1244,
+          "height": 1066,
+          "bottom": 1428
+        },
+        "main": {
+          "x": 266,
+          "y": 375,
+          "width": 1026,
+          "height": 368,
+          "bottom": 743
+        },
+        "inspector": {
+          "x": 61,
+          "y": 1148,
+          "width": 1244,
+          "height": 280,
+          "bottom": 1428
+        }
+      },
+      "aboveFoldMainRatio": 1,
+      "bannedControls": 0
+    },
+    "evidence": {
+      "label": "desktop-evidence",
+      "url": "http://127.0.0.1:8000/micro-layer/index.html?mode=evidence",
+      "title": "微观传导工作台 · 研究准备度",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "document": {
+        "scrollWidth": 1366,
+        "scrollHeight": 1104,
+        "clientWidth": 1366
+      },
+      "horizontalOverflow": false,
+      "selectedSymbol": "BTC",
+      "modes": [
+        {
+          "id": "overview",
+          "label": "研究总览",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "id": "transmission",
+          "label": "传导路径",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "id": "evidence",
+          "label": "证据检查",
+          "active": true,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "id": "observation",
+          "label": "观察回放",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "id": "quality",
+          "label": "数据质量",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "cards": [],
+      "nav": [
+        {
+          "label": "仪表盘",
+          "href": "http://127.0.0.1:8000/index.html",
+          "active": false
+        },
+        {
+          "label": "推导链",
+          "href": "http://127.0.0.1:8000/propagation.html",
+          "active": false
+        },
+        {
+          "label": "架构",
+          "href": "http://127.0.0.1:8000/architecture.html",
+          "active": false
+        },
+        {
+          "label": "微观工作台",
+          "href": "http://127.0.0.1:8000/micro-layer/index.html",
+          "active": true
+        },
+        {
+          "label": "历史归档 · 旧版卡片",
+          "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+          "active": false
+        }
+      ],
+      "headings": [
+        "微观传导工作台",
+        "研究导航",
+        "证据检查",
+        "结论与边界"
+      ],
+      "statusText": "情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。",
+      "bannerText": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+      "bannerVisible": true,
+      "mainText": "证据检查 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 原生 4 · 代理 0 · 合成隔离 0 · 冲突 0 · 缺失/过期 1 原生 ev_macro_ctx · 已过期 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 来源 尚无证据 · 时间 2026-07-15T05:37:10.494Z · 新鲜度 stale · 缺失原因 expired=3 with no support; path_confirmation:insufficient · 原始引用 1 原生 ev_BTC_funding_rate · 有效 funding_rate support: aligned_with_expected 来源 尚无证据 · 时间 2026-07-15T05:44:34.961Z · 新鲜度 fresh · 缺失原因 尚无证据 · 原始引用 1 原生 ev_BTC_open_interest · 有效 open_interest support: aligned_with_expected 来源 尚无证据 · 时间 2026-07-15T05:44:34.961Z · 新鲜度 fresh · 缺失原因 尚无证据 · 原始引用 1 原生 ev_BTC_price · 有效 price support: aligned_with_expected 来源 尚无证据 · 时间 2026-07-15T05:44:34.961Z · 新鲜度 fresh · 缺失原因 尚无证据 · 原始引用 1",
+      "inspectorText": "结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。",
+      "bodyText": "微观传导工作台 路径级验证 · 人工决策准备度 · advisory-only · 不生成订单 刷新研究快照 BTC ETH SOL 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核） 情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 研究导航 研究总览 传导路径 证据检查 观察回放 数据质量 五种模式共用同一 view model；首屏为研究总览，不在面板内重算路径结论。 证据检查 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 原生 4 · 代理 0 · 合成隔离 0 · 冲突 0 · 缺失/过期 1 原生 ev_macro_ctx · 已过期 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 来源 尚无证据 · 时间 2026-07-15T05:37:10.494Z · 新鲜度 stale · 缺失原因 expired=3 with no support; path_confirmation:insufficient · 原始引用 1 原生 ev_BTC_funding_rate · 有效 funding_rate support: aligned_with_expected 来源 尚无证据 · 时间 2026-07-15T05:44:34.961Z · 新鲜度 fresh · 缺失原因 尚无证据 · 原始引用 1 原生 ev_BTC_open_interest · 有效 open_interest support: aligned_with_expected 来源 尚无证据 · 时间 2026-07-15T05:44:34.961Z · 新鲜度 fresh · 缺失原因 尚无证据 · 原始引用 1 原生 ev_BTC_price · 有效 price support: aligned_with_expected 来源 尚无证据 · 时间 2026-07-15T05:44:34.961Z · 新鲜度 fresh · 缺失原因 尚无证据 · 原始引用 1 结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 安全边界：无下单 / 执行 / 授权 / 目标仓位按钮；executable 恒为 false；正式校准簿不被观察任务改写。",
+      "visibleButtons": [
+        {
+          "label": "刷新研究快照",
+          "id": "refreshWb",
+          "disabled": false,
+          "rect": {
+            "x": 1209,
+            "y": 26,
+            "width": 96,
+            "height": 23,
+            "bottom": 49
+          }
+        },
+        {
+          "label": "研究总览",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "label": "传导路径",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "label": "证据检查",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "label": "观察回放",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "label": "数据质量",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "rects": {
+        "status": {
+          "x": 61,
+          "y": 156,
+          "width": 1244,
+          "height": 192,
+          "bottom": 348
+        },
+        "layout": {
+          "x": 61,
+          "y": 362,
+          "width": 1244,
+          "height": 660,
+          "bottom": 1022
+        },
+        "main": {
+          "x": 266,
+          "y": 375,
+          "width": 1026,
+          "height": 342,
+          "bottom": 717
+        },
+        "inspector": {
+          "x": 61,
+          "y": 742,
+          "width": 1244,
+          "height": 280,
+          "bottom": 1022
+        }
+      },
+      "aboveFoldMainRatio": 1,
+      "bannedControls": 0
+    },
+    "observation": {
+      "label": "desktop-observation",
+      "url": "http://127.0.0.1:8000/micro-layer/index.html?mode=observation",
+      "title": "微观传导工作台 · 研究准备度",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "document": {
+        "scrollWidth": 1366,
+        "scrollHeight": 1095,
+        "clientWidth": 1366
+      },
+      "horizontalOverflow": false,
+      "selectedSymbol": "BTC",
+      "modes": [
+        {
+          "id": "overview",
+          "label": "研究总览",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "id": "transmission",
+          "label": "传导路径",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "id": "evidence",
+          "label": "证据检查",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "id": "observation",
+          "label": "观察回放",
+          "active": true,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "id": "quality",
+          "label": "数据质量",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "cards": [],
+      "nav": [
+        {
+          "label": "仪表盘",
+          "href": "http://127.0.0.1:8000/index.html",
+          "active": false
+        },
+        {
+          "label": "推导链",
+          "href": "http://127.0.0.1:8000/propagation.html",
+          "active": false
+        },
+        {
+          "label": "架构",
+          "href": "http://127.0.0.1:8000/architecture.html",
+          "active": false
+        },
+        {
+          "label": "微观工作台",
+          "href": "http://127.0.0.1:8000/micro-layer/index.html",
+          "active": true
+        },
+        {
+          "label": "历史归档 · 旧版卡片",
+          "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+          "active": false
+        }
+      ],
+      "headings": [
+        "微观传导工作台",
+        "研究导航",
+        "观察回放",
+        "结论与边界"
+      ],
+      "statusText": "情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。",
+      "bannerText": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+      "bannerVisible": true,
+      "mainText": "观察回放 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 24/48/72h 槽位 · 当时可知与事后结果隔离 · 24/48/72h 结果不写入正式校准簿 当时可知 路径 部分确认 · 立场 证据不足 数据时间 2026-07-15T05:37:10.494Z · 有效期 2026-07-16T17:44:34.962Z 正式校准簿不因本观察改写 24h 槽 · 状态 待观察 · 事后结果：尚无事后收益 · 来源 尚无证据 · 时间 1784025339013 事后结果仅观察，不回写正式校准簿 48h 槽 · 状态 待观察 · 事后结果：尚无事后收益 · 来源 尚无证据 · 时间 1784025339013 事后结果仅观察，不回写正式校准簿 72h 槽 · 状态 待观察 · 事后结果：尚无事后收益 · 来源 尚无证据 · 时间 1784025339013 事后结果仅观察，不回写正式校准簿 规则 transmission-rules-c3 · 数据 micro-collect-snapshot-v1 · git 26a392d",
+      "inspectorText": "结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。",
+      "bodyText": "微观传导工作台 路径级验证 · 人工决策准备度 · advisory-only · 不生成订单 刷新研究快照 BTC ETH SOL 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核） 情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 研究导航 研究总览 传导路径 证据检查 观察回放 数据质量 五种模式共用同一 view model；首屏为研究总览，不在面板内重算路径结论。 观察回放 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 24/48/72h 槽位 · 当时可知与事后结果隔离 · 24/48/72h 结果不写入正式校准簿 当时可知 路径 部分确认 · 立场 证据不足 数据时间 2026-07-15T05:37:10.494Z · 有效期 2026-07-16T17:44:34.962Z 正式校准簿不因本观察改写 24h 槽 · 状态 待观察 · 事后结果：尚无事后收益 · 来源 尚无证据 · 时间 1784025339013 事后结果仅观察，不回写正式校准簿 48h 槽 · 状态 待观察 · 事后结果：尚无事后收益 · 来源 尚无证据 · 时间 1784025339013 事后结果仅观察，不回写正式校准簿 72h 槽 · 状态 待观察 · 事后结果：尚无事后收益 · 来源 尚无证据 · 时间 1784025339013 事后结果仅观察，不回写正式校准簿 规则 transmission-rules-c3 · 数据 micro-collect-snapshot-v1 · git 26a392d 结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 安全边界：无下单 / 执行 / 授权 / 目标仓位按钮；executable 恒为 false；正式校准簿不被观察任务改写。",
+      "visibleButtons": [
+        {
+          "label": "刷新研究快照",
+          "id": "refreshWb",
+          "disabled": false,
+          "rect": {
+            "x": 1209,
+            "y": 26,
+            "width": 96,
+            "height": 23,
+            "bottom": 49
+          }
+        },
+        {
+          "label": "研究总览",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "label": "传导路径",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "label": "证据检查",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "label": "观察回放",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "label": "数据质量",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "rects": {
+        "status": {
+          "x": 61,
+          "y": 156,
+          "width": 1244,
+          "height": 192,
+          "bottom": 348
+        },
+        "layout": {
+          "x": 61,
+          "y": 362,
+          "width": 1244,
+          "height": 651,
+          "bottom": 1013
+        },
+        "main": {
+          "x": 266,
+          "y": 375,
+          "width": 1026,
+          "height": 333,
+          "bottom": 708
+        },
+        "inspector": {
+          "x": 61,
+          "y": 733,
+          "width": 1244,
+          "height": 280,
+          "bottom": 1013
+        }
+      },
+      "aboveFoldMainRatio": 1,
+      "bannedControls": 0
+    },
+    "quality": {
+      "label": "desktop-quality",
+      "url": "http://127.0.0.1:8000/micro-layer/index.html?mode=quality",
+      "title": "微观传导工作台 · 研究准备度",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "document": {
+        "scrollWidth": 1366,
+        "scrollHeight": 1076,
+        "clientWidth": 1366
+      },
+      "horizontalOverflow": false,
+      "selectedSymbol": "BTC",
+      "modes": [
+        {
+          "id": "overview",
+          "label": "研究总览",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "id": "transmission",
+          "label": "传导路径",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "id": "evidence",
+          "label": "证据检查",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "id": "observation",
+          "label": "观察回放",
+          "active": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "id": "quality",
+          "label": "数据质量",
+          "active": true,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "cards": [],
+      "nav": [
+        {
+          "label": "仪表盘",
+          "href": "http://127.0.0.1:8000/index.html",
+          "active": false
+        },
+        {
+          "label": "推导链",
+          "href": "http://127.0.0.1:8000/propagation.html",
+          "active": false
+        },
+        {
+          "label": "架构",
+          "href": "http://127.0.0.1:8000/architecture.html",
+          "active": false
+        },
+        {
+          "label": "微观工作台",
+          "href": "http://127.0.0.1:8000/micro-layer/index.html",
+          "active": true
+        },
+        {
+          "label": "历史归档 · 旧版卡片",
+          "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+          "active": false
+        }
+      ],
+      "headings": [
+        "微观传导工作台",
+        "研究导航",
+        "数据质量",
+        "结论与边界"
+      ],
+      "statusText": "情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。",
+      "bannerText": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+      "bannerVisible": true,
+      "mainText": "数据质量 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 覆盖率 0.8142857142857144 新鲜度 0.8142857142857144 来源可信度 0.6999999999999998 跨源一致性 1 原生证据比例 1 校准适用性 0.25 综合分（仅排序） 0.7893 综合分仅排序用，不可遮蔽短板 来源腿健康 n_macro:stale n_mechanism:stale n_funding:valid n_oi:valid n_price:valid n_asset:valid n_verdict:valid n_outcome:missing 降级来源：尚无证据 付费/空间证据缺口 缺少空间分布证据（清算热图需付费/授权来源；当前仅有代理液位信号，不冒充热图结构） gaps: liquidation_heatmap_paid_api",
+      "inspectorText": "结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。",
+      "bodyText": "微观传导工作台 路径级验证 · 人工决策准备度 · advisory-only · 不生成订单 刷新研究快照 BTC ETH SOL 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核） 情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 研究导航 研究总览 传导路径 证据检查 观察回放 数据质量 五种模式共用同一 view model；首屏为研究总览，不在面板内重算路径结论。 数据质量 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 覆盖率 0.8142857142857144 新鲜度 0.8142857142857144 来源可信度 0.6999999999999998 跨源一致性 1 原生证据比例 1 校准适用性 0.25 综合分（仅排序） 0.7893 综合分仅排序用，不可遮蔽短板 来源腿健康 n_macro:stale n_mechanism:stale n_funding:valid n_oi:valid n_price:valid n_asset:valid n_verdict:valid n_outcome:missing 降级来源：尚无证据 付费/空间证据缺口 缺少空间分布证据（清算热图需付费/授权来源；当前仅有代理液位信号，不冒充热图结构） gaps: liquidation_heatmap_paid_api 结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:34.962Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:34.962Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:34.962Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 安全边界：无下单 / 执行 / 授权 / 目标仓位按钮；executable 恒为 false；正式校准簿不被观察任务改写。",
+      "visibleButtons": [
+        {
+          "label": "刷新研究快照",
+          "id": "refreshWb",
+          "disabled": false,
+          "rect": {
+            "x": 1209,
+            "y": 26,
+            "width": 96,
+            "height": 23,
+            "bottom": 49
+          }
+        },
+        {
+          "label": "研究总览",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 403,
+            "width": 154,
+            "height": 35,
+            "bottom": 438
+          }
+        },
+        {
+          "label": "传导路径",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 444,
+            "width": 154,
+            "height": 35,
+            "bottom": 479
+          }
+        },
+        {
+          "label": "证据检查",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 485,
+            "width": 154,
+            "height": 35,
+            "bottom": 520
+          }
+        },
+        {
+          "label": "观察回放",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 526,
+            "width": 154,
+            "height": 35,
+            "bottom": 561
+          }
+        },
+        {
+          "label": "数据质量",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 74,
+            "y": 567,
+            "width": 154,
+            "height": 35,
+            "bottom": 602
+          }
+        }
+      ],
+      "rects": {
+        "status": {
+          "x": 61,
+          "y": 156,
+          "width": 1244,
+          "height": 192,
+          "bottom": 348
+        },
+        "layout": {
+          "x": 61,
+          "y": 362,
+          "width": 1244,
+          "height": 632,
+          "bottom": 994
+        },
+        "main": {
+          "x": 266,
+          "y": 375,
+          "width": 1026,
+          "height": 314,
+          "bottom": 689
+        },
+        "inspector": {
+          "x": 61,
+          "y": 714,
+          "width": 1244,
+          "height": 280,
+          "bottom": 994
+        }
+      },
+      "aboveFoldMainRatio": 1,
+      "bannedControls": 0
+    }
+  },
+  "interactions": {
+    "assetCards": [
+      {
+        "symbol": "BTC",
+        "beforeSelected": "BTC",
+        "afterSelected": "BTC",
+        "selectedCards": [
+          "BTC"
+        ],
+        "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:40.458Z 有效期 2026-07-16T17:44:40.458Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → BTC · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:40.458Z 有效期 2026-07-16T17:44:40.458Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:40.458Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:40.458Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:40.458Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 路径 partially_confirmed → partially_confirmed · 边变化 0 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC"
+      },
+      {
+        "symbol": "ETH",
+        "beforeSelected": "BTC",
+        "afterSelected": "ETH",
+        "selectedCards": [
+          "ETH"
+        ],
+        "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:41.474Z 有效期 2026-07-16T17:44:41.474Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → ETH · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:41.474Z 有效期 2026-07-16T17:44:41.474Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:41.474Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_ETH_funding_rate, ev_ETH_open_interest, ev_ETH_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:41.474Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:41.474Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 路径 partially_confirmed → partially_confirmed · 边变化 6 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC"
+      },
+      {
+        "symbol": "SOL",
+        "beforeSelected": "ETH",
+        "afterSelected": "SOL",
+        "selectedCards": [
+          "SOL"
+        ],
+        "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:42.495Z 有效期 2026-07-16T17:44:42.495Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → SOL · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:42.495Z 有效期 2026-07-16T17:44:42.495Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:42.495Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_SOL_funding_rate, ev_SOL_open_interest, ev_SOL_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:42.495Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:42.495Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 路径 partially_confirmed → partially_confirmed · 边变化 6 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC"
+      }
+    ],
+    "symbolSelect": [
+      {
+        "symbol": "BTC",
+        "elapsedMs": 1312,
+        "selectedSymbol": "BTC",
+        "selectedCards": [
+          "BTC"
+        ],
+        "banner": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+        "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:43.512Z 有效期 2026-07-16T17:44:43.512Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → BTC · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:43.512Z 有效期 2026-07-16T17:44:43.512Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:43.512Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:43.512Z）；1/4"
+      },
+      {
+        "symbol": "ETH",
+        "elapsedMs": 1250,
+        "selectedSymbol": "ETH",
+        "selectedCards": [
+          "ETH"
+        ],
+        "banner": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+        "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:44.788Z 有效期 2026-07-16T17:44:44.788Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → ETH · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:44.788Z 有效期 2026-07-16T17:44:44.788Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:44.788Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_ETH_funding_rate, ev_ETH_open_interest, ev_ETH_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:44.788Z）；1/4"
+      },
+      {
+        "symbol": "SOL",
+        "elapsedMs": 1229,
+        "selectedSymbol": "SOL",
+        "selectedCards": [
+          "SOL"
+        ],
+        "banner": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+        "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:46.022Z 有效期 2026-07-16T17:44:46.022Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → SOL · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:46.022Z 有效期 2026-07-16T17:44:46.022Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:46.022Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_SOL_funding_rate, ev_SOL_open_interest, ev_SOL_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:46.022Z）；1/4"
+      }
+    ],
+    "refresh": {
+      "elapsedMs": 2542,
+      "snapshot": {
+        "label": "after-refresh",
+        "url": "http://127.0.0.1:8000/micro-layer/index.html?mode=overview",
+        "title": "微观传导工作台 · 研究准备度",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "document": {
+          "scrollWidth": 1366,
+          "scrollHeight": 2448,
+          "clientWidth": 1366
+        },
+        "horizontalOverflow": false,
+        "selectedSymbol": "SOL",
+        "modes": [
+          {
+            "id": "overview",
+            "label": "研究总览",
+            "active": true,
+            "rect": {
+              "x": 74,
+              "y": 403,
+              "width": 154,
+              "height": 35,
+              "bottom": 438
+            }
+          },
+          {
+            "id": "transmission",
+            "label": "传导路径",
+            "active": false,
+            "rect": {
+              "x": 74,
+              "y": 444,
+              "width": 154,
+              "height": 35,
+              "bottom": 479
+            }
+          },
+          {
+            "id": "evidence",
+            "label": "证据检查",
+            "active": false,
+            "rect": {
+              "x": 74,
+              "y": 485,
+              "width": 154,
+              "height": 35,
+              "bottom": 520
+            }
+          },
+          {
+            "id": "observation",
+            "label": "观察回放",
+            "active": false,
+            "rect": {
+              "x": 74,
+              "y": 526,
+              "width": 154,
+              "height": 35,
+              "bottom": 561
+            }
+          },
+          {
+            "id": "quality",
+            "label": "数据质量",
+            "active": false,
+            "rect": {
+              "x": 74,
+              "y": 567,
+              "width": 154,
+              "height": 35,
+              "bottom": 602
+            }
+          }
+        ],
+        "cards": [
+          {
+            "symbol": "BTC",
+            "selected": false,
+            "text": "BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+            "rect": {
+              "x": 266,
+              "y": 1776,
+              "width": 335,
+              "height": 243,
+              "bottom": 2019
+            }
+          },
+          {
+            "symbol": "ETH",
+            "selected": false,
+            "text": "ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+            "rect": {
+              "x": 611,
+              "y": 1776,
+              "width": 335,
+              "height": 243,
+              "bottom": 2019
+            }
+          },
+          {
+            "symbol": "SOL",
+            "selected": true,
+            "text": "SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率",
+            "rect": {
+              "x": 957,
+              "y": 1776,
+              "width": 335,
+              "height": 243,
+              "bottom": 2019
+            }
+          }
+        ],
+        "nav": [
+          {
+            "label": "仪表盘",
+            "href": "http://127.0.0.1:8000/index.html",
+            "active": false
+          },
+          {
+            "label": "推导链",
+            "href": "http://127.0.0.1:8000/propagation.html",
+            "active": false
+          },
+          {
+            "label": "架构",
+            "href": "http://127.0.0.1:8000/architecture.html",
+            "active": false
+          },
+          {
+            "label": "微观工作台",
+            "href": "http://127.0.0.1:8000/micro-layer/index.html",
+            "active": true
+          },
+          {
+            "label": "历史归档 · 旧版卡片",
+            "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+            "active": false
+          }
+        ],
+        "headings": [
+          "微观传导工作台",
+          "研究导航",
+          "研究总览",
+          "结论与边界"
+        ],
+        "statusText": "情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。",
+        "bannerText": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+        "bannerVisible": true,
+        "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:47.273Z 有效期 2026-07-16T17:44:47.273Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → SOL · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:47.273Z 有效期 2026-07-16T17:44:47.273Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:47.273Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_SOL_funding_rate, ev_SOL_open_interest, ev_SOL_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:47.273Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:47.273Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 路径 partially_confirmed → partially_confirmed · 边变化 6 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 下一步 1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation 预期 unspecified → 可观察 funding_pressure, oi_change, futures_basis, spot_vs_mark → 证据 support=3 / contradict=0 / missing=1 → 立场 证据不足 · 偏差 insufficient 多资产比较 · 同一数据时间窗口可比 BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率 首屏三分栏：宏观路径 / 微观证据 / 综合结论。宏观过期或缺失时综合不得显示「已确认」。未知字段显示「尚无证据」。advisory-only · executable=false。",
+        "inspectorText": "结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:47.273Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_SOL_funding_rate, ev_SOL_open_interest, ev_SOL_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:47.273Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:47.273Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。",
+        "bodyText": "微观传导工作台 路径级验证 · 人工决策准备度 · advisory-only · 不生成订单 刷新研究快照 BTC ETH SOL 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核） 情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 研究导航 研究总览 传导路径 证据检查 观察回放 数据质量 五种模式共用同一 view model；首屏为研究总览，不在面板内重算路径结论。 研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:47.273Z 有效期 2026-07-16T17:44:47.273Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → SOL · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:47.273Z 有效期 2026-07-16T17:44:47.273Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:47.273Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_SOL_funding_rate, ev_SOL_open_interest, ev_SOL_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:47.273Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:47.273Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 路径 partially_confirmed → partially_confirmed · 边变化 6 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 下一步 1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation 预期 unspecified → 可观察 funding_pressure, oi_change, futures_basis, spot_vs_mark → 证据 support=3 / contradict=0 / missing=1 → 立场 证据不足 · 偏差 insufficient 多资产比较 · 同一数据时间窗口可比 BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率 首屏三分栏：宏观路径 / 微观证据 / 综合结论。宏观过期或缺失时综合不得显示「已确认」。未知字段显示「尚无证据」。advisory-only · executable=false。 结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:47.273Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_SOL_funding_rate, ev_SOL_open_interest, ev_SOL_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:47.273Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:47.273Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 安全边界：无下单 / 执行 / 授权 / 目标仓位按钮；executable 恒为 false；正式校准簿不被观察任务改写。",
+        "visibleButtons": [
+          {
+            "label": "刷新研究快照",
+            "id": "refreshWb",
+            "disabled": false,
+            "rect": {
+              "x": 1209,
+              "y": 26,
+              "width": 96,
+              "height": 23,
+              "bottom": 49
+            }
+          },
+          {
+            "label": "研究总览",
+            "id": null,
+            "disabled": false,
+            "rect": {
+              "x": 74,
+              "y": 403,
+              "width": 154,
+              "height": 35,
+              "bottom": 438
+            }
+          },
+          {
+            "label": "传导路径",
+            "id": null,
+            "disabled": false,
+            "rect": {
+              "x": 74,
+              "y": 444,
+              "width": 154,
+              "height": 35,
+              "bottom": 479
+            }
+          },
+          {
+            "label": "证据检查",
+            "id": null,
+            "disabled": false,
+            "rect": {
+              "x": 74,
+              "y": 485,
+              "width": 154,
+              "height": 35,
+              "bottom": 520
+            }
+          },
+          {
+            "label": "观察回放",
+            "id": null,
+            "disabled": false,
+            "rect": {
+              "x": 74,
+              "y": 526,
+              "width": 154,
+              "height": 35,
+              "bottom": 561
+            }
+          },
+          {
+            "label": "数据质量",
+            "id": null,
+            "disabled": false,
+            "rect": {
+              "x": 74,
+              "y": 567,
+              "width": 154,
+              "height": 35,
+              "bottom": 602
+            }
+          },
+          {
+            "label": "BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+            "id": null,
+            "disabled": false,
+            "rect": {
+              "x": 266,
+              "y": 1776,
+              "width": 335,
+              "height": 243,
+              "bottom": 2019
+            }
+          },
+          {
+            "label": "ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+            "id": null,
+            "disabled": false,
+            "rect": {
+              "x": 611,
+              "y": 1776,
+              "width": 335,
+              "height": 243,
+              "bottom": 2019
+            }
+          },
+          {
+            "label": "SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率",
+            "id": null,
+            "disabled": false,
+            "rect": {
+              "x": 957,
+              "y": 1776,
+              "width": 335,
+              "height": 243,
+              "bottom": 2019
+            }
+          }
+        ],
+        "rects": {
+          "status": {
+            "x": 61,
+            "y": 156,
+            "width": 1244,
+            "height": 192,
+            "bottom": 348
+          },
+          "layout": {
+            "x": 61,
+            "y": 362,
+            "width": 1244,
+            "height": 2005,
+            "bottom": 2367
+          },
+          "main": {
+            "x": 266,
+            "y": 375,
+            "width": 1026,
+            "height": 1674,
+            "bottom": 2049
+          },
+          "inspector": {
+            "x": 61,
+            "y": 2087,
+            "width": 1244,
+            "height": 280,
+            "bottom": 2367
+          }
+        },
+        "aboveFoldMainRatio": 0.23478674843876893,
+        "bannedControls": 0
+      }
+    }
+  },
+  "mobile": {
+    "overview": {
+      "label": "mobile-overview",
+      "url": "http://127.0.0.1:8000/micro-layer/index.html?mode=overview",
+      "title": "微观传导工作台 · 研究准备度",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "document": {
+        "scrollWidth": 390,
+        "scrollHeight": 5080,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "selectedSymbol": "BTC",
+      "modes": [
+        {
+          "id": "overview",
+          "label": "研究总览",
+          "active": true,
+          "rect": {
+            "x": 25,
+            "y": 900,
+            "width": 109,
+            "height": 35,
+            "bottom": 935
+          }
+        },
+        {
+          "id": "transmission",
+          "label": "传导路径",
+          "active": false,
+          "rect": {
+            "x": 140,
+            "y": 900,
+            "width": 109,
+            "height": 35,
+            "bottom": 935
+          }
+        },
+        {
+          "id": "evidence",
+          "label": "证据检查",
+          "active": false,
+          "rect": {
+            "x": 256,
+            "y": 900,
+            "width": 109,
+            "height": 35,
+            "bottom": 935
+          }
+        },
+        {
+          "id": "observation",
+          "label": "观察回放",
+          "active": false,
+          "rect": {
+            "x": 25,
+            "y": 941,
+            "width": 167,
+            "height": 35,
+            "bottom": 976
+          }
+        },
+        {
+          "id": "quality",
+          "label": "数据质量",
+          "active": false,
+          "rect": {
+            "x": 198,
+            "y": 941,
+            "width": 167,
+            "height": 35,
+            "bottom": 976
+          }
+        }
+      ],
+      "cards": [
+        {
+          "symbol": "BTC",
+          "selected": true,
+          "text": "BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+          "rect": {
+            "x": 25,
+            "y": 3406,
+            "width": 340,
+            "height": 222,
+            "bottom": 3628
+          }
+        },
+        {
+          "symbol": "ETH",
+          "selected": false,
+          "text": "ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+          "rect": {
+            "x": 25,
+            "y": 3638,
+            "width": 340,
+            "height": 222,
+            "bottom": 3859
+          }
+        },
+        {
+          "symbol": "SOL",
+          "selected": false,
+          "text": "SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率",
+          "rect": {
+            "x": 25,
+            "y": 3869,
+            "width": 340,
+            "height": 243,
+            "bottom": 4113
+          }
+        }
+      ],
+      "nav": [
+        {
+          "label": "仪表盘",
+          "href": "http://127.0.0.1:8000/index.html",
+          "active": false
+        },
+        {
+          "label": "推导链",
+          "href": "http://127.0.0.1:8000/propagation.html",
+          "active": false
+        },
+        {
+          "label": "架构",
+          "href": "http://127.0.0.1:8000/architecture.html",
+          "active": false
+        },
+        {
+          "label": "微观工作台",
+          "href": "http://127.0.0.1:8000/micro-layer/index.html",
+          "active": true
+        },
+        {
+          "label": "历史归档 · 旧版卡片",
+          "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+          "active": false
+        }
+      ],
+      "headings": [
+        "微观传导工作台",
+        "研究导航",
+        "研究总览",
+        "结论与边界"
+      ],
+      "statusText": "情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。",
+      "bannerText": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+      "bannerVisible": true,
+      "mainText": "研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:53.247Z 有效期 2026-07-16T17:44:53.247Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → BTC · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:53.247Z 有效期 2026-07-16T17:44:53.247Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:53.247Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:53.247Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:53.247Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 已记录 1 次观察快照 · partially_confirmed 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 下一步 1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation 预期 unspecified → 可观察 funding_pressure, oi_change, futures_basis, spot_vs_mark → 证据 support=3 / contradict=0 / missing=1 → 立场 证据不足 · 偏差 insufficient 多资产比较 · 同一数据时间窗口可比 BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率 首屏三分栏：宏观路径 / 微观证据 / 综合结论。宏观过期或缺失时综合不得显示「已确认」。未知字段显示「尚无证据」。advisory-only · executable=false。",
+      "inspectorText": "结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:53.247Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:53.247Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:53.247Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。",
+      "bodyText": "微观传导工作台 路径级验证 · 人工决策准备度 · advisory-only · 不生成订单 刷新研究快照 BTC ETH SOL 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核） 情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 研究导航 研究总览 传导路径 证据检查 观察回放 数据质量 五种模式共用同一 view model；首屏为研究总览，不在面板内重算路径结论。 研究总览 宏观证据阻塞确认：微观局部支持 ≠ 综合已确认 宏观路径状态 证据过期 上下文：文件新鲜 路径总判 存在反向证据 计数 支持 0 · 反向 3 · 缺失 1 · 过期 3 expired=3 with no support；path_confirmation:insufficient 微观证据状态 支持 立场：证据不足 支持/反证/缺失 3 / 0 / 1 微观局部支持不得单独升级为综合确认 综合研究结论 部分确认 阻塞确认 准备度 尚未就绪 · 人工复核 是（强制） 数据发生 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:53.247Z 有效期 2026-07-16T17:44:53.247Z 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 失效条件 手动失效 宏观情景 · 核心路径 · 研究命题 fomc_hawkish 路径：fomc_hawkish → BTC · 部分确认 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 时效 · 实时性 · 质量 数据时间 2026-07-15T05:37:10.494Z 最近刷新 2026-07-15T05:44:53.247Z 有效期 2026-07-16T17:44:53.247Z 采集 采集降级 · valid=18 stale=3 missing=0 live_jsonl 覆盖/新鲜/可信 0.8142857142857144 / 0.8142857142857144 / 0.6999999999999998 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:53.247Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:53.247Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:53.247Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 来源健康 · P3 · 最近变化 来源 部分来源降级（1/1） binance P3 观察中 D1 — 观察 10 次 · 正式簿未变 最近状态变化 已记录 1 次观察快照 · partially_confirmed 最大证据缺口 · 下一项核验 · 宏观桥接 缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 下一步 1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation 预期 unspecified → 可观察 funding_pressure, oi_change, futures_basis, spot_vs_mark → 证据 support=3 / contradict=0 / missing=1 → 立场 证据不足 · 偏差 insufficient 多资产比较 · 同一数据时间窗口可比 BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率 首屏三分栏：宏观路径 / 微观证据 / 综合结论。宏观过期或缺失时综合不得显示「已确认」。未知字段显示「尚无证据」。advisory-only · executable=false。 结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:53.247Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:53.247Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:53.247Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 安全边界：无下单 / 执行 / 授权 / 目标仓位按钮；executable 恒为 false；正式校准簿不被观察任务改写。",
+      "visibleButtons": [
+        {
+          "label": "刷新研究快照",
+          "id": "refreshWb",
+          "disabled": false,
+          "rect": {
+            "x": 12,
+            "y": 82,
+            "width": 96,
+            "height": 23,
+            "bottom": 105
+          }
+        },
+        {
+          "label": "研究总览",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 25,
+            "y": 900,
+            "width": 109,
+            "height": 35,
+            "bottom": 935
+          }
+        },
+        {
+          "label": "传导路径",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 140,
+            "y": 900,
+            "width": 109,
+            "height": 35,
+            "bottom": 935
+          }
+        },
+        {
+          "label": "证据检查",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 256,
+            "y": 900,
+            "width": 109,
+            "height": 35,
+            "bottom": 935
+          }
+        },
+        {
+          "label": "观察回放",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 25,
+            "y": 941,
+            "width": 167,
+            "height": 35,
+            "bottom": 976
+          }
+        },
+        {
+          "label": "数据质量",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 198,
+            "y": 941,
+            "width": 167,
+            "height": 35,
+            "bottom": 976
+          }
+        },
+        {
+          "label": "BTC degraded 资金费率 -0.0400% OI变化 -3.00% 期现基差 -3.48 bps 价格变化 -1.50% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 25,
+            "y": 3406,
+            "width": 340,
+            "height": 222,
+            "bottom": 3628
+          }
+        },
+        {
+          "label": "ETH degraded 资金费率 -0.0300% OI变化 -2.20% 期现基差 -2.83 bps 价格变化 -1.10% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 25,
+            "y": 3638,
+            "width": 340,
+            "height": 222,
+            "bottom": 3859
+          }
+        },
+        {
+          "label": "SOL degraded 资金费率 -0.0600% OI变化 -4.50% 期现基差 -5.14 bps 价格变化 -2.00% 数据质量 80% 来源可信 70% 市场状态 尚无证据 证据立场 证据不足 数据源异常：funding_rate:stale 市场异常：极端资金费率",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 25,
+            "y": 3869,
+            "width": 340,
+            "height": 243,
+            "bottom": 4113
+          }
+        }
+      ],
+      "rects": {
+        "status": {
+          "x": 12,
+          "y": 253,
+          "width": 366,
+          "height": 592,
+          "bottom": 845
+        },
+        "layout": {
+          "x": 12,
+          "y": 859,
+          "width": 366,
+          "height": 4134,
+          "bottom": 4993
+        },
+        "main": {
+          "x": 25,
+          "y": 1071,
+          "width": 340,
+          "height": 3106,
+          "bottom": 4176
+        },
+        "inspector": {
+          "x": 12,
+          "y": 4214,
+          "width": 366,
+          "height": 779,
+          "bottom": 4993
+        }
+      },
+      "aboveFoldMainRatio": 0,
+      "bannedControls": 0
+    },
+    "quality": {
+      "label": "mobile-quality",
+      "url": "http://127.0.0.1:8000/micro-layer/index.html?mode=quality",
+      "title": "微观传导工作台 · 研究准备度",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "document": {
+        "scrollWidth": 390,
+        "scrollHeight": 2356,
+        "clientWidth": 390
+      },
+      "horizontalOverflow": false,
+      "selectedSymbol": "BTC",
+      "modes": [
+        {
+          "id": "overview",
+          "label": "研究总览",
+          "active": false,
+          "rect": {
+            "x": 25,
+            "y": 363,
+            "width": 109,
+            "height": 35,
+            "bottom": 398
+          }
+        },
+        {
+          "id": "transmission",
+          "label": "传导路径",
+          "active": false,
+          "rect": {
+            "x": 140,
+            "y": 363,
+            "width": 109,
+            "height": 35,
+            "bottom": 398
+          }
+        },
+        {
+          "id": "evidence",
+          "label": "证据检查",
+          "active": false,
+          "rect": {
+            "x": 256,
+            "y": 363,
+            "width": 109,
+            "height": 35,
+            "bottom": 398
+          }
+        },
+        {
+          "id": "observation",
+          "label": "观察回放",
+          "active": false,
+          "rect": {
+            "x": 25,
+            "y": 404,
+            "width": 167,
+            "height": 35,
+            "bottom": 439
+          }
+        },
+        {
+          "id": "quality",
+          "label": "数据质量",
+          "active": true,
+          "rect": {
+            "x": 198,
+            "y": 404,
+            "width": 167,
+            "height": 35,
+            "bottom": 439
+          }
+        }
+      ],
+      "cards": [],
+      "nav": [
+        {
+          "label": "仪表盘",
+          "href": "http://127.0.0.1:8000/index.html",
+          "active": false
+        },
+        {
+          "label": "推导链",
+          "href": "http://127.0.0.1:8000/propagation.html",
+          "active": false
+        },
+        {
+          "label": "架构",
+          "href": "http://127.0.0.1:8000/architecture.html",
+          "active": false
+        },
+        {
+          "label": "微观工作台",
+          "href": "http://127.0.0.1:8000/micro-layer/index.html",
+          "active": true
+        },
+        {
+          "label": "历史归档 · 旧版卡片",
+          "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+          "active": false
+        }
+      ],
+      "headings": [
+        "微观传导工作台",
+        "研究导航",
+        "数据质量",
+        "结论与边界"
+      ],
+      "statusText": "情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。",
+      "bannerText": "本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核）",
+      "bannerVisible": true,
+      "mainText": "数据质量 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 覆盖率 0.8142857142857144 新鲜度 0.8142857142857144 来源可信度 0.6999999999999998 跨源一致性 1 原生证据比例 1 校准适用性 0.25 综合分（仅排序） 0.7893 综合分仅排序用，不可遮蔽短板 来源腿健康 n_macro:stale n_mechanism:stale n_funding:valid n_oi:valid n_price:valid n_asset:valid n_verdict:valid n_outcome:missing 降级来源：尚无证据 付费/空间证据缺口 缺少空间分布证据（清算热图需付费/授权来源；当前仅有代理液位信号，不冒充热图结构） gaps: liquidation_heatmap_paid_api",
+      "inspectorText": "结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:53.247Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:53.247Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:53.247Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。",
+      "bodyText": "微观传导工作台 路径级验证 · 人工决策准备度 · advisory-only · 不生成订单 刷新研究快照 BTC ETH SOL 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 本地决策为空：已用占位决策配合实时采集快照做对照（非静默；请刷新 Store 后复核） 情景 fomc_hawkish 宏观路径 证据过期 微观证据 支持 综合结论 部分确认 实时性 / 采集 采集降级 · valid=18 stale=3 missing=0 来源健康 部分来源降级（1/1） P3 状态 观察中 D1 最大证据缺口 已过期 · 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 研究导航 研究总览 传导路径 证据检查 观察回放 数据质量 五种模式共用同一 view model；首屏为研究总览，不在面板内重算路径结论。 数据质量 与研究总览一致 · 路径 部分确认 · 立场 证据不足 · 焦点 BTC · 不在本模式重算 覆盖率 0.8142857142857144 新鲜度 0.8142857142857144 来源可信度 0.6999999999999998 跨源一致性 1 原生证据比例 1 校准适用性 0.25 综合分（仅排序） 0.7893 综合分仅排序用，不可遮蔽短板 来源腿健康 n_macro:stale n_mechanism:stale n_funding:valid n_oi:valid n_price:valid n_asset:valid n_verdict:valid n_outcome:missing 降级来源：尚无证据 付费/空间证据缺口 缺少空间分布证据（清算热图需付费/授权来源；当前仅有代理液位信号，不冒充热图结构） gaps: liquidation_heatmap_paid_api 结论与边界 当前结论（成组 · 禁止孤立解读） 部分确认 立场：证据不足 缺口：已过期 路径状态 部分确认 研究立场 证据不足 数据质量 覆盖 0.8142857142857144 · 新鲜 0.8142857142857144 · 可信 0.6999999999999998 数据时间 2026-07-15T05:37:10.494Z 有效期 2026-07-16T17:44:53.247Z 人工复核 是（强制） · 可执行 否（固定） 支持 3 · ev_BTC_funding_rate, ev_BTC_open_interest, ev_BTC_price 反证 0 缺失 1 · ev_macro_ctx 准备度 尚未就绪 healthy_abstain 证据不足但系统健康：保持观察即可，不代表故障。 为何成立 路径状态为「部分确认」；研究立场为「证据不足」；支持证据 3 条 何种情况失效 超过有效期（2026-07-16T17:44:53.247Z）；1/4 core edges gap；native evidence coverage incomplete；macro_evidence_status=stale prevents confirmation；情景失效；因子失效或来源冲突 证据何时过期 2026-07-16T17:44:53.247Z 路径「部分确认」或立场「证据不足」≠ 交易信号；须同时看质量、时效、支持/反证与人工复核。 安全边界：无下单 / 执行 / 授权 / 目标仓位按钮；executable 恒为 false；正式校准簿不被观察任务改写。",
+      "visibleButtons": [
+        {
+          "label": "刷新研究快照",
+          "id": "refreshWb",
+          "disabled": false,
+          "rect": {
+            "x": 12,
+            "y": -455,
+            "width": 96,
+            "height": 23,
+            "bottom": -432
+          }
+        },
+        {
+          "label": "研究总览",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 25,
+            "y": 363,
+            "width": 109,
+            "height": 35,
+            "bottom": 398
+          }
+        },
+        {
+          "label": "传导路径",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 140,
+            "y": 363,
+            "width": 109,
+            "height": 35,
+            "bottom": 398
+          }
+        },
+        {
+          "label": "证据检查",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 256,
+            "y": 363,
+            "width": 109,
+            "height": 35,
+            "bottom": 398
+          }
+        },
+        {
+          "label": "观察回放",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 25,
+            "y": 404,
+            "width": 167,
+            "height": 35,
+            "bottom": 439
+          }
+        },
+        {
+          "label": "数据质量",
+          "id": null,
+          "disabled": false,
+          "rect": {
+            "x": 198,
+            "y": 404,
+            "width": 167,
+            "height": 35,
+            "bottom": 439
+          }
+        }
+      ],
+      "rects": {
+        "status": {
+          "x": 12,
+          "y": -284,
+          "width": 366,
+          "height": 592,
+          "bottom": 308
+        },
+        "layout": {
+          "x": 12,
+          "y": 322,
+          "width": 366,
+          "height": 1410,
+          "bottom": 1732
+        },
+        "main": {
+          "x": 25,
+          "y": 534,
+          "width": 340,
+          "height": 394,
+          "bottom": 928
+        },
+        "inspector": {
+          "x": 12,
+          "y": 953,
+          "width": 366,
+          "height": 779,
+          "bottom": 1732
+        }
+      },
+      "aboveFoldMainRatio": 0.7873175761421319,
+      "bannedControls": 0
+    }
+  },
+  "legacy": {
+    "label": "legacy-desktop",
+    "url": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+    "title": "加密微观分析 · 状态与证据",
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "document": {
+      "scrollWidth": 1366,
+      "scrollHeight": 2334,
+      "clientWidth": 1366
+    },
+    "horizontalOverflow": false,
+    "selectedSymbol": null,
+    "modes": [],
+    "cards": [],
+    "nav": [
+      {
+        "label": "仪表盘",
+        "href": "http://127.0.0.1:8000/index.html",
+        "active": false
+      },
+      {
+        "label": "推导链",
+        "href": "http://127.0.0.1:8000/propagation.html",
+        "active": false
+      },
+      {
+        "label": "架构",
+        "href": "http://127.0.0.1:8000/architecture.html",
+        "active": false
+      },
+      {
+        "label": "微观工作台",
+        "href": "http://127.0.0.1:8000/micro-layer/index.html",
+        "active": false
+      },
+      {
+        "label": "历史归档 · 旧版卡片",
+        "href": "http://127.0.0.1:8000/micro-layer/archive/index_legacy_cards.html",
+        "active": false
+      }
+    ],
+    "headings": [
+      "加密微观分析"
+    ],
+    "statusText": "",
+    "bannerText": "",
+    "bannerVisible": false,
+    "mainText": "",
+    "inspectorText": "",
+    "bodyText": "加密微观分析 状态与证据 · 用于验证宏观推导 · 不生成订单 · 不提供自动交易 采集中… 仪表盘 推导链 架构 微观工作台 历史归档 · 旧版卡片 【历史归档】本页已迁入 archive/，仅供对照验收；默认研究入口为微观工作台。本页面用于验证宏观推导，不生成订单，不提供自动交易能力。保留 advisory-only 与杀开关；执行门禁仅作安全边界。 服务模式 · 尚未采集或使用缓存 · advisory-only=开 · 杀开关=开 · 不自动下单 采集平面快照 · valid=18 stale=3 missing=0 · live_jsonl 采集进度 1s 正在读取 binance、bybit、bitget、okx 采集进行中… 完成后展示成功 / 降级 / 失败来源 尚未采集 当前微观风险状态 -- 重点关注标的 -- 平均证据质量 无明显缺口 主要证据缺口 观察中 D1 P3 观察状态 当前结论 尚无缓存 等待微观证据 说明 刷新后将汇总风险状态、支持/反驳证据与宏观关系 宏观推导验证 只读映射 · 不改传播图 scenario_id fomc_hawkish path_id fomc_hawkish:p1:fed_rate_hike>liquidity_condition>btc_price 当前宏观情景 FOMC 鹰派超预期 情景论点 政策利率/缩表预期偏紧时，美元、实际利率和流动性条件是第一层验证；若风险偏好同步走弱，BTC 与高 beta 风险资产更容易承压。 图谱核心路径 Fed加息 → 流动性条件 → BTC价格 微观证据 funding/OI/跨所覆盖可用 判断 存在反向证据 影响资产 BTC, ETH 失效条件 信用利差未扩张且风险资产继续走强；BTC 与宏观路径脱钩并由链上/ETF 流入主导；费率回归中性且 OI 未下降 标的立场 -- 上下文时间 2026-07-15T05:37:10.494Z 来源 只读 case_report · fomc_hawkish 证据链 待绑定观察 说明 微观只验证路径，不替代宏观结论；相关≠因果 P3 观察状态 只观察 · 不下单 观察候选 leverage_crowding|MULTI|down|48h 状态 active_observation_only 已运行天数 1.0749 剩余天数 26.9251 观察次数 10 候选匹配 7 正式校准簿未变 是 actionable 0 advisory-only 是 杀开关 开 允许下单 否 最近观察 2026-07-15T04:25:28.518Z 标的总览 二级：状态/因子计数见明细 标的 日化资金费率 OI变化 完备/可信 状态 市场状态 证据立场 数据与状态明细 点击上方标的切换 没有缓存数据，请通过服务版刷新 状态节点与因子聚合 同一因子最多贡献一次 等待数据 趋势与观察线索 来自最近决策快照 等待数据 完备度 + 来源可信度 -- 等待数据 市场状态 代理项明确标记 等待数据 风险判断与证据边界 支持 / 反驳 / 证据不足 等待数据 历史证据与风险约束 缺证据则不下判断 等待数据 安全边界（原执行门禁 · 非产品主线） 研究路线 宏观验证导向 · 不默认进入模拟执行 数据可信度 多所覆盖、跨所分歧、熔断与降级可见。 状态解释 状态节点、因子去重、代理边界诚实标注。 宏观映射 微观证据支持/反驳/不足，对应图谱路径。 历史验证 校准与风险约束；证据不足即弃权。 持续观察 P3 Shadow 只记录；S4 为研究阶段复评。",
+    "visibleButtons": [
+      {
+        "label": "采集中…",
+        "id": "refreshMicro",
+        "disabled": true,
+        "rect": {
+          "x": 1268,
+          "y": 20,
+          "width": 78,
+          "height": 34,
+          "bottom": 54
+        }
+      }
+    ],
+    "rects": {
+      "status": null,
+      "layout": {
+        "x": 20,
+        "y": 1597,
+        "width": 1326,
+        "height": 588,
+        "bottom": 2185
+      },
+      "main": null,
+      "inspector": null
+    },
+    "aboveFoldMainRatio": null,
+    "bannedControls": 0
+  },
+  "finishedAt": "2026-07-15T05:44:56.100Z"
+}

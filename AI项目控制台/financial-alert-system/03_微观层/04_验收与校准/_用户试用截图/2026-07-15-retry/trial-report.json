@@ -1,0 +1,45 @@
+{
+  "schema_version": "ux-retry-trial-v1",
+  "generated_at": "2026-07-15T06:32:00.000Z",
+  "advisory_only": true,
+  "banned_controls": 0,
+  "desktop_1366x768": {
+    "scroll_height_px": 1382,
+    "prev_scroll_height_px": 2448,
+    "q1_in_first_screen": true,
+    "q2_in_first_screen": true,
+    "q3_in_first_screen": true,
+    "q5_in_first_screen": true,
+    "q4_assets_below_fold_ok": true,
+    "unsigned_conclusion": true,
+    "contrast_mode": true,
+    "beijing_time_in_five": true,
+    "iso_leak_in_five": false,
+    "ms_leak_in_five": false
+  },
+  "mobile_390x844": {
+    "q1_in_first_screen": true,
+    "q5_in_first_screen": true,
+    "visible_strip_chips": ["真实性", "综合结论"],
+    "overflow_x": false,
+    "scroll_height_px": 2559,
+    "prev_scroll_height_px": 5080
+  },
+  "evidence_mode": {
+    "shared_verdict_unsigned": true,
+    "traceable_native": 3,
+    "pending_source": 1,
+    "raw_interface_links": 2
+  },
+  "checklist": {
+    "placeholder_not_signable": "pass",
+    "native_traceable_or_demoted": "pass",
+    "desktop_first_screen_core_questions": "pass",
+    "mobile_conclusion_and_gap_first": "pass",
+    "no_raw_iso_ms_in_five": "pass",
+    "modes_assets_legacy_safe": "pass",
+    "no_trading_controls": "pass"
+  },
+  "verdict": "user_experience_retrial_pass_conditional_on_placeholder_store",
+  "note": "当前试用仍为对照/占位决策；有真实 Store 决策时应再目视确认 live 路径。"
+}
