@@ -1,6 +1,6 @@
 ﻿{
   "version": "project-status-v1",
-  "generated_at": "2026-07-15T05:42:44.2276503Z",
+  "generated_at": "2026-07-15T10:42:32.7155960Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + live code probes",
   "git": {
@@ -19,8 +19,8 @@
     "static/research_workbench.js": 2039,
     "static/propagation_engine.js": 1925,
     "static/data.js": 2284,
-    "index.html": 2983,
-    "package.json": 76
+    "index.html": 68,
+    "package.json": 84
   },
   "acceptance": [
     {
@@ -71,7 +71,7 @@
         {
           "path": "package.json",
           "ok": true,
-          "detail": "exists (76 lines)"
+          "detail": "exists (84 lines)"
         },
         {
           "path": "scripts/run_smoke_test.js",
@@ -95,7 +95,7 @@
         {
           "path": "propagation.html",
           "ok": true,
-          "detail": "exists (1360 lines)"
+          "detail": "exists (1361 lines)"
         },
         {
           "path": "static/propagation_app.js",
@@ -424,7 +424,7 @@
     }
   ],
   "meta": {
-    "run_at": "2026-07-15T05:42:44.2276503Z",
+    "run_at": "2026-07-15T10:42:32.7155960Z",
     "suite": "sync_vault_status.ps1",
     "platform": "win32"
   }
