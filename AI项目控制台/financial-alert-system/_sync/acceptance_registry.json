@@ -1,26 +1,97 @@
 {
-  "version": "acceptance-registry-v1",
+  "version": "acceptance-registry-v2",
+  "updated": "2026-07-16",
   "code_root_candidates": [
-    "D:\\financial-alert-system",
     "F:\\financial-alert-system",
+    "D:\\financial-alert-system",
     "C:\\Users\\Administrator\\Downloads\\financial-alert-system"
   ],
   "vault_root_candidates": [
-    "D:\\AI  金融知识点",
+    "F:\\AI 金融知识点",
     "D:\\AI 金融知识点",
-    "F:\\AI 金融知识点"
+    "D:\\AI  金融知识点"
   ],
   "mirror_relpath": "AI项目控制台/financial-alert-system/project_status.json",
+  "policy": {
+    "file_exists_alone_is_not_accepted": true,
+    "release_gate": "blocked",
+    "cloud_gate": "blocked",
+    "note": "file_exists only proves structural presence. ACCEPTED requires command_run or artifact_pass with ok/PASS."
+  },
+  "remediation": {
+    "plan": "01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md",
+    "rg0_report": "04_研究工作台/02_重构执行/统一研究工作台_RG0整改重开与基线_2026-07-16.md",
+    "release_gate": "blocked",
+    "cloud_gate": "blocked",
+    "phases": {
+      "RG0": "complete",
+      "SEC0": "complete",
+      "NFP_LOOP": "engineering_pass",
+      "NFP_BLIND_SCAFFOLD": "scaffold_pass_24",
+      "NFP_RESEARCH_COMPLETE": false,
+      "NFP_LIVE_FORWARD": "0_of_3",
+      "RT1": "not_started",
+      "TRUTH1": "not_started",
+      "CTX1": "not_started",
+      "GATE1": "not_started",
+      "UW3-R": "not_started",
+      "UW4-R": "not_started",
+      "UW6-R": "not_started",
+      "UW7-R": "not_started",
+      "UW8-R": "not_started"
+    },
+    "split_flags": {
+      "delete_executed": true,
+      "observation_status": "not_run"
+    },
+    "project_status_verdict": "整改中，未发布，研究有效性未证明"
+  },
   "items": [
     {
+      "id": "nfp-event-card",
+      "title": "NFP 事件卡冻结与结算（工程）",
+      "class": "command",
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/NFP事件预测与结算账本.md"
+      ],
+      "evidence": [
+        { "type": "artifact_pass", "path": "artifacts/nfp_event_card_smoke.json" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "sec0-static-security",
+      "title": "SEC0 静态服务与凭据封口",
+      "class": "command",
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "frontmatter_status_on_pass": "sec0_pass",
+      "frontmatter_status_on_fail": "sec0_block",
+      "evidence": [
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/sec0_static_security_last.json"
+        },
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/sec0_rollback_drill.json"
+        }
+      ],
+      "pass_requires": "all"
+    },
+    {
       "id": "workbench-p0-p4",
-      "title": "传播图研究工作台 P0–P4",
+      "title": "传播图研究工作台 P0–P4（结构存在，非发布验收）",
+      "class": "structural",
       "notes": [
         "AI项目控制台/financial-alert-system/传播图研究工作台整改方案_2026-07-11.md",
         "AI项目控制台/financial-alert-system/任务进度.md"
       ],
-      "frontmatter_status_on_pass": "done",
-      "frontmatter_status_on_fail": "acceptance_failed",
+      "frontmatter_status_on_pass": "structural_present",
+      "frontmatter_status_on_fail": "missing",
       "evidence": [
         { "type": "file_exists", "path": "static/research_workbench.js" },
         { "type": "file_exists", "path": "scripts/smoke_research_workbench_p1.js" },
@@ -32,12 +103,13 @@
     },
     {
       "id": "engineering-gate",
-      "title": "工程门禁 npm check/smoke/acceptance",
+      "title": "工程门禁脚本存在（结构，非发布验收）",
+      "class": "structural",
       "notes": [
         "AI项目控制台/financial-alert-system/工程收口与验真整改方案_2026-07-11.md",
         "AI项目控制台/financial-alert-system/任务进度.md"
       ],
-      "frontmatter_status_on_pass": "done",
+      "frontmatter_status_on_pass": "structural_present",
       "frontmatter_status_on_fail": "pending",
       "evidence": [
         { "type": "file_exists", "path": "package.json" },
@@ -47,7 +119,8 @@
     },
     {
       "id": "core-propagation",
-      "title": "传播图核心页面可用",
+      "title": "传播图核心页面存在（结构，非发布验收）",
+      "class": "structural",
       "notes": [
         "AI项目控制台/financial-alert-system/README.md",
         "AI项目控制台/financial-alert-system/任务进度.md"

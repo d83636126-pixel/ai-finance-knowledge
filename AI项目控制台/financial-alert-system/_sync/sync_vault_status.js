@@ -85,6 +85,7 @@ function probeEvidence(codeRoot, evidence) {
         rule,
         ok,
         detail: ok ? `exists (${countLines(full)} lines)` : "MISSING",
+        kind: "structural",
       });
     } else if (rule.type === "artifact_pass") {
       const full = path.join(codeRoot, rule.path);
@@ -100,9 +101,17 @@ function probeEvidence(codeRoot, evidence) {
           detail = `artifact unreadable: ${e.message}`;
         }
       }
-      results.push({ rule, ok, detail });
+      results.push({ rule, ok, detail, kind: "command" });
+    } else if (rule.type === "command_run") {
+      // Deferred: sync must not spawn heavy suites; require prior artifact_pass instead.
+      results.push({
+        rule,
+        ok: false,
+        detail: "command_run disabled in sync — run smoke then use artifact_pass",
+        kind: "command",
+      });
     } else {
-      results.push({ rule, ok: false, detail: `unknown evidence type: ${rule.type}` });
+      results.push({ rule, ok: false, detail: `unknown evidence type: ${rule.type}`, kind: "unknown" });
     }
   }
   return results;
@@ -113,6 +122,16 @@ function itemPassed(item, evidenceResults) {
   if (req === "all") return evidenceResults.every((r) => r.ok);
   if (req === "any") return evidenceResults.some((r) => r.ok);
   return false;
+}
+
+function itemVerdict(item, passed) {
+  const cls = item.class
+    || ((item.evidence || []).every((e) => e.type === "file_exists") ? "structural" : "command");
+  // file_exists alone must never become ACCEPTED (release language).
+  if (cls === "structural") {
+    return passed ? "PRESENT" : "MISSING";
+  }
+  return passed ? "ACCEPTED" : "NOT_ACCEPTED";
 }
 
 function buildLiveStatus(codeRoot, registry) {
@@ -141,24 +160,35 @@ function buildLiveStatus(codeRoot, registry) {
   const items = registry.items.map((item) => {
     const evidence = probeEvidence(codeRoot, item.evidence);
     const passed = itemPassed(item, evidence);
+    const verdict = itemVerdict(item, passed);
     return {
       id: item.id,
       title: item.title,
-      status: passed ? "accepted" : "not_accepted",
+      class: item.class || null,
+      status: verdict === "ACCEPTED" ? "accepted" : verdict === "PRESENT" ? "present" : "not_accepted",
+      verdict,
       passed,
       evidence: evidence.map((e) => ({
         path: e.rule.path || e.rule.type,
         ok: e.ok,
         detail: e.detail,
+        kind: e.kind || null,
       })),
     };
   });
+
+  const remediation = registry.remediation || null;
 
   return {
     version: "project-status-v1",
     generated_at: new Date().toISOString(),
     product: "financial-alert-system",
     source_of_truth: "acceptance_registry.json + live code probes",
+    verdict: (remediation && remediation.project_status_verdict)
+      || "整改中，未发布，研究有效性未证明",
+    release_gate: (remediation && remediation.release_gate) || "blocked",
+    cloud_gate: (remediation && remediation.cloud_gate) || "blocked",
+    remediation,
     git: {
       commit: commit || null,
       short: short || null,
@@ -195,12 +225,17 @@ function renderAutoBlock(live, notePath) {
   lines.push(
     `> Git：\`${live.git.short || "n/a"}\` / \`${live.git.branch || "n/a"}\`${live.git.dirty ? "（dirty）" : ""}`
   );
-  lines.push("> 事实源：代码仓探针 + `_sync/acceptance_registry.json`（不是聊天记忆）");
+  lines.push(`> 统一口径：${live.verdict || "整改中，未发布，研究有效性未证明"}`);
+  lines.push(`> release_gate：\`${live.release_gate || "blocked"}\` · cloud_gate：\`${live.cloud_gate || "blocked"}\``);
+  lines.push("> 事实源：代码仓探针 + `_sync/acceptance_registry.json`（file_exists ≠ ACCEPTED）");
   lines.push("");
   lines.push("| 验收项 | 状态 | 证据摘要 |");
   lines.push("|---|---|---|");
   for (const item of related) {
-    const badge = item.passed ? "✅ 已验收" : "❌ 未验收";
+    const badge =
+      item.verdict === "ACCEPTED" ? "✅ ACCEPTED"
+        : item.verdict === "PRESENT" ? "📎 PRESENT（结构）"
+          : "❌ NOT_ACCEPTED";
     const summary = item.evidence
       .map((e) => `${e.ok ? "✓" : "✗"} ${e.path}`)
       .join("<br>");
@@ -347,7 +382,7 @@ function main() {
   console.log(`vault_root=${vaultRoot}`);
   console.log(`notes_updated=${updated}${args.dryRun ? " (dry-run)" : ""}`);
   for (const a of live.acceptance) {
-    console.log(`- ${a.id}: ${a.passed ? "ACCEPTED" : "NOT_ACCEPTED"}`);
+    console.log(`- ${a.id}: ${a.verdict || (a.passed ? "ACCEPTED" : "NOT_ACCEPTED")}`);
   }
 }
 

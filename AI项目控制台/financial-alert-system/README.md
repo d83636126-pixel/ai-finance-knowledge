@@ -1,14 +1,14 @@
 ﻿<!-- AUTO:STATUS:BEGIN -->
 
 > [!important] AUTO STATUS (do not hand-edit this block)
-> generated_at: 2026-07-15T10:42:32.7155960Z
+> generated_at: 2026-07-16T04:52:10.2392880Z
 > code_root: `F:\financial-alert-system`
-> git: `ffa0093` / `master` (dirty)
+> git: `fa3fe38` / `master` (dirty)
 > source: code probes + `_sync/acceptance_registry.json`
 
 | item | status | evidence |
 |---|---|---|
-| 传播图核心页面可用 | ACCEPTED | OK:propagation.html / OK:static/propagation_app.js / OK:propagation_graph.json |
+| 传播图核心页面存在（结构，非发布验收） | ACCEPTED | OK:propagation.html / OK:static/propagation_app.js / OK:propagation_graph.json |
 
 sync:
 ```bat
