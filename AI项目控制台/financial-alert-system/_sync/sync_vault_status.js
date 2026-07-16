@@ -5,13 +5,11 @@
  * Single direction of truth:
  *   code repo evidence  -->  Obsidian note AUTO status blocks (+ optional frontmatter)
  *
- * Humans must not hand-edit content between:
- *   <!-- AUTO:STATUS:BEGIN -->
- *   <!-- AUTO:STATUS:END -->
+ * Graded verdicts via scripts/lib/acceptance_status.js (shared with generate_project_status).
  *
  * Usage:
  *   node sync_vault_status.js
- *   node sync_vault_status.js --code-root "D:\\financial-alert-system" --vault "D:\\AI  金融知识点"
+ *   node sync_vault_status.js --code-root "F:\\financial-alert-system" --vault "F:\\AI 金融知识点"
  *   node sync_vault_status.js --dry-run
  */
 
@@ -75,66 +73,16 @@ function countLines(filePath) {
   }
 }
 
-function probeEvidence(codeRoot, evidence) {
-  const results = [];
-  for (const rule of evidence || []) {
-    if (rule.type === "file_exists") {
-      const full = path.join(codeRoot, rule.path);
-      const ok = fs.existsSync(full);
-      results.push({
-        rule,
-        ok,
-        detail: ok ? `exists (${countLines(full)} lines)` : "MISSING",
-        kind: "structural",
-      });
-    } else if (rule.type === "artifact_pass") {
-      const full = path.join(codeRoot, rule.path);
-      let ok = false;
-      let detail = "MISSING";
-      if (fs.existsSync(full)) {
-        try {
-          const j = readJson(full);
-          const status = String(j.status || j.result || j.pass || "").toLowerCase();
-          ok = status === "pass" || status === "passed" || j.ok === true || j.passed === true;
-          detail = ok ? `artifact PASS (${rule.path})` : `artifact present but not PASS (${status || "unknown"})`;
-        } catch (e) {
-          detail = `artifact unreadable: ${e.message}`;
-        }
-      }
-      results.push({ rule, ok, detail, kind: "command" });
-    } else if (rule.type === "command_run") {
-      // Deferred: sync must not spawn heavy suites; require prior artifact_pass instead.
-      results.push({
-        rule,
-        ok: false,
-        detail: "command_run disabled in sync — run smoke then use artifact_pass",
-        kind: "command",
-      });
-    } else {
-      results.push({ rule, ok: false, detail: `unknown evidence type: ${rule.type}`, kind: "unknown" });
-    }
+function loadAcceptanceStatus(codeRoot) {
+  const modPath = path.join(codeRoot, "scripts", "lib", "acceptance_status.js");
+  if (!fs.existsSync(modPath)) {
+    throw new Error("missing shared module: " + modPath);
   }
-  return results;
+  delete require.cache[require.resolve(modPath)];
+  return require(modPath);
 }
 
-function itemPassed(item, evidenceResults) {
-  const req = item.pass_requires || "all";
-  if (req === "all") return evidenceResults.every((r) => r.ok);
-  if (req === "any") return evidenceResults.some((r) => r.ok);
-  return false;
-}
-
-function itemVerdict(item, passed) {
-  const cls = item.class
-    || ((item.evidence || []).every((e) => e.type === "file_exists") ? "structural" : "command");
-  // file_exists alone must never become ACCEPTED (release language).
-  if (cls === "structural") {
-    return passed ? "PRESENT" : "MISSING";
-  }
-  return passed ? "ACCEPTED" : "NOT_ACCEPTED";
-}
-
-function buildLiveStatus(codeRoot, registry) {
+function buildLiveStatus(codeRoot, registry, Acc) {
   const commit = safeGit(codeRoot, "rev-parse HEAD");
   const short = safeGit(codeRoot, "rev-parse --short HEAD");
   const branch = safeGit(codeRoot, "rev-parse --abbrev-ref HEAD");
@@ -157,37 +105,22 @@ function buildLiveStatus(codeRoot, registry) {
     if (fs.existsSync(full)) files[rel] = countLines(full);
   }
 
-  const items = registry.items.map((item) => {
-    const evidence = probeEvidence(codeRoot, item.evidence);
-    const passed = itemPassed(item, evidence);
-    const verdict = itemVerdict(item, passed);
-    return {
-      id: item.id,
-      title: item.title,
-      class: item.class || null,
-      status: verdict === "ACCEPTED" ? "accepted" : verdict === "PRESENT" ? "present" : "not_accepted",
-      verdict,
-      passed,
-      evidence: evidence.map((e) => ({
-        path: e.rule.path || e.rule.type,
-        ok: e.ok,
-        detail: e.detail,
-        kind: e.kind || null,
-      })),
-    };
-  });
-
+  const items = Acc.evaluateRegistryItems(codeRoot, registry);
   const remediation = registry.remediation || null;
 
+  const researchPass = items.some((i) => i.verdict === Acc.VERDICTS.RESEARCH_PASS);
+  const anyBlock = items.some((i) => i.verdict === Acc.VERDICTS.BLOCK);
+
   return {
-    version: "project-status-v1",
+    version: "project-status-v2",
     generated_at: new Date().toISOString(),
     product: "financial-alert-system",
-    source_of_truth: "acceptance_registry.json + live code probes",
+    source_of_truth: "acceptance_registry.json + acceptance_status.js graded probes",
     verdict: (remediation && remediation.project_status_verdict)
       || "整改中，未发布，研究有效性未证明",
     release_gate: (remediation && remediation.release_gate) || "blocked",
     cloud_gate: (remediation && remediation.cloud_gate) || "blocked",
+    research_validity: researchPass ? "RESEARCH_PASS" : "BLOCK",
     remediation,
     git: {
       commit: commit || null,
@@ -206,16 +139,14 @@ function buildLiveStatus(codeRoot, registry) {
       node: process.version,
       platform: process.platform,
       suite: "sync_vault_status",
+      grader: "acceptance_status.js",
+      any_block: anyBlock,
     },
   };
 }
 
-function renderAutoBlock(live, notePath) {
-  const related = (live.acceptance || []).filter((item) => {
-    // notes matching is done by caller; here render all for dashboard notes
-    return true;
-  });
-
+function renderAutoBlock(live, Acc) {
+  const related = live.acceptance || [];
   const lines = [];
   lines.push(MARK_BEGIN);
   lines.push("");
@@ -226,25 +157,24 @@ function renderAutoBlock(live, notePath) {
     `> Git：\`${live.git.short || "n/a"}\` / \`${live.git.branch || "n/a"}\`${live.git.dirty ? "（dirty）" : ""}`
   );
   lines.push(`> 统一口径：${live.verdict || "整改中，未发布，研究有效性未证明"}`);
-  lines.push(`> release_gate：\`${live.release_gate || "blocked"}\` · cloud_gate：\`${live.cloud_gate || "blocked"}\``);
-  lines.push("> 事实源：代码仓探针 + `_sync/acceptance_registry.json`（file_exists ≠ ACCEPTED）");
+  lines.push(
+    `> release_gate：\`${live.release_gate || "blocked"}\` · cloud_gate：\`${live.cloud_gate || "blocked"}\` · research：\`${live.research_validity || "BLOCK"}\``
+  );
+  lines.push("> 事实源：`acceptance_status.js` 分级探针（SCAFFOLD ≠ RESEARCH，file_exists ≠ ACCEPTED）");
   lines.push("");
   lines.push("| 验收项 | 状态 | 证据摘要 |");
   lines.push("|---|---|---|");
   for (const item of related) {
-    const badge =
-      item.verdict === "ACCEPTED" ? "✅ ACCEPTED"
-        : item.verdict === "PRESENT" ? "📎 PRESENT（结构）"
-          : "❌ NOT_ACCEPTED";
-    const summary = item.evidence
+    const badge = Acc.badgeForVerdict(item.verdict);
+    const summary = (item.evidence || [])
       .map((e) => `${e.ok ? "✓" : "✗"} ${e.path}`)
       .join("<br>");
-    lines.push(`| ${item.title} | ${badge} | ${summary} |`);
+    lines.push(`| ${item.title} | ${badge} | ${summary || "—"} |`);
   }
   lines.push("");
   lines.push("同步命令：");
   lines.push("```bat");
-  lines.push("node \"AI项目控制台\\financial-alert-system\\_sync\\sync_vault_status.js\"");
+  lines.push("powershell -NoProfile -ExecutionPolicy Bypass -File \"AI项目控制台\\financial-alert-system\\_sync\\sync_vault_status.ps1\"");
   lines.push("```");
   lines.push("");
   lines.push(MARK_END);
@@ -259,7 +189,6 @@ function upsertAutoBlock(markdown, block) {
     const after = markdown.slice(end + MARK_END.length);
     return before + block + after.replace(/^\r?\n/, "\n");
   }
-  // insert after frontmatter if present
   if (markdown.startsWith("---")) {
     const close = markdown.indexOf("\n---", 3);
     if (close !== -1) {
@@ -320,9 +249,9 @@ function main() {
     );
   }
 
-  const live = buildLiveStatus(codeRoot, registry);
+  const Acc = loadAcceptanceStatus(codeRoot);
+  const live = buildLiveStatus(codeRoot, registry, Acc);
 
-  // write machine-readable mirror into vault
   const mirrorRel = registry.mirror_relpath || "AI项目控制台/financial-alert-system/project_status.json";
   const mirrorPath = path.join(vaultRoot, mirrorRel);
   if (!args.dryRun) {
@@ -330,7 +259,6 @@ function main() {
     fs.writeFileSync(mirrorPath, JSON.stringify(live, null, 2) + "\n", "utf8");
   }
 
-  // also write report next to script
   const reportPath = path.join(__dirname, "last_sync_report.json");
   if (!args.dryRun) {
     fs.writeFileSync(reportPath, JSON.stringify({ live, vaultRoot, codeRoot }, null, 2) + "\n", "utf8");
@@ -354,18 +282,17 @@ function main() {
       ...live,
       acceptance: live.acceptance.filter((a) => relatedItems.some((i) => i.id === a.id)),
     };
-    const block = renderAutoBlock(relatedLive, noteRel);
+    const block = renderAutoBlock(relatedLive, Acc);
     let md = fs.readFileSync(notePath, "utf8");
     md = upsertAutoBlock(md, block);
 
-    // If note maps to exactly one item with frontmatter policy, set status
     if (relatedItems.length === 1) {
       const item = relatedItems[0];
       const liveItem = live.acceptance.find((a) => a.id === item.id);
       if (liveItem) {
         const st = liveItem.passed
-          ? item.frontmatter_status_on_pass || "done"
-          : item.frontmatter_status_on_fail || "acceptance_failed";
+          ? item.frontmatter_status_on_pass || liveItem.verdict.toLowerCase()
+          : item.frontmatter_status_on_fail || "block";
         md = setFrontmatterStatus(md, st);
       }
     }
@@ -381,14 +308,15 @@ function main() {
   console.log(`code_root=${codeRoot}`);
   console.log(`vault_root=${vaultRoot}`);
   console.log(`notes_updated=${updated}${args.dryRun ? " (dry-run)" : ""}`);
+  console.log(`research_validity=${live.research_validity}`);
   for (const a of live.acceptance) {
-    console.log(`- ${a.id}: ${a.verdict || (a.passed ? "ACCEPTED" : "NOT_ACCEPTED")}`);
+    console.log(`- ${a.id}: ${a.verdict}`);
   }
 }
 
 try {
   main();
 } catch (err) {
-  console.error(err.message || err);
+  console.error(err && err.stack ? err.stack : err);
   process.exitCode = 1;
 }

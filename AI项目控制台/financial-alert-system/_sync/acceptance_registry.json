@@ -1,5 +1,5 @@
 {
-  "version": "acceptance-registry-v2",
+  "version": "acceptance-registry-v3",
   "updated": "2026-07-16",
   "code_root_candidates": [
     "F:\\financial-alert-system",
@@ -14,9 +14,11 @@
   "mirror_relpath": "AI项目控制台/financial-alert-system/project_status.json",
   "policy": {
     "file_exists_alone_is_not_accepted": true,
+    "scaffold_is_not_research": true,
+    "empty_evidence_is_block": true,
     "release_gate": "blocked",
     "cloud_gate": "blocked",
-    "note": "file_exists only proves structural presence. ACCEPTED requires command_run or artifact_pass with ok/PASS."
+    "note": "Graded verdicts via scripts/lib/acceptance_status.js. SCAFFOLD_PASS never becomes RESEARCH_PASS or ACCEPTED."
   },
   "remediation": {
     "plan": "01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md",
@@ -29,15 +31,10 @@
       "NFP_LOOP": "engineering_pass",
       "NFP_BLIND_SCAFFOLD": "scaffold_pass",
       "NFP_FORWARD_SCAFFOLD": "scaffold_pass",
-      "RT1": "not_started",
-      "TRUTH1": "not_started",
-      "CTX1": "not_started",
-      "GATE1": "not_started",
-      "UW3-R": "not_started",
-      "UW4-R": "not_started",
-      "UW6-R": "not_started",
-      "UW7-R": "not_started",
-      "UW8-R": "not_started"
+      "NFP_HISTORICAL_BLIND_RESEARCH": "not_started",
+      "NFP_LIVE_FORWARD": "observing_0_of_3",
+      "NFP_RESEARCH_COMPLETE": false,
+      "STATUS_GRADER_FIX": "in_progress"
     },
     "split_flags": {
       "delete_executed": true,
@@ -47,13 +44,39 @@
   },
   "items": [
     {
-      "id": "nfp-event-card",
-      "title": "NFP 事件卡冻结与结算（工程）",
+      "id": "sec0-static-security",
+      "title": "SEC0 安全封口",
       "class": "command",
+      "level": "security",
+      "pass_verdict": "ENGINEERING_PASS",
+      "research_credit": false,
+      "max_age_hours": 168,
       "notes": [
         "AI项目控制台/financial-alert-system/任务进度.md",
         "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
       ],
+      "frontmatter_status_on_pass": "engineering_pass",
+      "frontmatter_status_on_fail": "block",
+      "evidence": [
+        { "type": "artifact_pass", "path": "artifacts/sec0_static_security_last.json" },
+        { "type": "artifact_pass", "path": "artifacts/sec0_rollback_drill.json" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "nfp-event-card",
+      "title": "NFP 冻结与结算程序",
+      "class": "command",
+      "level": "engineering",
+      "pass_verdict": "ENGINEERING_PASS",
+      "research_credit": false,
+      "max_age_hours": 168,
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "frontmatter_status_on_pass": "engineering_pass",
+      "frontmatter_status_on_fail": "block",
       "evidence": [
         { "type": "artifact_pass", "path": "artifacts/nfp_event_card_smoke.json" }
       ],
@@ -61,12 +84,18 @@
     },
     {
       "id": "nfp-blind-scaffold",
-      "title": "NFP 历史盲测脚手架（≥20，非研究结案）",
+      "title": "历史盲测脚手架",
       "class": "command",
+      "level": "scaffold",
+      "pass_verdict": "SCAFFOLD_PASS",
+      "research_credit": false,
+      "max_age_hours": 168,
       "notes": [
         "AI项目控制台/financial-alert-system/任务进度.md",
         "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
       ],
+      "frontmatter_status_on_pass": "scaffold_pass",
+      "frontmatter_status_on_fail": "block",
       "evidence": [
         { "type": "artifact_pass", "path": "artifacts/nfp_blind_batch_latest.json" }
       ],
@@ -74,80 +103,122 @@
     },
     {
       "id": "nfp-forward-scaffold",
-      "title": "NFP 前瞻样本闭环脚手架（3 事件，非实时行情）",
+      "title": "前瞻流程脚手架",
       "class": "command",
+      "level": "scaffold",
+      "pass_verdict": "SCAFFOLD_PASS",
+      "research_credit": false,
+      "max_age_hours": 168,
       "notes": [
         "AI项目控制台/financial-alert-system/任务进度.md",
         "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
       ],
+      "frontmatter_status_on_pass": "scaffold_pass",
+      "frontmatter_status_on_fail": "block",
       "evidence": [
         { "type": "artifact_pass", "path": "artifacts/nfp_forward_gate.json" }
       ],
       "pass_requires": "all"
     },
     {
-      "id": "sec0-static-security",
-      "title": "SEC0 静态服务与凭据封口",
+      "id": "nfp-historical-blind-research",
+      "title": "真实历史盲测",
       "class": "command",
+      "level": "research",
+      "pass_verdict": "RESEARCH_PASS",
+      "research_credit": true,
+      "max_age_hours": 720,
       "notes": [
         "AI项目控制台/financial-alert-system/任务进度.md",
         "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
       ],
-      "frontmatter_status_on_pass": "sec0_pass",
-      "frontmatter_status_on_fail": "sec0_block",
+      "frontmatter_status_on_pass": "research_pass",
+      "frontmatter_status_on_fail": "not_started",
       "evidence": [
-        {
-          "type": "artifact_pass",
-          "path": "artifacts/sec0_static_security_last.json"
-        },
-        {
-          "type": "artifact_pass",
-          "path": "artifacts/sec0_rollback_drill.json"
-        }
+        { "type": "manual_status", "value": "NOT_STARTED" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "nfp-live-forward",
+      "title": "真实前瞻事件 OBSERVING 0/3",
+      "class": "command",
+      "level": "observing",
+      "pass_verdict": "OBSERVING",
+      "research_credit": false,
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "frontmatter_status_on_pass": "observing",
+      "frontmatter_status_on_fail": "block",
+      "evidence": [
+        { "type": "manual_status", "value": "OBSERVING" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "research-validity",
+      "title": "研究有效性",
+      "class": "command",
+      "level": "research",
+      "pass_verdict": "RESEARCH_PASS",
+      "research_credit": true,
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "frontmatter_status_on_pass": "research_pass",
+      "frontmatter_status_on_fail": "block",
+      "evidence": [
+        { "type": "manual_status", "value": "BLOCK" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "release-cloud-gate",
+      "title": "发布 / 上云",
+      "class": "command",
+      "level": "release",
+      "pass_verdict": "RELEASE_PASS",
+      "research_credit": false,
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "frontmatter_status_on_pass": "release_pass",
+      "frontmatter_status_on_fail": "block",
+      "evidence": [
+        { "type": "manual_status", "value": "BLOCK" }
       ],
       "pass_requires": "all"
     },
     {
       "id": "workbench-p0-p4",
-      "title": "传播图研究工作台 P0–P4（结构存在，非发布验收）",
+      "title": "传播图研究工作台 P0–P4（结构）",
       "class": "structural",
+      "level": "structural",
+      "pass_verdict": "PRESENT",
+      "research_credit": false,
       "notes": [
-        "AI项目控制台/financial-alert-system/传播图研究工作台整改方案_2026-07-11.md",
         "AI项目控制台/financial-alert-system/任务进度.md"
       ],
       "frontmatter_status_on_pass": "structural_present",
       "frontmatter_status_on_fail": "missing",
       "evidence": [
         { "type": "file_exists", "path": "static/research_workbench.js" },
-        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p1.js" },
-        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p2.js" },
-        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p3.js" },
-        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p4.js" }
-      ],
-      "pass_requires": "all"
-    },
-    {
-      "id": "engineering-gate",
-      "title": "工程门禁脚本存在（结构，非发布验收）",
-      "class": "structural",
-      "notes": [
-        "AI项目控制台/financial-alert-system/工程收口与验真整改方案_2026-07-11.md",
-        "AI项目控制台/financial-alert-system/任务进度.md"
-      ],
-      "frontmatter_status_on_pass": "structural_present",
-      "frontmatter_status_on_fail": "pending",
-      "evidence": [
-        { "type": "file_exists", "path": "package.json" },
-        { "type": "file_exists", "path": "scripts/run_smoke_test.js" }
+        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p1.js" }
       ],
       "pass_requires": "all"
     },
     {
       "id": "core-propagation",
-      "title": "传播图核心页面存在（结构，非发布验收）",
+      "title": "传播图核心页面（结构）",
       "class": "structural",
+      "level": "structural",
+      "pass_verdict": "PRESENT",
+      "research_credit": false,
       "notes": [
-        "AI项目控制台/financial-alert-system/README.md",
         "AI项目控制台/financial-alert-system/任务进度.md"
       ],
       "evidence": [

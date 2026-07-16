@@ -1,176 +1,302 @@
-﻿{
-  "version": "project-status-v1",
-  "generated_at": "2026-07-16T10:12:11.7260435Z",
-  "product": "financial-alert-system",
-  "source_of_truth": "acceptance_registry.json + live code probes",
-  "git": {
-    "commit": "fa3fe3831490576268a081303cff11ae26a9fa14",
-    "short": "fa3fe38",
-    "branch": "master",
-    "dirty": true,
-    "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
-  },
-  "paths": {
-    "code_root": "F:\\financial-alert-system",
-    "vault_root": "F:\\AI 金融知识点"
-  },
-  "files": {
-    "static/propagation_app.js": 5729,
-    "static/research_workbench.js": 2039,
-    "static/propagation_engine.js": 1925,
-    "static/data.js": 2251,
-    "index.html": 70,
-    "package.json": 94
-  },
-  "acceptance": [
-    {
-      "id": "nfp-event-card",
-      "title": "NFP 事件卡冻结与结算（工程）",
-      "passed": true,
-      "status": "accepted",
-      "evidence": [],
-      "notes": [
-        "AI项目控制台/financial-alert-system/任务进度.md",
-        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
-      ],
-      "frontmatter_status_on_pass": null,
-      "frontmatter_status_on_fail": null
+{
+  "live": {
+    "version": "project-status-v2",
+    "generated_at": "2026-07-16T11:42:29.237Z",
+    "product": "financial-alert-system",
+    "source_of_truth": "acceptance_registry.json + acceptance_status.js graded probes",
+    "verdict": "整改中，未发布，研究有效性未证明",
+    "release_gate": "blocked",
+    "cloud_gate": "blocked",
+    "research_validity": "BLOCK",
+    "remediation": {
+      "plan": "01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md",
+      "rg0_report": "04_研究工作台/02_重构执行/统一研究工作台_RG0整改重开与基线_2026-07-16.md",
+      "release_gate": "blocked",
+      "cloud_gate": "blocked",
+      "phases": {
+        "RG0": "complete",
+        "SEC0": "complete",
+        "NFP_LOOP": "engineering_pass",
+        "NFP_BLIND_SCAFFOLD": "scaffold_pass",
+        "NFP_FORWARD_SCAFFOLD": "scaffold_pass",
+        "NFP_HISTORICAL_BLIND_RESEARCH": "not_started",
+        "NFP_LIVE_FORWARD": "observing_0_of_3",
+        "NFP_RESEARCH_COMPLETE": false,
+        "STATUS_GRADER_FIX": "in_progress"
+      },
+      "split_flags": {
+        "delete_executed": true,
+        "observation_status": "not_run"
+      },
+      "project_status_verdict": "整改中，未发布，研究有效性未证明"
     },
-    {
-      "id": "nfp-blind-scaffold",
-      "title": "NFP 历史盲测脚手架（≥20，非研究结案）",
-      "passed": true,
-      "status": "accepted",
-      "evidence": [],
-      "notes": [
-        "AI项目控制台/financial-alert-system/任务进度.md",
-        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
-      ],
-      "frontmatter_status_on_pass": null,
-      "frontmatter_status_on_fail": null
+    "git": {
+      "commit": "5456f88e63d764ec623261ee0c9637ed49739d94",
+      "short": "5456f88",
+      "branch": "master",
+      "dirty": true,
+      "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
     },
-    {
-      "id": "nfp-forward-scaffold",
-      "title": "NFP 前瞻样本闭环脚手架（3 事件，非实时行情）",
-      "passed": true,
-      "status": "accepted",
-      "evidence": [],
-      "notes": [
-        "AI项目控制台/financial-alert-system/任务进度.md",
-        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
-      ],
-      "frontmatter_status_on_pass": null,
-      "frontmatter_status_on_fail": null
+    "paths": {
+      "code_root": "F:\\financial-alert-system"
     },
-    {
-      "id": "sec0-static-security",
-      "title": "SEC0 静态服务与凭据封口",
-      "passed": true,
-      "status": "accepted",
-      "evidence": [],
-      "notes": [
-        "AI项目控制台/financial-alert-system/任务进度.md",
-        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
-      ],
-      "frontmatter_status_on_pass": "sec0_pass",
-      "frontmatter_status_on_fail": "sec0_block"
+    "files": {
+      "static/propagation_app.js": 5729,
+      "static/research_workbench.js": 2040,
+      "static/propagation_engine.js": 1926,
+      "static/data.js": 2252,
+      "index.html": 71,
+      "package.json": 96
     },
-    {
-      "id": "workbench-p0-p4",
-      "title": "传播图研究工作台 P0–P4（结构存在，非发布验收）",
-      "passed": true,
-      "status": "accepted",
-      "evidence": [
-        {
-          "path": "static/research_workbench.js",
-          "ok": true,
-          "detail": "exists (2039 lines)"
-        },
-        {
-          "path": "scripts/smoke_research_workbench_p1.js",
-          "ok": true,
-          "detail": "exists (96 lines)"
-        },
-        {
-          "path": "scripts/smoke_research_workbench_p2.js",
-          "ok": true,
-          "detail": "exists (96 lines)"
-        },
-        {
-          "path": "scripts/smoke_research_workbench_p3.js",
-          "ok": true,
-          "detail": "exists (79 lines)"
-        },
-        {
-          "path": "scripts/smoke_research_workbench_p4.js",
-          "ok": true,
-          "detail": "exists (115 lines)"
-        }
-      ],
-      "notes": [
-        "AI项目控制台/financial-alert-system/传播图研究工作台整改方案_2026-07-11.md",
-        "AI项目控制台/financial-alert-system/任务进度.md"
-      ],
-      "frontmatter_status_on_pass": "structural_present",
-      "frontmatter_status_on_fail": "missing"
-    },
-    {
-      "id": "engineering-gate",
-      "title": "工程门禁脚本存在（结构，非发布验收）",
-      "passed": true,
-      "status": "accepted",
-      "evidence": [
-        {
-          "path": "package.json",
-          "ok": true,
-          "detail": "exists (94 lines)"
-        },
-        {
-          "path": "scripts/run_smoke_test.js",
-          "ok": true,
-          "detail": "exists (80 lines)"
-        }
-      ],
-      "notes": [
-        "AI项目控制台/financial-alert-system/工程收口与验真整改方案_2026-07-11.md",
-        "AI项目控制台/financial-alert-system/任务进度.md"
-      ],
-      "frontmatter_status_on_pass": "structural_present",
-      "frontmatter_status_on_fail": "pending"
-    },
-    {
-      "id": "core-propagation",
-      "title": "传播图核心页面存在（结构，非发布验收）",
-      "passed": true,
-      "status": "accepted",
-      "evidence": [
-        {
-          "path": "propagation.html",
-          "ok": true,
-          "detail": "exists (1360 lines)"
-        },
-        {
-          "path": "static/propagation_app.js",
-          "ok": true,
-          "detail": "exists (5729 lines)"
-        },
-        {
-          "path": "propagation_graph.json",
-          "ok": true,
-          "detail": "exists (5001 lines)"
-        }
-      ],
-      "notes": [
-        "AI项目控制台/financial-alert-system/README.md",
-        "AI项目控制台/financial-alert-system/任务进度.md"
-      ],
-      "frontmatter_status_on_pass": null,
-      "frontmatter_status_on_fail": null
+    "acceptance": [
+      {
+        "id": "sec0-static-security",
+        "title": "SEC0 安全封口",
+        "class": "command",
+        "level": "security",
+        "pass_verdict": "ENGINEERING_PASS",
+        "research_credit": false,
+        "status": "engineering_pass",
+        "verdict": "ENGINEERING_PASS",
+        "passed": true,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "artifacts/sec0_static_security_last.json",
+            "ok": true,
+            "detail": "ENGINEERING_PASS (artifacts/sec0_static_security_last.json)",
+            "kind": "artifact",
+            "artifact_status": "PASS"
+          },
+          {
+            "path": "artifacts/sec0_rollback_drill.json",
+            "ok": true,
+            "detail": "ENGINEERING_PASS (artifacts/sec0_rollback_drill.json)",
+            "kind": "artifact",
+            "artifact_status": "PASS"
+          }
+        ]
+      },
+      {
+        "id": "nfp-event-card",
+        "title": "NFP 冻结与结算程序",
+        "class": "command",
+        "level": "engineering",
+        "pass_verdict": "ENGINEERING_PASS",
+        "research_credit": false,
+        "status": "engineering_pass",
+        "verdict": "ENGINEERING_PASS",
+        "passed": true,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "artifacts/nfp_event_card_smoke.json",
+            "ok": true,
+            "detail": "ENGINEERING_PASS (artifacts/nfp_event_card_smoke.json)",
+            "kind": "artifact",
+            "artifact_status": "PASS"
+          }
+        ]
+      },
+      {
+        "id": "nfp-blind-scaffold",
+        "title": "历史盲测脚手架",
+        "class": "command",
+        "level": "scaffold",
+        "pass_verdict": "SCAFFOLD_PASS",
+        "research_credit": false,
+        "status": "scaffold_pass",
+        "verdict": "SCAFFOLD_PASS",
+        "passed": true,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "artifacts/nfp_blind_batch_latest.json",
+            "ok": true,
+            "detail": "SCAFFOLD_PASS (not research credit) (artifacts/nfp_blind_batch_latest.json)",
+            "kind": "artifact",
+            "artifact_status": "SCAFFOLD_PASS"
+          }
+        ]
+      },
+      {
+        "id": "nfp-forward-scaffold",
+        "title": "前瞻流程脚手架",
+        "class": "command",
+        "level": "scaffold",
+        "pass_verdict": "SCAFFOLD_PASS",
+        "research_credit": false,
+        "status": "scaffold_pass",
+        "verdict": "SCAFFOLD_PASS",
+        "passed": true,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "artifacts/nfp_forward_gate.json",
+            "ok": true,
+            "detail": "SCAFFOLD_PASS (not research credit) (artifacts/nfp_forward_gate.json)",
+            "kind": "artifact",
+            "artifact_status": "SCAFFOLD_PASS"
+          }
+        ]
+      },
+      {
+        "id": "nfp-historical-blind-research",
+        "title": "真实历史盲测",
+        "class": "command",
+        "level": "research",
+        "pass_verdict": "RESEARCH_PASS",
+        "research_credit": true,
+        "status": "not_started",
+        "verdict": "NOT_STARTED",
+        "passed": false,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "manual_status",
+            "ok": true,
+            "detail": "NOT_STARTED",
+            "kind": "manual",
+            "artifact_status": null
+          }
+        ]
+      },
+      {
+        "id": "nfp-live-forward",
+        "title": "真实前瞻事件 OBSERVING 0/3",
+        "class": "command",
+        "level": "observing",
+        "pass_verdict": "OBSERVING",
+        "research_credit": false,
+        "status": "observing",
+        "verdict": "OBSERVING",
+        "passed": true,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "manual_status",
+            "ok": true,
+            "detail": "OBSERVING",
+            "kind": "manual",
+            "artifact_status": null
+          }
+        ]
+      },
+      {
+        "id": "research-validity",
+        "title": "研究有效性",
+        "class": "command",
+        "level": "research",
+        "pass_verdict": "RESEARCH_PASS",
+        "research_credit": true,
+        "status": "block",
+        "verdict": "BLOCK",
+        "passed": false,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "manual_status",
+            "ok": false,
+            "detail": "BLOCK",
+            "kind": "manual",
+            "artifact_status": null
+          }
+        ]
+      },
+      {
+        "id": "release-cloud-gate",
+        "title": "发布 / 上云",
+        "class": "command",
+        "level": "release",
+        "pass_verdict": "RELEASE_PASS",
+        "research_credit": false,
+        "status": "block",
+        "verdict": "BLOCK",
+        "passed": false,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "manual_status",
+            "ok": false,
+            "detail": "BLOCK",
+            "kind": "manual",
+            "artifact_status": null
+          }
+        ]
+      },
+      {
+        "id": "workbench-p0-p4",
+        "title": "传播图研究工作台 P0–P4（结构）",
+        "class": "structural",
+        "level": "structural",
+        "pass_verdict": "PRESENT",
+        "research_credit": false,
+        "status": "present",
+        "verdict": "PRESENT",
+        "passed": true,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "static/research_workbench.js",
+            "ok": true,
+            "detail": "exists (2040 lines)",
+            "kind": "structural",
+            "artifact_status": null
+          },
+          {
+            "path": "scripts/smoke_research_workbench_p1.js",
+            "ok": true,
+            "detail": "exists (97 lines)",
+            "kind": "structural",
+            "artifact_status": null
+          }
+        ]
+      },
+      {
+        "id": "core-propagation",
+        "title": "传播图核心页面（结构）",
+        "class": "structural",
+        "level": "structural",
+        "pass_verdict": "PRESENT",
+        "research_credit": false,
+        "status": "present",
+        "verdict": "PRESENT",
+        "passed": true,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "propagation.html",
+            "ok": true,
+            "detail": "exists (1361 lines)",
+            "kind": "structural",
+            "artifact_status": null
+          },
+          {
+            "path": "static/propagation_app.js",
+            "ok": true,
+            "detail": "exists (5729 lines)",
+            "kind": "structural",
+            "artifact_status": null
+          },
+          {
+            "path": "propagation_graph.json",
+            "ok": true,
+            "detail": "exists (5002 lines)",
+            "kind": "structural",
+            "artifact_status": null
+          }
+        ]
+      }
+    ],
+    "meta": {
+      "run_at": "2026-07-16T11:42:29.242Z",
+      "node": "v25.2.1",
+      "platform": "win32",
+      "suite": "sync_vault_status",
+      "grader": "acceptance_status.js",
+      "any_block": true
     }
-  ],
-  "meta": {
-    "run_at": "2026-07-16T10:12:11.7260435Z",
-    "suite": "sync_vault_status.ps1",
-    "platform": "win32"
-  }
+  },
+  "vaultRoot": "F:\\AI 金融知识点",
+  "codeRoot": "F:\\financial-alert-system"
 }
