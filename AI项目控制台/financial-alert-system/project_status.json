@@ -1,6 +1,6 @@
 {
   "version": "project-status-v2",
-  "generated_at": "2026-07-16T11:42:29.237Z",
+  "generated_at": "2026-07-16T12:22:10.489Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + acceptance_status.js graded probes",
   "verdict": "整改中，未发布，研究有效性未证明",
@@ -18,10 +18,11 @@
       "NFP_LOOP": "engineering_pass",
       "NFP_BLIND_SCAFFOLD": "scaffold_pass",
       "NFP_FORWARD_SCAFFOLD": "scaffold_pass",
-      "NFP_HISTORICAL_BLIND_RESEARCH": "not_started",
+      "NFP_HISTORICAL_BLIND_RESEARCH": "not_started_gate_installed",
       "NFP_LIVE_FORWARD": "observing_0_of_3",
       "NFP_RESEARCH_COMPLETE": false,
-      "STATUS_GRADER_FIX": "in_progress"
+      "STATUS_GRADER_FIX": "complete",
+      "ENGINEERING_BASELINE": "nfp-engineering-scaffold-v1"
     },
     "split_flags": {
       "delete_executed": true,
@@ -45,7 +46,7 @@
     "static/propagation_engine.js": 1926,
     "static/data.js": 2252,
     "index.html": 71,
-    "package.json": 96
+    "package.json": 97
   },
   "acceptance": [
     {
@@ -288,7 +289,7 @@
     }
   ],
   "meta": {
-    "run_at": "2026-07-16T11:42:29.242Z",
+    "run_at": "2026-07-16T12:22:10.496Z",
     "node": "v25.2.1",
     "platform": "win32",
     "suite": "sync_vault_status",

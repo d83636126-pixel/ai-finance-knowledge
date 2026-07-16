@@ -31,10 +31,11 @@
       "NFP_LOOP": "engineering_pass",
       "NFP_BLIND_SCAFFOLD": "scaffold_pass",
       "NFP_FORWARD_SCAFFOLD": "scaffold_pass",
-      "NFP_HISTORICAL_BLIND_RESEARCH": "not_started",
+      "NFP_HISTORICAL_BLIND_RESEARCH": "not_started_gate_installed",
       "NFP_LIVE_FORWARD": "observing_0_of_3",
       "NFP_RESEARCH_COMPLETE": false,
-      "STATUS_GRADER_FIX": "in_progress"
+      "STATUS_GRADER_FIX": "complete",
+      "ENGINEERING_BASELINE": "nfp-engineering-scaffold-v1"
     },
     "split_flags": {
       "delete_executed": true,
