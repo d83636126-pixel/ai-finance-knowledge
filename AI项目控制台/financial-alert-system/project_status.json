@@ -1,6 +1,6 @@
 ﻿{
   "version": "project-status-v1",
-  "generated_at": "2026-07-16T04:52:10.2392880Z",
+  "generated_at": "2026-07-16T10:12:11.7260435Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + live code probes",
   "git": {
@@ -20,7 +20,7 @@
     "static/propagation_engine.js": 1925,
     "static/data.js": 2251,
     "index.html": 70,
-    "package.json": 92
+    "package.json": 94
   },
   "acceptance": [
     {
@@ -31,7 +31,33 @@
       "evidence": [],
       "notes": [
         "AI项目控制台/financial-alert-system/任务进度.md",
-        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/NFP事件预测与结算账本.md"
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "frontmatter_status_on_pass": null,
+      "frontmatter_status_on_fail": null
+    },
+    {
+      "id": "nfp-blind-scaffold",
+      "title": "NFP 历史盲测脚手架（≥20，非研究结案）",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [],
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "frontmatter_status_on_pass": null,
+      "frontmatter_status_on_fail": null
+    },
+    {
+      "id": "nfp-forward-scaffold",
+      "title": "NFP 前瞻样本闭环脚手架（3 事件，非实时行情）",
+      "passed": true,
+      "status": "accepted",
+      "evidence": [],
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
       ],
       "frontmatter_status_on_pass": null,
       "frontmatter_status_on_fail": null
@@ -97,7 +123,7 @@
         {
           "path": "package.json",
           "ok": true,
-          "detail": "exists (92 lines)"
+          "detail": "exists (94 lines)"
         },
         {
           "path": "scripts/run_smoke_test.js",
@@ -143,7 +169,7 @@
     }
   ],
   "meta": {
-    "run_at": "2026-07-16T04:52:10.2392880Z",
+    "run_at": "2026-07-16T10:12:11.7260435Z",
     "suite": "sync_vault_status.ps1",
     "platform": "win32"
   }

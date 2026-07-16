@@ -27,9 +27,8 @@
       "RG0": "complete",
       "SEC0": "complete",
       "NFP_LOOP": "engineering_pass",
-      "NFP_BLIND_SCAFFOLD": "scaffold_pass_24",
-      "NFP_RESEARCH_COMPLETE": false,
-      "NFP_LIVE_FORWARD": "0_of_3",
+      "NFP_BLIND_SCAFFOLD": "scaffold_pass",
+      "NFP_FORWARD_SCAFFOLD": "scaffold_pass",
       "RT1": "not_started",
       "TRUTH1": "not_started",
       "CTX1": "not_started",
@@ -53,10 +52,36 @@
       "class": "command",
       "notes": [
         "AI项目控制台/financial-alert-system/任务进度.md",
-        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/NFP事件预测与结算账本.md"
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
       ],
       "evidence": [
         { "type": "artifact_pass", "path": "artifacts/nfp_event_card_smoke.json" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "nfp-blind-scaffold",
+      "title": "NFP 历史盲测脚手架（≥20，非研究结案）",
+      "class": "command",
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "evidence": [
+        { "type": "artifact_pass", "path": "artifacts/nfp_blind_batch_latest.json" }
+      ],
+      "pass_requires": "all"
+    },
+    {
+      "id": "nfp-forward-scaffold",
+      "title": "NFP 前瞻样本闭环脚手架（3 事件，非实时行情）",
+      "class": "command",
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "evidence": [
+        { "type": "artifact_pass", "path": "artifacts/nfp_forward_gate.json" }
       ],
       "pass_requires": "all"
     },
