@@ -1,5 +1,5 @@
 {
-  "version": "acceptance-registry-v3",
+  "version": "acceptance-registry-v4",
   "updated": "2026-07-16",
   "code_root_candidates": [
     "F:\\financial-alert-system",
@@ -18,29 +18,12 @@
     "empty_evidence_is_block": true,
     "release_gate": "blocked",
     "cloud_gate": "blocked",
-    "note": "Graded verdicts via scripts/lib/acceptance_status.js. SCAFFOLD_PASS never becomes RESEARCH_PASS or ACCEPTED."
+    "note": "All verdicts are computed by acceptance_status.js + project_status_builder.js. Manual status may only declare BLOCK, NOT_STARTED, or OBSERVING and can never grant research credit.",
+    "research_validity_item_id": "research-validity"
   },
   "remediation": {
     "plan": "01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md",
     "rg0_report": "04_研究工作台/02_重构执行/统一研究工作台_RG0整改重开与基线_2026-07-16.md",
-    "release_gate": "blocked",
-    "cloud_gate": "blocked",
-    "phases": {
-      "RG0": "complete",
-      "SEC0": "complete",
-      "NFP_LOOP": "engineering_pass",
-      "NFP_BLIND_SCAFFOLD": "scaffold_pass",
-      "NFP_FORWARD_SCAFFOLD": "scaffold_pass",
-      "NFP_HISTORICAL_BLIND_RESEARCH": "not_started_gate_installed",
-      "NFP_LIVE_FORWARD": "observing_0_of_3",
-      "NFP_RESEARCH_COMPLETE": false,
-      "STATUS_GRADER_FIX": "complete",
-      "ENGINEERING_BASELINE": "nfp-engineering-scaffold-v1"
-    },
-    "split_flags": {
-      "delete_executed": true,
-      "observation_status": "not_run"
-    },
     "project_status_verdict": "整改中，未发布，研究有效性未证明"
   },
   "items": [
@@ -59,8 +42,14 @@
       "frontmatter_status_on_pass": "engineering_pass",
       "frontmatter_status_on_fail": "block",
       "evidence": [
-        { "type": "artifact_pass", "path": "artifacts/sec0_static_security_last.json" },
-        { "type": "artifact_pass", "path": "artifacts/sec0_rollback_drill.json" }
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/sec0_static_security_last.json"
+        },
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/sec0_rollback_drill.json"
+        }
       ],
       "pass_requires": "all"
     },
@@ -79,9 +68,16 @@
       "frontmatter_status_on_pass": "engineering_pass",
       "frontmatter_status_on_fail": "block",
       "evidence": [
-        { "type": "artifact_pass", "path": "artifacts/nfp_event_card_smoke.json" }
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/nfp_event_card_smoke.json"
+        }
       ],
-      "pass_requires": "all"
+      "pass_requires": "all",
+      "required_artifact_fields": {
+        "schema": "nfp-event-card-v2",
+        "hash_version": "sha256-canonical-json-v2"
+      }
     },
     {
       "id": "nfp-blind-scaffold",
@@ -98,9 +94,16 @@
       "frontmatter_status_on_pass": "scaffold_pass",
       "frontmatter_status_on_fail": "block",
       "evidence": [
-        { "type": "artifact_pass", "path": "artifacts/nfp_blind_batch_latest.json" }
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/nfp_blind_batch_latest.json"
+        }
       ],
-      "pass_requires": "all"
+      "pass_requires": "all",
+      "required_artifact_fields": {
+        "schema": "nfp-event-card-v2",
+        "hash_version": "sha256-canonical-json-v2"
+      }
     },
     {
       "id": "nfp-forward-scaffold",
@@ -117,7 +120,36 @@
       "frontmatter_status_on_pass": "scaffold_pass",
       "frontmatter_status_on_fail": "block",
       "evidence": [
-        { "type": "artifact_pass", "path": "artifacts/nfp_forward_gate.json" }
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/nfp_forward_gate.json"
+        }
+      ],
+      "pass_requires": "all",
+      "required_artifact_fields": {
+        "schema": "nfp-event-card-v2",
+        "hash_version": "sha256-canonical-json-v2"
+      }
+    },
+    {
+      "id": "nfp-logical-split",
+      "title": "NFP 应用 / 官方数据包逻辑拆分",
+      "class": "command",
+      "level": "engineering",
+      "pass_verdict": "ENGINEERING_PASS",
+      "research_credit": false,
+      "max_age_hours": 168,
+      "notes": [
+        "AI项目控制台/financial-alert-system/任务进度.md",
+        "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
+      ],
+      "frontmatter_status_on_pass": "engineering_pass",
+      "frontmatter_status_on_fail": "block",
+      "evidence": [
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/nfp_logical_split_smoke.json"
+        }
       ],
       "pass_requires": "all"
     },
@@ -134,9 +166,12 @@
         "AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/项目收缩与核心闭环整改计划_2026-07-16.md"
       ],
       "frontmatter_status_on_pass": "research_pass",
-      "frontmatter_status_on_fail": "not_started",
+      "frontmatter_status_on_fail": "block",
       "evidence": [
-        { "type": "manual_status", "value": "NOT_STARTED" }
+        {
+          "type": "artifact_pass",
+          "path": "artifacts/nfp_research_blind_gate.json"
+        }
       ],
       "pass_requires": "all"
     },
@@ -154,7 +189,10 @@
       "frontmatter_status_on_pass": "observing",
       "frontmatter_status_on_fail": "block",
       "evidence": [
-        { "type": "manual_status", "value": "OBSERVING" }
+        {
+          "type": "manual_status",
+          "value": "OBSERVING"
+        }
       ],
       "pass_requires": "all"
     },
@@ -172,7 +210,10 @@
       "frontmatter_status_on_pass": "research_pass",
       "frontmatter_status_on_fail": "block",
       "evidence": [
-        { "type": "manual_status", "value": "BLOCK" }
+        {
+          "type": "manual_status",
+          "value": "BLOCK"
+        }
       ],
       "pass_requires": "all"
     },
@@ -190,7 +231,10 @@
       "frontmatter_status_on_pass": "release_pass",
       "frontmatter_status_on_fail": "block",
       "evidence": [
-        { "type": "manual_status", "value": "BLOCK" }
+        {
+          "type": "manual_status",
+          "value": "BLOCK"
+        }
       ],
       "pass_requires": "all"
     },
@@ -207,8 +251,14 @@
       "frontmatter_status_on_pass": "structural_present",
       "frontmatter_status_on_fail": "missing",
       "evidence": [
-        { "type": "file_exists", "path": "static/research_workbench.js" },
-        { "type": "file_exists", "path": "scripts/smoke_research_workbench_p1.js" }
+        {
+          "type": "file_exists",
+          "path": "static/research_workbench.js"
+        },
+        {
+          "type": "file_exists",
+          "path": "scripts/smoke_research_workbench_p1.js"
+        }
       ],
       "pass_requires": "all"
     },
@@ -223,9 +273,18 @@
         "AI项目控制台/financial-alert-system/任务进度.md"
       ],
       "evidence": [
-        { "type": "file_exists", "path": "propagation.html" },
-        { "type": "file_exists", "path": "static/propagation_app.js" },
-        { "type": "file_exists", "path": "propagation_graph.json" }
+        {
+          "type": "file_exists",
+          "path": "propagation.html"
+        },
+        {
+          "type": "file_exists",
+          "path": "static/propagation_app.js"
+        },
+        {
+          "type": "file_exists",
+          "path": "propagation_graph.json"
+        }
       ],
       "pass_requires": "all"
     }

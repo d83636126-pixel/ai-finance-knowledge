@@ -1,9 +1,10 @@
 {
   "live": {
-    "version": "project-status-v2",
-    "generated_at": "2026-07-16T12:22:10.489Z",
+    "version": "project-status-v3",
+    "builder_version": "project-status-builder-v3",
+    "generated_at": "2026-07-16T17:48:16.741Z",
     "product": "financial-alert-system",
-    "source_of_truth": "acceptance_registry.json + acceptance_status.js graded probes",
+    "source_of_truth": "acceptance_registry.json + acceptance_status.js + project_status_builder.js",
     "verdict": "整改中，未发布，研究有效性未证明",
     "release_gate": "blocked",
     "cloud_gate": "blocked",
@@ -14,40 +15,44 @@
       "release_gate": "blocked",
       "cloud_gate": "blocked",
       "phases": {
-        "RG0": "complete",
-        "SEC0": "complete",
-        "NFP_LOOP": "engineering_pass",
-        "NFP_BLIND_SCAFFOLD": "scaffold_pass",
-        "NFP_FORWARD_SCAFFOLD": "scaffold_pass",
-        "NFP_HISTORICAL_BLIND_RESEARCH": "not_started_gate_installed",
-        "NFP_LIVE_FORWARD": "observing_0_of_3",
+        "SEC0": "ENGINEERING_PASS",
+        "NFP_LOOP": "ENGINEERING_PASS",
+        "NFP_BLIND_SCAFFOLD": "SCAFFOLD_PASS",
+        "NFP_FORWARD_SCAFFOLD": "SCAFFOLD_PASS",
+        "NFP_HISTORICAL_BLIND_RESEARCH": "BLOCK",
+        "NFP_LIVE_FORWARD": "OBSERVING",
         "NFP_RESEARCH_COMPLETE": false,
-        "STATUS_GRADER_FIX": "complete",
-        "ENGINEERING_BASELINE": "nfp-engineering-scaffold-v1"
+        "STATUS_GRADER": "project-status-builder-v3",
+        "ENGINEERING_BASELINE": "nfp-engineering-remediation-v2"
       },
       "split_flags": {
-        "delete_executed": true,
-        "observation_status": "not_run"
+        "nfp_research_app": true,
+        "official_macro_data": true,
+        "crypto_micro": false
+      },
+      "git_scope": {
+        "dirty": true,
+        "changed_entries": 62
       },
       "project_status_verdict": "整改中，未发布，研究有效性未证明"
     },
-    "git": {
-      "commit": "5456f88e63d764ec623261ee0c9637ed49739d94",
-      "short": "5456f88",
-      "branch": "master",
-      "dirty": true,
-      "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
-    },
-    "paths": {
-      "code_root": "F:\\financial-alert-system"
-    },
-    "files": {
-      "static/propagation_app.js": 5729,
-      "static/research_workbench.js": 2040,
-      "static/propagation_engine.js": 1926,
-      "static/data.js": 2252,
-      "index.html": 71,
-      "package.json": 97
+    "phase": {
+      "workbench": "remediation",
+      "engineering": "ENGINEERING_PASS",
+      "next": "v2 integrity → real as-of evidence → >=20 historical blinds → >=3 live forwards",
+      "verdict": "整改中，未发布，研究有效性未证明",
+      "release_gate": "blocked",
+      "cloud_gate": "blocked",
+      "research_validity": "BLOCK",
+      "SEC0": "ENGINEERING_PASS",
+      "NFP_LOOP": "ENGINEERING_PASS",
+      "NFP_BLIND_SCAFFOLD": "SCAFFOLD_PASS",
+      "NFP_FORWARD_SCAFFOLD": "SCAFFOLD_PASS",
+      "NFP_HISTORICAL_BLIND_RESEARCH": "BLOCK",
+      "NFP_LIVE_FORWARD": "OBSERVING",
+      "NFP_RESEARCH_COMPLETE": false,
+      "STATUS_GRADER": "project-status-builder-v3",
+      "ENGINEERING_BASELINE": "nfp-engineering-remediation-v2"
     },
     "acceptance": [
       {
@@ -95,7 +100,7 @@
             "ok": true,
             "detail": "ENGINEERING_PASS (artifacts/nfp_event_card_smoke.json)",
             "kind": "artifact",
-            "artifact_status": "PASS"
+            "artifact_status": "ENGINEERING_PASS"
           }
         ]
       },
@@ -142,23 +147,44 @@
         ]
       },
       {
+        "id": "nfp-logical-split",
+        "title": "NFP 应用 / 官方数据包逻辑拆分",
+        "class": "command",
+        "level": "engineering",
+        "pass_verdict": "ENGINEERING_PASS",
+        "research_credit": false,
+        "status": "engineering_pass",
+        "verdict": "ENGINEERING_PASS",
+        "passed": true,
+        "research_credit_granted": false,
+        "evidence": [
+          {
+            "path": "artifacts/nfp_logical_split_smoke.json",
+            "ok": true,
+            "detail": "ENGINEERING_PASS (artifacts/nfp_logical_split_smoke.json)",
+            "kind": "artifact",
+            "artifact_status": "ENGINEERING_PASS"
+          }
+        ]
+      },
+      {
         "id": "nfp-historical-blind-research",
         "title": "真实历史盲测",
         "class": "command",
         "level": "research",
         "pass_verdict": "RESEARCH_PASS",
         "research_credit": true,
-        "status": "not_started",
-        "verdict": "NOT_STARTED",
+        "status": "block",
+        "verdict": "BLOCK",
         "passed": false,
         "research_credit_granted": false,
         "evidence": [
           {
-            "path": "manual_status",
-            "ok": true,
-            "detail": "NOT_STARTED",
-            "kind": "manual",
-            "artifact_status": null
+            "path": "artifacts/nfp_research_blind_gate.json",
+            "ok": false,
+            "detail": "research gate fail status=BLOCK complete=false synthetic=true (artifacts/nfp_research_blind_gate.json)",
+            "kind": "artifact",
+            "artifact_status": "BLOCK"
           }
         ]
       },
@@ -289,12 +315,203 @@
         ]
       }
     ],
+    "git": {
+      "commit": "559e7dc6b5f9bb1abd2bd76674ba7fbf614555ce",
+      "short": "559e7dc",
+      "branch": "master",
+      "dirty": true,
+      "baseline_tag": "nfp-engineering-remediation-v2",
+      "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
+    },
+    "graph": {
+      "nodes": 128,
+      "edges": 327,
+      "updated_at": "2026-07-12T18:15:00.000Z",
+      "edges_with_source": 231,
+      "core_edges": 117,
+      "core_edges_with_source_url": 116,
+      "core_source_url_pct": 99
+    },
+    "credibility": {
+      "note": "图谱标注 ≠ 实时验证。总览四层：接口连通 / 数据新鲜 / 路径确认 / 路径失效。",
+      "core_source_url_pct": 99,
+      "market_snapshot_mode": "cli-refresh-degraded",
+      "has_fred_key": true,
+      "has_fred_api_key": true,
+      "fred_source_status": {
+        "mode": "last_good_snapshot",
+        "availability": "available",
+        "has_fred_key": true,
+        "key_source": "dotenv",
+        "cannot_treat_as_live_confirm": true,
+        "usable_observation": true,
+        "snapshot_has_fred_api_key_historical": true,
+        "note": "FRED observation is degraded/stale/fallback — may generate research reports but must not restore live path confirmation",
+        "tips": {
+          "mode": "last_good_snapshot",
+          "usable": true,
+          "as_of": "2026-07-13",
+          "age_hours": 89.80482972222222,
+          "detail": "FRED via local_server",
+          "cannot_treat_as_live_confirm": true
+        },
+        "dgs10": {
+          "mode": "last_good_snapshot",
+          "usable": true,
+          "as_of": "2026-07-13",
+          "age_hours": 89.80482972222222,
+          "detail": "FRED via local_server",
+          "cannot_treat_as_live_confirm": true
+        }
+      },
+      "market_snapshot_updated_at": "2026-07-15T05:14:06.834Z"
+    },
+    "files": {
+      "static/propagation_app.js": 5729,
+      "static/research_workbench.js": 2040,
+      "static/propagation_engine.js": 1926,
+      "static/data.js": 2252,
+      "static/nfp_event_card.js": 626,
+      "index.html": 71,
+      "package.json": 102
+    },
+    "npm_scripts": [
+      "smoke:micro",
+      "smoke:micro-page",
+      "smoke:micro-cal",
+      "smoke:micro-port",
+      "smoke:micro-exec",
+      "smoke:micro-trust",
+      "smoke:micro-s2",
+      "smoke:micro-contract",
+      "smoke:micro-transmission",
+      "smoke:micro-transmission-engine",
+      "smoke:micro-workbench",
+      "smoke:micro-ledger",
+      "smoke:micro-collect-snapshot",
+      "export:micro-collect-snapshot",
+      "report:micro-collect-continuity",
+      "accept:micro-redesign",
+      "watch:micro-collect-24h",
+      "probe:micro-legs",
+      "probe:micro-collect",
+      "probe:micro-browser",
+      "collect:micro:once",
+      "collect:micro:loop",
+      "schedule:micro-collect:install",
+      "ledger:micro:append",
+      "ledger:micro:resolve",
+      "accept:micro-s3:offline",
+      "accept:micro-s3",
+      "calibrate:micro",
+      "calibrate:micro:pool",
+      "calibrate:micro:candidate",
+      "inspect:micro-cal",
+      "inspect:micro-cal:enrich",
+      "preview:micro-cal-gates",
+      "preview:micro-cal-candidate",
+      "solidify:micro-cal-gates",
+      "observe:micro-p3",
+      "summarize:micro-p3",
+      "digest:micro-p3",
+      "digest:micro-p3:week",
+      "export:micro-macro-context",
+      "smoke:micro-macro-context",
+      "smoke:micro-macro-bind",
+      "freeze:macro-m0",
+      "build:macro-scenario",
+      "build:macro-path-evidence",
+      "build:macro-source-status",
+      "bridge:macro-micro",
+      "report:macro-evidence",
+      "run:macro-evidence-loop",
+      "smoke:macro-evidence-loop",
+      "smoke:fred-source-status",
+      "smoke:sec0-static-security",
+      "smoke:acceptance-status",
+      "drill:sec0-rollback",
+      "nfp:freeze",
+      "nfp:settle",
+      "smoke:nfp-event-card",
+      "nfp:blind-batch",
+      "nfp:seed-history",
+      "nfp:forward-gate",
+      "nfp:research-blind-gate",
+      "smoke:nfp-research-gate",
+      "smoke:nfp-core-mirror",
+      "test:nfp-app",
+      "test:official-macro-data",
+      "smoke:nfp-logical-split",
+      "gate:remediation-p3",
+      "smoke:macro-evidence-status",
+      "smoke:c10-cross-layer",
+      "smoke:ux-authenticity",
+      "smoke:realtime-truth",
+      "smoke:unified-workbench",
+      "smoke:uw3-overview-news",
+      "smoke:uw4-closed-loop",
+      "smoke:uw5-health",
+      "smoke:uw7-root",
+      "accept:uw6",
+      "observe:micro-p3:cycle",
+      "schedule:micro-p3:install",
+      "smoke:micro-p3",
+      "smoke:micro-p3-summary",
+      "smoke:micro-p3-digest",
+      "check",
+      "smoke",
+      "acceptance",
+      "status",
+      "refresh:evidence",
+      "perf:workbench",
+      "p3:selfcheck",
+      "e2e:workflow",
+      "test"
+    ],
+    "security": {
+      "default_host": "127.0.0.1",
+      "non_loopback_requires_token": true,
+      "max_body_bytes_default": 2097152
+    },
+    "paths": {
+      "code_root": "F:\\financial-alert-system"
+    },
     "meta": {
-      "run_at": "2026-07-16T12:22:10.496Z",
+      "run_at": "2026-07-16T17:48:16.741Z",
+      "cwd": "F:\\financial-alert-system",
       "node": "v25.2.1",
       "platform": "win32",
-      "suite": "sync_vault_status",
-      "grader": "acceptance_status.js",
+      "git_commit": "559e7dc6b5f9bb1abd2bd76674ba7fbf614555ce",
+      "git_commit_short": "559e7dc",
+      "git_branch": "master",
+      "git_dirty": true,
+      "git_tag_baseline": "baseline-f-drive-2026-07-11",
+      "graph": {
+        "nodes": 128,
+        "edges": 327,
+        "updated_at": "2026-07-12T18:15:00.000Z",
+        "edges_with_source": 231,
+        "core_edges": 117,
+        "core_edges_with_source_url": 116,
+        "core_source_url_pct": 99
+      },
+      "external_network": false,
+      "has_fred_key": true,
+      "has_fred_api_key": true,
+      "fred_key_source": "dotenv",
+      "fred_source_status": {
+        "mode": "last_good_snapshot",
+        "availability": "available",
+        "cannot_treat_as_live_confirm": true,
+        "usable_observation": true,
+        "snapshot_has_fred_api_key_historical": true,
+        "note": "FRED observation is degraded/stale/fallback — may generate research reports but must not restore live path confirmation"
+      },
+      "has_access_token": false,
+      "host_hint": "127.0.0.1",
+      "test_base": "http://127.0.0.1:8000",
+      "suite": "project_status",
+      "builder": "project-status-builder-v3",
       "any_block": true
     }
   },
