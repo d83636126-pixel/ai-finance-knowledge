@@ -25,6 +25,14 @@ updated: 2026-07-11
 AI项目控制台\financial-alert-system\_sync\run_sync.bat
 ```
 
+## 日开会话（写 .env + 启 local_server）
+
+手册：[[AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/日开会话_DayOpen_2026-07-17]]
+
+```bat
+AI项目控制台\financial-alert-system\_sync\day_open.bat
+```
+
 或：
 
 ```bat
