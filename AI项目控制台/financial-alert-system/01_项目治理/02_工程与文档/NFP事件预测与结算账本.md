@@ -21,9 +21,9 @@ project: financial-alert-system
 
 | 指标 | 当前 | 目标 | 证据 |
 |---|---|---|---|
-| gate_eligible | **5** | — | 门禁 v2 RESEARCH_ELIGIBLE（小样本 5 场） |
-| audit_pass | **5** | — | 人工审计工件 |
-| research_counted | **5** | 5（小样本✅）/ ≥20（聚合） | `artifacts/nfp_research_counts.json` |
+| gate_eligible | **10** | — | 小样本5 + Wave-2 |
+| audit_pass | **10** | — | 人工审计工件 |
+| research_counted | **10** | 5（小样本✅）/ ≥20（聚合） | `artifacts/nfp_research_counts.json` |
 | 聚合 RESEARCH_PASS | BLOCK | RESEARCH_PASS | 需 ≥20 research_counted + 指标 |
 
 ## 前瞻队列
