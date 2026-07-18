@@ -2,17 +2,17 @@
 type: Cursor_Codex闭环交接板
 schema_version: 2
 tags: [AI协作, Cursor, Codex, Obsidian, 闭环]
-created: 2026-07-18
+created: 2026-07-19
 updated: '2026-07-18'
 project: financial-alert-system
-loop_id: loop-2026-07-18-002
-revision: 16
-turn: 4
+loop_id: loop-2026-07-19-001
+revision: 3
+turn: 1
 next_actor: 'codex'
 status: 'pending_review'
 max_turns: 8
 last_writer: 'cursor'
-written_at: '2026-07-18T15:23:17.842Z'
+written_at: '2026-07-18T17:06:37.222Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -28,7 +28,8 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 >
 > 正本：`F:\AI 金融知识点\AI协作记忆系统\Cursor_Codex_闭环交接板.md`  
 > 仓库镜像：`F:\financial-alert-system\docs\ai-collab\Cursor_Codex_闭环交接板.md`  
-> 上一闭环归档：`闭环归档/loop-2026-07-18-001.md`（CC-01 ENGINEERING_PASS）
+> 上一闭环归档：`闭环归档/loop-2026-07-18-002.md`（CC-02 / AR-S0 ENGINEERING_PASS）  
+> 再上一归档：`闭环归档/loop-2026-07-18-001.md`（CC-01 ENGINEERING_PASS）
 
 ## 0. 闭环协议
 
@@ -60,100 +61,86 @@ Codex 独立核验 → done/human、pending_exec/cursor 或 blocked/human
 
 | 字段 | 内容 |
 |---|---|
-| 一句话目标 | 完成CC-02 / AR-S0安全与现场治理收尾；不进入AR-S1+。 |
-| 成功标准 | 当前树与Git全历史扫描fail-closed；无法解析的候选不得静默放行；placeholder必须严格全值匹配；审计脚本自身不得成为扫描盲区；无原文泄漏；临时目录只分类不删除。 |
-| 明确不做 | 不改CC-01协议、冻结20、Gate v2、样本或阈值；不实现Model v3；不启动AR-S1+；不删除/移动；不重写历史；不commit/push。 |
-| 允许改动路径 | `scripts/ar_s0_audit.js`；`artifacts/ar_s0_security_audit.json`；`artifacts/ar_s0_temp_inventory.json`；`artifacts/ar_s0_checklist.json`；`project_status.json`限定字段；交接板正本/镜像。 |
+| 一句话目标 | 建设 CC-AL0 / AUTO-LOOP-S0：全自动闭环监督器；本轮仅脚手架 + dry-run，不真实唤醒 Agent。 |
+| 成功标准 | `loop_supervisor.js` 可读交接板并输出“本应唤醒谁”；能力探针记录本机缺口；默认 dry-run 且无法在未显式启用时启动 Agent；不进入 AR-S1+ / 模型研究。 |
+| 明确不做 | 不安装/登录 cursor-agent（Human）；不改 Codex 桌面打包路径；不注册真实任务计划自动唤醒；不启动真实 Agent；不改 Gate/样本/阈值；不进入 AR-S1+。 |
+| 允许改动路径 | `scripts/loop_supervisor.js`；`artifacts/loop_supervisor_*.json`；`docs/ai-collab/auto_loop_s0_notes.md`；`project_status.json` 限定字段；交接板正本/镜像。 |
 | 代码根路径 | `F:\financial-alert-system` |
+| 轨道说明 | 平行于阶段计划 CC-03(AR-S1A)；本环编号 CC-AL0，不占用 CC-03。 |
 
 ## 2. 当前回合仪表盘
 
 | 项 | 值 |
 |---|---|
-| loop_id | `loop-2026-07-18-002` |
-| revision | `16` |
-| turn | `4 / 8` |
+| loop_id | `loop-2026-07-19-001` |
+| revision | *(release后递增)* |
+| turn | `1 / 8` |
 | status | 🟠 `pending_review` |
 | next_actor | `codex` |
-| lease_owner | —（已release） |
-| 阻塞原因 | —；T04已交审，等Codex独立核验 |
+| lease_owner | `cursor-session-ccal0-t01-20260719`（release后清空） |
+| 阻塞原因 | —；T01已交审 |
 
-**给下一位AI的一句话：**Codex独立复跑AR-S0审计；核验未解析历史候选fail-closed、placeholder全值锚定、scanner源码无整文件豁免；不得宣称ENGINEERING_PASS除非证据充分。
+**给下一位AI的一句话：**Codex独立复跑 dry-run；核验未 spawn Agent、能力缺口记录正确、`--enable-dispatch` fail-closed；不得宣称全自动互唤已可用。
 
 ## 3. 下一条Cursor指令
 
 ```text
 状态：🟠 等待Codex评审
-指令 ID：T04（Cursor已完成）
-阶段：CC-02 / AR-S0
+指令 ID：T01（Cursor已完成）
+阶段：CC-AL0 / AUTO-LOOP-S0
 
-Codex请独立核验第4节报告与下列验收项；通过则done/human或pending_exec下一刀；失败则定向返工。
+Codex请独立核验第4节；通过则 done 或给出下一刀（仍禁止真实调度，除非Human另授）。
 禁止代Cursor改代码；禁止进入AR-S1+；禁止commit/push。
 ```
 
 ## 4. Cursor完成报告
 
 ```text
-状态：🟢 Cursor已完成T04，交Codex评审
-指令 ID：T04
-完成时间：2026-07-18T15:22:30.242Z
+状态：🟢 Cursor已完成T01，交Codex评审
+指令 ID：T01
+完成时间：2026-07-19T00:10:00.000Z（本地会话）
 git_head_before/after：50e8106aac199abb5f520abb9807b9c1578f0c4f
 
-验收命令：
-- node --check scripts/ar_s0_audit.js → 0
-- node scripts/ar_s0_audit.js → 0
+归档：
+- loop-2026-07-18-002 → 闭环归档与 docs/ai-collab/archive/ 哈希 MATCH
+  2775d98348c4289e8f6bb7b5e2c0f816e30e7809fbd3d8373bef453464e6c76d
 
-关键结果（无原文/无新秘密值）：
-- pattern_self_test：8/8
-- policy_self_test：10/10（含 hist_unresolved_fail_closed / placeholder_substring_still_triage / scanner_source_scanned_no_fixture_hit）
-- coverage_complete=true；truncated=false；tool_errors=0
-- block=false；immediate_human_block_recommended=false
-- candidate_no_inline_match=25；unresolved_history_candidates=0
-- attestation_effective=true；secrets_printed=false；secret_like_values=0
-- findings_total=26（25 NO_INLINE候选 + 1 attested .env）；无已确认新凭据
+验收：
+- node --check scripts/loop_supervisor.js → 0
+- node scripts/loop_supervisor.js --dry-run → 0
+- --enable-dispatch --no-dry-run → agents_spawned=0（runners未实现，fail-closed）
 
-T04边界收口：
-1. BINARY_SKIP/UNREADABLE → coverage_complete=false + tool_error + unresolved；当前仓库计数=0仍正常通过。
-2. placeholder改为提取值后锚定全值allowlist；含example等子串的真实候选仍HUMAN_TRIAGE。
-3. 取消scripts/ar_s0_audit.js整文件过滤；fixture分段拼接；源码实际扫描且当前无RISK命中。
+dry-run要点：
+- intended_wake_target=cursor（当时 pending_exec + 活跃租约 → should_dispatch=false）
+- gaps：cursor_agent_not_installed_or_not_on_path；codex_cli_not_on_path_for_supervisor
+- Windows cursor 可定位；WSL cursor 可定位；cursor-agent/codex 均未找到
+- dispatch_attempted=false；agents_spawned=0；secrets_printed=false
+- 未注册任务计划；未真实唤醒 Agent；未进 AR-S1+
 
-允许路径与哈希（SHA-256）：
-- scripts/ar_s0_audit.js：d7661f2a71bf560ab0e9cad21053ff873d7ae7e54da36f3eb6ba87bb27550d03
-- artifacts/ar_s0_security_audit.json：7b3780e5ac5b8f302ebbac8006e6aa9d50d10813ac770e1feb87325ae5bc3202
-- artifacts/ar_s0_temp_inventory.json：4991910e46abf87218aa1d0960604c94e3eef46678ae14797c42bb217942b911
-- artifacts/ar_s0_checklist.json：635831cf810a844da3cf9f765fea070dddea609d9a320ae642dd493cf10b21ef
-- artifacts/ar_s0_credential_rotation_attestation.json：3559cf447d0619e794fb443c67a146381ca1e8066a4f4b2338fe3b98bdc860c4（未改）
-- project_status.json：330b4a4b734e016b815bad19185615b1b54ddb7462131f62ea231a4b4e1df97c
+产物哈希（SHA-256）：
+- scripts/loop_supervisor.js：1513316b65910e6dd89770459520268f984bfdf4c7c8346456e1e5bc6504096b
+- artifacts/loop_supervisor_dry_run.json：0f5f0a40df59ed3885c3ab2da0d56ccc141d5e4402fc9a2cb540348d3b531f74
+- docs/ai-collab/auto_loop_s0_notes.md：ead247db62c4a1499e4437447eff403fbe7253e401a08672b187f4354610b5b5
+- project_status.json：67a542f7d3bd7fd16cf353873ada250046443913f823e8eb0bd6748a7e04597a
 
-状态字段：CC-02/AR-S0=READY_FOR_CODEX_REVIEW；Gate v2 BLOCK；research_credit=false；RESEARCH_PASS=false；未宣称ENGINEERING_PASS；未删除/移动/重写历史/commit/push。
+状态字段：CC_AL0/AUTO_LOOP_S0=READY_FOR_CODEX_REVIEW；CC-02/AR-S0=ENGINEERING_PASS（Codex已判）；Gate v2 BLOCK；research_credit=false；未宣称本环 ENGINEERING_PASS。
 ```
 
 ## 5. Codex反馈
 
 ```text
-状态：⏳ 等待Codex独立评审T04
+状态：⏳ 等待Codex独立评审T01
 ```
 
 ## 6. 回合历史
 
-### Turn 4 — 2026-07-18 — T04
-- Cursor：未解析历史候选fail-closed；placeholder全值锚定；取消scanner整文件豁免；policy 10/10；交Codex。
+### Turn 1 — 2026-07-19 — T01
+- Cursor：归档CC-02；初始化CC-AL0；监督器脚手架 + 能力探针 + dry-run；交Codex。
 - Codex：待评审。
 - 状态迁移：pending_exec → pending_review
 
-### Turn 3 — 2026-07-18 — T03
-- Cursor：修复历史HEAD删除放行、未跟踪凭据放行、coverage时序三处fail-open；policy 7/7；交Codex。
-- Codex：主体修复成立；发现未解析候选、placeholder子串和scanner源码豁免三处边界；T04定向返工。
-- 状态迁移：pending_exec → pending_review → pending_exec
-
-### Turn 2 — 2026-07-18 — T02
-- Cursor：补齐日志/构建/历史8类覆盖与轮换attestation。
-- Codex：识别历史低置信、未跟踪文件和coverage时序三处fail-open；T03返工。
-
-### Turn 1 — 2026-07-18 — T01
-- Cursor：启动CC-02初版扫描；旧.env指纹触发blocked。
-- Human：完成DeepSeek密钥轮换；Codex验证旧指纹消失并解阻。
-- Codex：识别扫描覆盖与attestation缺口；T02返工。
+### Turn 0 — 2026-07-19 — 开环
+- Human：授权启动 CC-AL0 / AUTO-LOOP-S0（先 dry-run，不混入 AR-S1+）。
 
 ## 7. 操作清单
 
@@ -165,7 +152,8 @@ T04边界收口：
 
 ## 8. 关联
 
+- [[AI协作记忆系统/闭环归档/loop-2026-07-18-002]]
+- [[AI协作记忆系统/闭环归档/loop-2026-07-18-001]]
 - [[AI协作记忆系统/Cursor_Codex_阶段闭环使用方法与主要流程]]
 - [[AI项目控制台/financial-alert-system/01_项目治理/02_工程与文档/Cursor_Codex_阶段闭环执行计划_现阶段至架构改造完成_2026-07-18]]
-- [[AI协作记忆系统/闭环归档/loop-2026-07-18-001]]
-- [[AI项目控制台/financial-alert-system/任务进度]]
+- docs/ai-collab/auto_loop_s0_notes.md
