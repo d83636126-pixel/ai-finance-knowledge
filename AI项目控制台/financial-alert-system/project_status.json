@@ -1,7 +1,7 @@
 {
   "version": "project-status-v3",
   "builder_version": "project-status-builder-v3",
-  "generated_at": "2026-07-16T17:48:16.741Z",
+  "generated_at": "2026-07-18T05:50:27.539Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + acceptance_status.js + project_status_builder.js",
   "verdict": "整改中，未发布，研究有效性未证明",
@@ -22,7 +22,7 @@
       "NFP_LIVE_FORWARD": "OBSERVING",
       "NFP_RESEARCH_COMPLETE": false,
       "STATUS_GRADER": "project-status-builder-v3",
-      "ENGINEERING_BASELINE": "nfp-engineering-remediation-v2"
+      "ENGINEERING_BASELINE": null
     },
     "split_flags": {
       "nfp_research_app": true,
@@ -31,7 +31,7 @@
     },
     "git_scope": {
       "dirty": true,
-      "changed_entries": 62
+      "changed_entries": 17
     },
     "project_status_verdict": "整改中，未发布，研究有效性未证明"
   },
@@ -51,7 +51,7 @@
     "NFP_LIVE_FORWARD": "OBSERVING",
     "NFP_RESEARCH_COMPLETE": false,
     "STATUS_GRADER": "project-status-builder-v3",
-    "ENGINEERING_BASELINE": "nfp-engineering-remediation-v2"
+    "ENGINEERING_BASELINE": null
   },
   "acceptance": [
     {
@@ -315,11 +315,11 @@
     }
   ],
   "git": {
-    "commit": "559e7dc6b5f9bb1abd2bd76674ba7fbf614555ce",
-    "short": "559e7dc",
+    "commit": "50e8106aac199abb5f520abb9807b9c1578f0c4f",
+    "short": "50e8106",
     "branch": "master",
     "dirty": true,
-    "baseline_tag": "nfp-engineering-remediation-v2",
+    "baseline_tag": null,
     "remote": "https://github.com/d83636126-pixel/financial-alert-system.git"
   },
   "graph": {
@@ -338,28 +338,28 @@
     "has_fred_key": true,
     "has_fred_api_key": true,
     "fred_source_status": {
-      "mode": "last_good_snapshot",
+      "mode": "snapshot_stale",
       "availability": "available",
       "has_fred_key": true,
       "key_source": "dotenv",
       "cannot_treat_as_live_confirm": true,
-      "usable_observation": true,
+      "usable_observation": false,
       "snapshot_has_fred_api_key_historical": true,
       "note": "FRED observation is degraded/stale/fallback — may generate research reports but must not restore live path confirmation",
       "tips": {
-        "mode": "last_good_snapshot",
-        "usable": true,
+        "mode": "snapshot_stale",
+        "usable": false,
         "as_of": "2026-07-13",
-        "age_hours": 89.80482972222222,
-        "detail": "FRED via local_server",
+        "age_hours": 125.84119333333334,
+        "detail": "observation age 125.8h > 120h",
         "cannot_treat_as_live_confirm": true
       },
       "dgs10": {
-        "mode": "last_good_snapshot",
-        "usable": true,
+        "mode": "snapshot_stale",
+        "usable": false,
         "as_of": "2026-07-13",
-        "age_hours": 89.80482972222222,
-        "detail": "FRED via local_server",
+        "age_hours": 125.84119333333334,
+        "detail": "observation age 125.8h > 120h",
         "cannot_treat_as_live_confirm": true
       }
     },
@@ -370,9 +370,9 @@
     "static/research_workbench.js": 2040,
     "static/propagation_engine.js": 1926,
     "static/data.js": 2252,
-    "static/nfp_event_card.js": 626,
-    "index.html": 71,
-    "package.json": 102
+    "static/nfp_event_card.js": 630,
+    "index.html": 72,
+    "package.json": 124
   },
   "npm_scripts": [
     "smoke:micro",
@@ -398,6 +398,18 @@
     "collect:micro:once",
     "collect:micro:loop",
     "schedule:micro-collect:install",
+    "schedule:micro-collect:remove",
+    "schedule:micro-p3:remove",
+    "supabase:pull",
+    "supabase:push:ping",
+    "supabase:push:bootstrap",
+    "supabase:push:micro",
+    "supabase:push:market",
+    "day:open",
+    "day:open:force",
+    "day:open:install-secrets",
+    "day:open:install-logon",
+    "day:open:remove-logon",
     "ledger:micro:append",
     "ledger:micro:resolve",
     "accept:micro-s3:offline",
@@ -436,6 +448,15 @@
     "nfp:seed-history",
     "nfp:forward-gate",
     "nfp:research-blind-gate",
+    "nfp:research-blind-gate-v2",
+    "smoke:nfp-research-gate-v2",
+    "nfp:register-event",
+    "nfp:ingest-consensus",
+    "nfp:fetch-windows",
+    "nfp:fetch-alt-windows",
+    "nfp:build-research-card",
+    "nfp:print-backtest",
+    "smoke:nfp-research-evidence",
     "smoke:nfp-research-gate",
     "smoke:nfp-core-mirror",
     "test:nfp-app",
@@ -446,6 +467,7 @@
     "smoke:c10-cross-layer",
     "smoke:ux-authenticity",
     "smoke:realtime-truth",
+    "smoke:remote-cache-ui",
     "smoke:unified-workbench",
     "smoke:uw3-overview-news",
     "smoke:uw4-closed-loop",
@@ -476,12 +498,12 @@
     "code_root": "F:\\financial-alert-system"
   },
   "meta": {
-    "run_at": "2026-07-16T17:48:16.741Z",
+    "run_at": "2026-07-18T05:50:27.539Z",
     "cwd": "F:\\financial-alert-system",
     "node": "v25.2.1",
     "platform": "win32",
-    "git_commit": "559e7dc6b5f9bb1abd2bd76674ba7fbf614555ce",
-    "git_commit_short": "559e7dc",
+    "git_commit": "50e8106aac199abb5f520abb9807b9c1578f0c4f",
+    "git_commit_short": "50e8106",
     "git_branch": "master",
     "git_dirty": true,
     "git_tag_baseline": "baseline-f-drive-2026-07-11",
@@ -499,10 +521,10 @@
     "has_fred_api_key": true,
     "fred_key_source": "dotenv",
     "fred_source_status": {
-      "mode": "last_good_snapshot",
+      "mode": "snapshot_stale",
       "availability": "available",
       "cannot_treat_as_live_confirm": true,
-      "usable_observation": true,
+      "usable_observation": false,
       "snapshot_has_fred_api_key_historical": true,
       "note": "FRED observation is degraded/stale/fallback — may generate research reports but must not restore live path confirmation"
     },

@@ -2,7 +2,7 @@
 type: 事件账本
 tags: [NFP, 冻结, 结算, 盲测, 前瞻]
 created: 2026-07-17
-updated: 2026-07-17
+updated: 2026-07-18
 status: active
 project: financial-alert-system
 ---
@@ -10,16 +10,21 @@ project: financial-alert-system
 # NFP 事件预测与结算账本
 
 > [!important]
-> 本账本只登记**可审计**事件卡。脚手架卡（`engineering_scaffold` / `synthetic_reactions=true`）可附注，但**不得**计入研究完成数。
-> 执行计划：[[NFP真实盲测执行计划_2026-07-17]]
+> 计数三档（勿混用）：
+> - `gate_eligible` = 门禁 RESEARCH_ELIGIBLE 卡数
+> - `audit_pass` = 人工 AUDIT_PASS 卡数
+> - `research_counted` = 同时满足上两者（小样本进度）
+>
+> **禁止**把 `events_research_ok` 直接说成“研究已通过”。权威工件：`artifacts/nfp_research_counts.json`
 
 ## 计数（人工维护；以门禁工件为准）
 
 | 指标 | 当前 | 目标 | 证据 |
 |---|---|---|---|
-| 历史盲测合格 | **0** | ≥20 | `artifacts/nfp_research_blind_gate.json` → BLOCK |
-| 真实前瞻已结算 | **0** | ≥3 | OBSERVING |
-| 研究有效性 | BLOCK | RESEARCH_PASS | 主计划第 4 阶段 |
+| gate_eligible | **5** | — | 门禁 v2 RESEARCH_ELIGIBLE（小样本 5 场） |
+| audit_pass | **5** | — | 人工审计工件 |
+| research_counted | **5** | 5（小样本✅）/ ≥20（聚合） | `artifacts/nfp_research_counts.json` |
+| 聚合 RESEARCH_PASS | BLOCK | RESEARCH_PASS | 需 ≥20 research_counted + 指标 |
 
 ## 前瞻队列
 
@@ -33,8 +38,13 @@ project: financial-alert-system
 
 | period | 发布日 | 共识 provenance | 市场窗口 | 研究信用 | 备注 |
 |---|---|---|---|---|---|
-| 2026-06 | 2026-07-02 | 库内约 110–115k，**仍缺事前快照** | ❌ Yahoo 403（2026-07-17 试采失败） | ❌ 未授 | 事件已登记；窗口/共识均未过关 |
-| 2026-05 | 2026-06-05 | 85k vs 130k 冲突 | — | ❌ | 先外部裁定 |
+| 2026-06 | 2026-07-02 | MUFG→Bloomberg 115k · auditable | Databento NQU6/ZTU6/DX + gold/btc | ✅ research_counted | 小样本 #1 AUDIT_PASS |
+| 2026-04 | 2026-05-08 | FactSet/Bloomberg 65k · auditable | Databento NQM6/ZTM6/DX + gold/btc | ✅ research_counted | 小样本 #2 AUDIT_PASS；周五 t+1d→周一 |
+| 2025-12 | 2026-01-09 | FactSet 55k · auditable | Databento NQH6/ZTH6/DX + gold/btc | ✅ research_counted | 小样本 #5 AUDIT_PASS；周五 t+1d→周一；**5/5 完成** |
+| 2026-02 | 2026-03-06 | FactSet 60k · auditable | Databento NQH6/ZTM6/DX + gold/btc | ✅ research_counted | 小样本 #4 AUDIT_PASS；周五 t+1d→周一 |
+| 2026-01 | 2026-02-11 | FactSet 75k · auditable | Databento NQH6/ZTH6/DX + gold/btc | ✅ research_counted | 小样本 #3 AUDIT_PASS；周三正常会话 |
+| 2026-03 | 2026-04-03 | — | — | ❌ **EXCLUDED_HOLIDAY_SESSION** | Good Friday 早收；不计分母；非研究失败 |
+| 2026-05 | 2026-06-05 | 85k vs 130k 冲突 | — | ❌ | 排除出小样本 |
 | 2025-10 | 停摆月 | 明确缺共识 | — | ❌ | 负样本 |
 | 其余 scaffold seed | 多期 | BLS naive | 合成 | ❌ | 仅工程 |
 
