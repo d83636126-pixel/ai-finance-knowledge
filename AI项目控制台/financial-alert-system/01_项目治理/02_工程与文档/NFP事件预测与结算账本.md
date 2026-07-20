@@ -21,16 +21,17 @@ project: financial-alert-system
 
 | 指标 | 当前 | 目标 | 证据 |
 |---|---|---|---|
-| gate_eligible | **10** | — | 小样本5 + Wave-2 |
-| audit_pass | **10** | — | 人工审计工件 |
-| research_counted | **10** | 5（小样本✅）/ ≥20（聚合） | `artifacts/nfp_research_counts.json` |
-| 聚合 RESEARCH_PASS | BLOCK | RESEARCH_PASS | 需 ≥20 research_counted + 指标 |
+| gate_eligible | **20** | — | `artifacts/nfp_research_counts.json` |
+| audit_pass | **20** | — | 人工审计工件 |
+| research_counted | **20** | 5（小样本✅）/ ≥20（计数✅） | Wave-3 完成并冻结为 v2 失败基准 |
+| 聚合 RESEARCH_PASS | **BLOCK** | RESEARCH_PASS | 指标未过（方向 32% / Brier 0.742 / Δ−0.047）；禁止降门槛 |
+| Model v3 工程切片 | ✅ 开发诊断 | — | `artifacts/nfp_model_v3_dev_diagnose.json`（`research_credit=false`） |
 
 ## 前瞻队列
 
 | event_id | 期间 | 官方发布 | 模式 | 共识 | 冻结 | 结算 | 窗口 | 备注 |
 |---|---|---|---|---|---|---|---|---|
-| `nfp_2026_07` | 2026-07 | 2026-08-07 08:30 ET | live_forward | ⏳ 待 T-7 回填 | ⏳ | ⏳ | ⏳ | [[04_推演跟踪/2026年7月非农数据跟踪_占位]] |
+| `nfp_2026_07` | 2026-07 | 2026-08-07 08:30 ET | live_forward | ⏳ **公开共识仍空**（07-20）；pending 模板已备 | ⏳ | ⏳ | ⏳ | 跟踪笔记已更新；`nfp:forward-prep-2026-07` |
 | （下一场） | 2026-08 | ~2026-09-04 | live_forward | — | — | — | — | 日历待 T-1 复核 |
 | （再下一场） | 2026-09 | ~2026-10-02 | live_forward | — | — | — | — | 日历待 T-1 复核 |
 
