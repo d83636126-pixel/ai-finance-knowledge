@@ -1,6 +1,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-Set-Location -LiteralPath 'D:\AI  金融知识点'
+# Always operate on this script's vault root (canonical: D:\AI 金融知识点)
+Set-Location -LiteralPath $PSScriptRoot
 
 git status -sb
 git add -A
