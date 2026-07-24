@@ -1,18 +1,18 @@
 ---
 type: Cursor_Codex闭环交接板
 schema_version: 2
-tags: [AI协作, Cursor, Codex, Obsidian, 闭环, GOV-01]
+tags: [AI协作, Cursor, Codex, Obsidian, 闭环, OPS-01]
 created: 2026-07-24
 updated: '2026-07-24'
 project: financial-alert-system
-loop_id: loop-2026-07-24-027
-revision: 3
-turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
-max_turns: 6
-last_writer: 'human'
-written_at: '2026-07-24T07:48:47.474Z'
+loop_id: loop-2026-07-24-029
+revision: 7
+turn: 2
+next_actor: 'codex'
+status: 'pending_review'
+max_turns: 8
+last_writer: 'cursor'
+written_at: '2026-07-24T15:53:00.000Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -23,82 +23,114 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板
 
-> [!important] 当前执行：**GOV-01 治理换轨**
+> [!important] 当前执行：**OPS-01 分层验收与数据新鲜度（R1 P1 修复后交 R2）**
 >
-> 架构阶段已完成；CC-13 已 PASS 并归档为 `loop-2026-07-24-026`。
-> 本环只建立产品运营阶段的治理基线，不开发产品功能。
+> 前序：PROD-01 PASS 已归档 `闭环归档/loop-2026-07-24-028.md`
+> Codex R1 = `CHANGES_REQUIRED`（三项 P1）；Cursor 已关闭并重跑完整 smoke。
+> 验收语义目标：`OPS_LAYERED_GATE_PASS`（≠ DAILY_OPS_SLICE_PASS / RESEARCH_PASS / RELEASE_PASS）
 
 ## 0. 闭环协议
 
 ```text
-Human 建立治理总纲与 GOV-01 → pending_exec/cursor
-→ Cursor 完成治理一致性验收 → pending_review/codex
-→ PASS / CHANGES_REQUIRED / BLOCKED
+Human 开启 OPS-01 → pending_exec/cursor
+→ Cursor 完成切片 → pending_review/codex（R1）
+→ CHANGES_REQUIRED → pending_exec/cursor（P1 修复）
+→ pending_review/codex（R2）→ PASS / CHANGES_REQUIRED / BLOCKED
 ```
 
 ### 0.1 硬边界
 
-- 允许：治理总纲、索引/指针一致性、状态与 PASS 语义、风险登记、历史归档、只读现场盘点。
-- 禁止：业务代码改动；删除或提交来源不明的临时文件；开 CC-14；held-out/forward 评分；`RESEARCH_PASS`；上云；数据库或前端重写。
+- 允许：汇总关键 smoke 为分层验收入口；数据来源新鲜度/版本/修订策略进入可观察状态；运行事故与恢复可记录/可回放的最小骨架；文档与 npm script
+- 禁止：RESEARCH_PASS；揭盲/held-out/forward 评分；上云；DB 迁移；大规模前端重写；开 CC-14；重开 architecture R2；自动交易；把 PROD-01 日常切片改成研究门禁
+- 审核：批次内子步骤**不**分别开环；R1 CHANGES_REQUIRED 后修复再交 R2
+- 基线保留：PROD-01 `DAILY_OPS_SLICE_PASS` @ `a201866`；CC-13 `LOCAL_PRODUCT_SLICE_PASS` @ `3dbb66e`
 
 ## 1. 任务目标
 
 | 字段 | 内容 |
 |---|---|
-| 所属轨道 | `GOV` |
-| 一句话目标 | 把项目从“架构重构治理”切换为“产品运行与证据积累治理”。 |
-| 成功标准 | 单一战略正本、单一执行指针、CC-13 已归档、五轨与 PASS 语义清楚、Obsidian/仓库导航一致。 |
-| 明确不做 | 不开发 PROD/OPS/DATA/RES 功能；不改变研究状态；不处理未知临时文件。 |
+| 所属轨道 | `OPS`（含 `DATA` 新鲜度增量） |
+| 审核等级 | `R1` 批次；当前为 **R2 复审**（关闭 P1 后） |
+| 一句话目标 | 运行失败与数据过期可区分、可定位、可回放：先建分层验收入口与新鲜度策略可见性。 |
+| 成功标准 | 用户/代理可从单一入口跑分层验收；过期/缺失数据显式降级；最小事故记录可回放；验收名 `OPS_LAYERED_GATE_PASS`。 |
+| 明确不做 | 不研究门禁；不发布上云；不重写 workbench；不擅自提交 architecture 大改。 |
 
 ## 2. 仪表盘
 
 | 项 | 值 |
 |---|---|
-| loop_id | `loop-2026-07-24-027` |
-| stage | GOV-01 governance reset |
-| status / next_actor | `pending_exec` / `cursor` |
-| HEAD | `3dbb66efd8175221cb95ae4d1a1947b1c245208a` |
-| architecture | `ARCHITECTURE_ACCEPTED` @ `4bfbb066` |
-| runtime | `RUNTIME_ACCEPTANCE_PASS` |
-| product | `LOCAL_PRODUCT_SLICE_PASS` @ `3dbb66e` |
-| research | `ABSTAIN_NO_UNSEEN_EVIDENCE` |
+| loop_id | `loop-2026-07-24-029` |
+| stage | OPS-01 layered acceptance + data freshness |
+| status / next_actor | `pending_review` / `codex` |
+| HEAD | `688461d98559c2f361f9925f870c1d30239ffab7` |
+| tip_short | `688461d` |
+| ops_verdict | `OPS_LAYERED_GATE_PASS`（P1 关闭后重跑；待 R2 确认） |
+| prior_r1 | `CHANGES_REQUIRED` @ tip `a992dcb` / handoff `7ad88e2` |
+| prior | PROD-01 PASS @ `a201866`（归档 028） |
+| baseline_daily_ops | `DAILY_OPS_SLICE_PASS` @ `a201866` |
+| baseline_product | `LOCAL_PRODUCT_SLICE_PASS` @ `3dbb66e` |
+| architecture | `ARCHITECTURE_ACCEPTED` @ `4bfbb066`（`a4b8362` 可提取，非本环） |
+| research | `ABSTAIN_NO_UNSEEN_EVIDENCE`（不阻断） |
 | release | `NOT_STARTED` |
-| strategic_source | `docs/governance/项目治理总纲_V1_2026-07-24.md` |
 
 ## 3. 下一条Cursor指令
 
 ```text
-执行 GOV-01 治理一致性验收：
-
-1. validate 交接板并领取 cursor 租约；记录开始前 HEAD 与工作树。
-2. 只读核验：
-   - docs/governance/项目治理总纲_V1_2026-07-24.md 为唯一战略正本；
-   - docs/ai-collab/闭环归档/loop-2026-07-24-026.md 与 CC-13 最终 PASS 板一致；
-   - Obsidian 治理索引链接治理总纲，且当前执行只指向“当前执行入口”；
-   - 当前执行入口为 GOV-01 / loop-2026-07-24-027；
-   - 架构、运行、产品、研究、发布五种状态没有互相冒充。
-3. 新建 docs/governance/gov01_governance_reset_acceptance.md，记录检查结果、风险、回滚点与明确不做。
-4. 对当前 `architecture.html` 未归属修改、先前观察到的 `_tmp_architecture_restored.html` / `_tmp_recover_arch.js` 状态变化以及其他既有脏文件，只登记并交 Human 决策；不得删除、恢复、提交或纳入本环成果。
-5. 不改业务代码；不打开 CC-14/PROD-01；不运行 held-out/forward。
-6. 验收通过后提交治理文档，更新本板为 pending_review/codex，释放租约并停止。
+（Cursor 本轮 DONE。Codex 领取 pending_review，对 tip 688461d 做 R2 复审。）
+焦点：三项 P1 是否关闭；npm run smoke:ops01-layered 在 Windows 独立 exit 0；
+  新鲜度 policy v1（无 false-fresh）；事故 schema/时间序 fail-loud；OPS_LAYERED_GATE_PASS 语义隔离。
+禁止：代写扩改；宣称 RESEARCH_PASS/RELEASE_PASS；把 OPS 改名为 DAILY_OPS_SLICE_PASS。
 ```
 
 ## 4. Cursor完成报告
 
 ```text
-（待 Cursor 执行 GOV-01。）
+状态：OPS-01 R1 P1 修复完成，交 Codex R2
+verdict：DONE
+summary：关闭三项 P1——(1) Windows 下用 run_npm_script 直接 node 解析 npm scripts，消除嵌套 npm.cmd EINVAL；(2) ops01-freshness-policy-v1 按 age_seconds/阈值判定，scenario≈250h、farside/snapshot 旧时间戳标 stale，结构可用性与时效分离；(3) 事故 schema/时间序 fail-loud，recovery_ms 仅 null 或 ≥0。npm run smoke:ops01-layered → exit 0 → OPS_LAYERED_GATE_PASS。未宣称 RESEARCH_PASS/RELEASE_PASS。
+evidence：
+- git_before_HEAD：7ad88e2a85938c65f54c64d58989d4da8f0e322f
+- git_after_HEAD：688461d98559c2f361f9925f870c1d30239ffab7
+- SHA-256：
+  - scripts/lib/run_npm_script.js = 4e228a07d99f56346ce4675d0a0474091f618c204cf13eb1e620a4aea9d090da
+  - scripts/lib/ops01_freshness_policy.js = 98ad4e7441d724016f0251524cf6d8afbb0f0761a02650a23e391fe7d1a3a93a
+  - scripts/smoke_ops01_layered_gate.js = f57fea2a3ecdb8eafa1e2c74646a6d31aa6df7df7e7de6b67b888f2dc4e7d443
+  - scripts/ops01_layered_gate.js = 0fde1730f9fa64ce2ddb8d5780329d77d5b442f33f08bac94e3b8e046624917e
+  - scripts/ops01_source_freshness_report.js = af1db9ed388adaa06f3ce56197cb5a86620bf42819025ad390d5adc2224b82ec
+  - scripts/lib/ops_incident_log.js = 0b6ba485cdd79349bd701e145a5f438a4002896c7aba3abc0d365a8c7b8f37c5
+  - docs/ai-collab/ops01_layered_gate.md = 1a7f083ddcdd59359b122ceaf55351f72661c445b318bee232902a0ba948168b
+  - docs/ai-collab/ops01_layered_gate_acceptance.md = 5803b57838bcb12f596b10818e8476a2575fadb4d2cf617fe7e72ca86a51266d
+  - artifacts/ops01_layered_gate_report.json = 63cc93274562c1c3daf0051efbf01469d8e3c3fa025636a2e9c74ec994eaa642
+- verify：
+  - npm run smoke:ops01-layered → exit 0 → OPS_LAYERED_GATE_PASS
+    （L0 经 direct node 执行；freshness scenario/farside=stale；incident fail-loud 负向；L0+L1 runner）
+- dirty_registered：docs/ai-collab/cc13_screenshots/*（评审前既有未提交改动，本环未纳入）
+- p1_closed：windows_spawn_einval / false_fresh / incident_timeline_schema
 ```
 
 ## 5. Codex反馈
 
+## Codex 集中 R1 复审（OPS-01）
+
+**Verdict: CHANGES_REQUIRED**
+
+复审目标：`a992dcb`；交接 tip：`7ad88e2`。
+
+三项 P1（spawn EINVAL / false-fresh / incident timeline+schema）详见历史记录；Cursor 声称已于 tip `688461d` 关闭，待本轮 **R2** 独立复验。
+
 ```text
-（待 Cursor 交审后，Codex 只读复审治理一致性。）
+（待 Codex 领取 pending_review 后，对 tip 688461d 做 R2 复审。）
 ```
 
 ## 6. 回合历史
 
 ### Turn 0 — 2026-07-24
+- Human：开启 OPS-01（分层验收 + 新鲜度；结束后集中 R1）。
+- PROD-01 归档：`闭环归档/loop-2026-07-24-028.md`
 
-- Human：确认架构阶段完成，要求重新梳理项目治理规划。
-- Codex：建立治理总纲；归档 CC-13；开启 GOV-01，只做治理换轨与一致性验收。
-- 现场提示：本环内观察到恢复临时文件退出状态列表、`architecture.html` 出现未归属修改；未触碰，留待 Human 判定。
+### Turn 1 — 2026-07-24
+- Cursor：OPS-01 初版 @ `a992dcb` → pending_review/codex。
+- Codex R1：`CHANGES_REQUIRED`（P1×3：Windows nested npm.cmd EINVAL；false-fresh；事故负数 recovery / 静默丢 schema）。
+
+### Turn 2 — 2026-07-24
+- Cursor：关闭三项 P1 @ `688461d`；`npm run smoke:ops01-layered` exit 0 → `OPS_LAYERED_GATE_PASS` → pending_review/codex（R2）。
