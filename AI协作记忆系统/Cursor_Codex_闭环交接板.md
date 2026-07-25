@@ -1,18 +1,18 @@
 ---
 type: Cursor_Codex闭环交接板
 schema_version: 2
-tags: [AI协作, Cursor, Codex, Obsidian, 闭环, PRD-EVENT-VALUE-02, V2.3]
+tags: [AI协作, Cursor, Codex, Obsidian, 闭环, PRD-EVENT-QUEUE-03, V2.4]
 created: 2026-07-25
 updated: '2026-07-25'
 project: financial-alert-system
-loop_id: PRD-EVENT-VALUE-02
-revision: 16
-turn: 5
+loop_id: PRD-EVENT-QUEUE-03
+revision: 1
+turn: 1
 next_actor: 'cursor'
 status: 'pending_exec'
 max_turns: 8
 last_writer: 'cursor'
-written_at: '2026-07-25T08:32:20.528Z'
+written_at: '2026-07-25T10:25:00.000Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -22,83 +22,84 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 ---
 # Cursor ↔ Codex 闭环交接板
 
-> [!important] 当前执行：**PRD-EVENT-VALUE-02 · V2.3**
+> [!important] 当前执行：**PRD-EVENT-QUEUE-03 · V2.4 已纳入研究待办**
 >
-> Human：**暂不交 Codex**。已修复「纳入后直达/确保事前」失败。
-> **不宣称** `EVENT_RESEARCH_VALUE_V1_PASS`。
+> 前环 `PRD-EVENT-VALUE-02` 已 PASS 归档（产品 tip `fcf0450`）。
+> 本环最终验收：`EVENT_RESEARCH_QUEUE_V1_PASS`（齐套后一次 R1）。
+> batch1 已交付；**暂不交 Codex**。
 
 ## 0. 闭环协议
 
 ```text
-Cursor 连续切片；Human「开」前不交 Codex（当前延期）
+VALUE-02 PASS → 开 QUEUE-03
+→ Cursor 连续切片（不拆审）
+→ Human「开」→ 一次 Codex R1
 ```
 
 ### 0.1 硬边界
 
 - 禁止宣称 RESEARCH_PASS / DATA_QUALITY_PASS / RELEASE_PASS
-- Codex = DEFERRED_BY_HUMAN
+- 不重复宣称 INTEGRATION / VALUE PASS
+- 本环唯一 PASS 名：`EVENT_RESEARCH_QUEUE_V1_PASS`（未宣称）
 
 ## 1. 任务目标
 
 | 字段 | 内容 |
 |---|---|
 | 所属轨道 | `PROD` |
-| 成功标准 | `EVENT_RESEARCH_VALUE_V1_PASS`（未宣称） |
+| 审核等级 | `R1`（整环一次） |
+| 一句话目标 | 日历展示已纳入记录的缺口待办（事前/证据/可做事后），一键深链执行。 |
+| 成功标准 | `EVENT_RESEARCH_QUEUE_V1_PASS` |
+| 明确不做 | 自动全量刷证据；扩工作台表单；研究门禁；上云 |
+| tip（VALUE） | `fcf0450`（前环） |
+| tip（本环） | 未提交 |
 
 ## 2. 仪表盘
 
 | 项 | 值 |
 |---|---|
-| loop_id | `PRD-EVENT-VALUE-02` |
-| stage | V2.3 fix：ScenarioDomain 403 · 纳入直达已复验 |
+| loop_id | `PRD-EVENT-QUEUE-03` |
+| stage | V2.4 batch1 待办队列已落地 · pending_exec |
 | status / next_actor | pending_exec / cursor |
-| HEAD | `21ec892`（工作树未提交） |
-| codex | `DEFERRED_BY_HUMAN` |
-| acceptance | 未宣称 PASS |
+| batch1 | `PRD_EVENT_QUEUE_03_BATCH1_SMOKE_PASS` |
+| acceptance | 未宣称 |
+| research | `ABSTAIN` |
+| release | `NOT_STARTED` |
 
-## 3. 下一条指令
+## 3. 下一条指令（Cursor）
 
 ```text
-保持 pending_exec。不交 Codex。
-可继续计划切片；纳入→记录页→确保事前已修复可试用。
+继续 V2.4：实机走查日历「研究待办」；按计划补 batch2（空态/负向/READY）或按 Human 指示调整。
+不强制交 Codex，直至齐套且 Human「开」。
 ```
 
 ## 4. Cursor完成报告
 
 ```text
-状态：HOTFIX DONE · 不交 Codex
-owner：cursor-prd-event-value-02-fix-focus-20260725
-故障：纳入后直达/确保事前失败
-根因：
-1) packages/scenario-domain/browser.umd.js 被 static_public_policy 403 → ScenarioDomain 未加载
-2) generatePre → _thirdFridayOfMonth(null) 抛错；拦截器超时
-修复：
-- scripts/lib/static_public_policy.js：白名单 browser.umd.js（其它 packages 仍 403）
-- scenario_reasoner._thirdFridayOfMonth 空域 fail-soft
-- event_research_record.html 加载 UMD
-- calendarAdoptResearch：改走 adoptFromCalendar({ensure_pre:false}) 后同页直达 + focus
-复验（:8013，需重启 server 加载新 policy）：
-- UMD HTTP 200；ScenarioDomain=object
-- 纳入 earnings_msft_2026_q2 → 直达记录页 focus=ensure_pre → 事前摘要已生成
-烟雾：smoke_prd_event_value_02_fix_scenario_domain.js
-未宣称 PASS
+开环 PRD-EVENT-QUEUE-03；归档 VALUE-02 镜像 → docs/ai-collab/闭环归档/PRD-EVENT-VALUE-02.md
+计划：产品发展执行计划_V2.4_已纳入研究待办队列_2026-07-25.md
+batch1：
+- listAdoptedActionQueue + nextAction 事后门禁（解锁才 open_post）
+- calendarQueuePrompt UI + 空态
+- focus=open_post
+- smoke：scripts/smoke_prd_event_queue_03_batch1.js → PASS
+未宣称 QUEUE / RESEARCH / DATA_QUALITY / RELEASE PASS
+本地：http://127.0.0.1:8013/propagation.html?tab=calendar
 ```
 
 ## 5. Codex反馈
 
 ```text
-（DEFERRED）
+（本批次不交审）
 ```
 
 ## 6. 回合历史
 
 | turn | actor | 动作 | 结果 |
 |---|---|---|---|
-| 4 | cursor | batch3 | DONE |
-| — | human | 直达下一步失败；暂不交 Codex | bug |
-| 5 | cursor | 修 ScenarioDomain 403 + 纳入直达 | FIXED |
+| — | human | 「继续后续工作」 | 授权开新环 |
+| 1 | cursor | 开 QUEUE-03 + batch1 | smoke PASS；pending_exec |
 
 ## 7. Human备注
 
-- Codex 仍延期
-- 请硬刷新后再试：日历 → 纳入研究
+- VALUE-02 已结案；当前唯一主环 = QUEUE-03
