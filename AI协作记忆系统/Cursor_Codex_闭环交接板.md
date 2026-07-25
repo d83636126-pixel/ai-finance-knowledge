@@ -1,18 +1,18 @@
 ---
 type: Cursor_Codex闭环交接板
 schema_version: 2
-tags: [AI协作, Cursor, Codex, Obsidian, 闭环, PRD-EVENT-INTEGRATION-01, V2.2]
+tags: [AI协作, Cursor, Codex, Obsidian, 闭环, PRD-EVENT-VALUE-02, V2.3]
 created: 2026-07-25
 updated: '2026-07-25'
 project: financial-alert-system
-loop_id: PRD-EVENT-INTEGRATION-01
-revision: 19
-turn: 6
+loop_id: PRD-EVENT-VALUE-02
+revision: 16
+turn: 5
 next_actor: 'cursor'
 status: 'pending_exec'
 max_turns: 8
 last_writer: 'cursor'
-written_at: '2026-07-25T06:32:34.052Z'
+written_at: '2026-07-25T08:32:20.528Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -22,93 +22,83 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 ---
 # Cursor ↔ Codex 闭环交接板
 
-> [!important] 当前执行：**PRD-EVENT-INTEGRATION-01 · V1_READY + Human 路径干跑（待你签署）**
+> [!important] 当前执行：**PRD-EVENT-VALUE-02 · V2.3**
 >
-> `V1_READY_SMOKE_PASS` + `HUMAN_PATH_DRYRUN_PASS` 已齐；**未宣称** `EVENT_RESEARCH_INTEGRATION_V1_PASS`；**不交 Codex**。
-> 请你按清单勾选；确认后明示「开 Codex R1」。
+> Human：**暂不交 Codex**。已修复「纳入后直达/确保事前」失败。
+> **不宣称** `EVENT_RESEARCH_VALUE_V1_PASS`。
 
 ## 0. 闭环协议
 
 ```text
-Human 开环 PRD-EVENT-INTEGRATION-01（V2.2）
-→ Cursor 连续交付纵向切片（中间不拆 Codex）
-→ V1 齐套且 Human 确认后一次 Codex R1
-→ PASS / CHANGES_REQUIRED / BLOCKED
+Cursor 连续切片；Human「开」前不交 Codex（当前延期）
 ```
 
 ### 0.1 硬边界
 
-- 允许：合流编排；V1_READY；Human 路径干跑取证
-- 禁止：自行宣称 PASS；中途交 Codex；扩展独立工作台表单
-- 干跑 ≠ Human 签署
+- 禁止宣称 RESEARCH_PASS / DATA_QUALITY_PASS / RELEASE_PASS
+- Codex = DEFERRED_BY_HUMAN
 
 ## 1. 任务目标
 
 | 字段 | 内容 |
 |---|---|
 | 所属轨道 | `PROD` |
-| 审核等级 | `R1`（整环结束集中一次） |
-| 一句话目标 | V2.2 合流主线待 Human 签署后一次 R1 |
-| 成功标准 | `EVENT_RESEARCH_INTEGRATION_V1_PASS`（未宣称） |
-| 明确不做 | 代签 Human；扩展 workspace 表单 |
+| 成功标准 | `EVENT_RESEARCH_VALUE_V1_PASS`（未宣称） |
 
 ## 2. 仪表盘
 
 | 项 | 值 |
 |---|---|
-| loop_id | `PRD-EVENT-INTEGRATION-01` |
-| stage | V2.2 batch6：Human 路径干跑 |
+| loop_id | `PRD-EVENT-VALUE-02` |
+| stage | V2.3 fix：ScenarioDomain 403 · 纳入直达已复验 |
 | status / next_actor | pending_exec / cursor |
-| HEAD | `9f02553`（工作树未提交） |
-| batch1–6 | DONE |
-| smoke | `HUMAN_PATH_DRYRUN_PASS`（另有 V1_READY） |
-| acceptance | 未宣称 PASS（待 Human 签署） |
-| nfp_2026_07 | `LIVE_FORWARD_OBSERVATION` |
-| research | `ABSTAIN` |
-| release | `NOT_STARTED` |
+| HEAD | `21ec892`（工作树未提交） |
+| codex | `DEFERRED_BY_HUMAN` |
+| acceptance | 未宣称 PASS |
 
-## 3. 下一条Cursor指令
+## 3. 下一条指令
 
 ```text
-等待 Human 按清单实机勾选并签署。
-若明示「开 Codex R1」：切 pending_review/codex（仍勿宣称 PASS）。
-若报缺口：按反馈修补，仍不交 Codex。
+保持 pending_exec。不交 Codex。
+可继续计划切片；纳入→记录页→确保事前已修复可试用。
 ```
 
 ## 4. Cursor完成报告
 
 ```text
-状态：第六切片干跑取证完成；继续 pending_exec；不交 Codex；不代签 Human
-verdict：BATCH6_HUMAN_PATH_DRYRUN_CONTINUE
-summary：对 :8013 跑入口/页面区/registry 幂等/重开增量/未来门禁干跑；日历 upcoming 仍为浏览器 bridge（已记录）。未宣称 PASS。
-evidence：
-- git_HEAD：9f025530b1c2cc6cfbc754fe77b66bfb21d5871e（未提交）
-- local_url：http://127.0.0.1:8013/propagation.html?tab=calendar
-- checklist：docs/ai-collab/PRD-EVENT-INTEGRATION-01_human_acceptance_checklist.md
-- verify：node scripts/smoke_prd_event_integration_01_human_path.js → HUMAN_PATH_DRYRUN_PASS
-- artifact：artifacts/prd_event_integration_01_human_path_dryrun.json
-- SHA-256：
-  - scripts/smoke_prd_event_integration_01_human_path.js = 33dbf5c3c4f88a3b6dae7e868668a1c25787cf72f7ce1a306b89ab74b3991330
-  - docs/ai-collab/PRD-EVENT-INTEGRATION-01_human_acceptance_checklist.md = c8dbb3e451d660c36c550b7e5b5e59b4efcd4910c7649ea79688b04842949962
-  - artifacts/prd_event_integration_01_human_path_dryrun.json = e4a751ddca3237588bf54dd4e39d135a06f9f9cb3a80f07b7d4293f8403c6afb
-- not_claimed：EVENT_RESEARCH_INTEGRATION_V1_PASS / RESEARCH_PASS / DATA_QUALITY_PASS / RELEASE_PASS
+状态：HOTFIX DONE · 不交 Codex
+owner：cursor-prd-event-value-02-fix-focus-20260725
+故障：纳入后直达/确保事前失败
+根因：
+1) packages/scenario-domain/browser.umd.js 被 static_public_policy 403 → ScenarioDomain 未加载
+2) generatePre → _thirdFridayOfMonth(null) 抛错；拦截器超时
+修复：
+- scripts/lib/static_public_policy.js：白名单 browser.umd.js（其它 packages 仍 403）
+- scenario_reasoner._thirdFridayOfMonth 空域 fail-soft
+- event_research_record.html 加载 UMD
+- calendarAdoptResearch：改走 adoptFromCalendar({ensure_pre:false}) 后同页直达 + focus
+复验（:8013，需重启 server 加载新 policy）：
+- UMD HTTP 200；ScenarioDomain=object
+- 纳入 earnings_msft_2026_q2 → 直达记录页 focus=ensure_pre → 事前摘要已生成
+烟雾：smoke_prd_event_value_02_fix_scenario_domain.js
+未宣称 PASS
 ```
 
 ## 5. Codex反馈
 
 ```text
-（Human 签署并明示「开 Codex R1」后一次审核）
+（DEFERRED）
 ```
 
 ## 6. 回合历史
 
 | turn | actor | 动作 | 结果 |
 |---|---|---|---|
-| — | human | 开 V2.2 / PRD-EVENT-INTEGRATION-01 | 开环 |
-| 1–5 | cursor | batch1–5 合流 + V1_READY | V1_READY |
-| 6 | cursor | Human 路径 HTTP 干跑 | BATCH6_HUMAN_PATH_DRYRUN_CONTINUE |
+| 4 | cursor | batch3 | DONE |
+| — | human | 直达下一步失败；暂不交 Codex | bug |
+| 5 | cursor | 修 ScenarioDomain 403 + 纳入直达 | FIXED |
 
 ## 7. Human备注
 
-- 清单：`docs/ai-collab/PRD-EVENT-INTEGRATION-01_human_acceptance_checklist.md`
-- 干跑已绿，请你实机勾选；确认后回复「开 Codex R1」
+- Codex 仍延期
+- 请硬刷新后再试：日历 → 纳入研究
