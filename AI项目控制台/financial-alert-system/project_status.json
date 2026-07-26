@@ -1,7 +1,7 @@
 {
   "version": "project-status-v3",
   "builder_version": "project-status-builder-v3",
-  "generated_at": "2026-07-23T11:19:55.127Z",
+  "generated_at": "2026-07-26T12:02:25.012Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + acceptance_status.js + project_status_builder.js",
   "verdict": "整改中，未发布，研究有效性未证明",
@@ -15,9 +15,9 @@
     "cloud_gate": "blocked",
     "phases": {
       "SEC0": "BLOCK",
-      "NFP_LOOP": "ENGINEERING_PASS",
-      "NFP_BLIND_SCAFFOLD": "SCAFFOLD_PASS",
-      "NFP_FORWARD_SCAFFOLD": "SCAFFOLD_PASS",
+      "NFP_LOOP": "BLOCK",
+      "NFP_BLIND_SCAFFOLD": "BLOCK",
+      "NFP_FORWARD_SCAFFOLD": "BLOCK",
       "NFP_HISTORICAL_BLIND_RESEARCH": "BLOCK",
       "NFP_LIVE_FORWARD": "OBSERVING",
       "NFP_RESEARCH_COMPLETE": false,
@@ -31,22 +31,22 @@
     },
     "git_scope": {
       "dirty": true,
-      "changed_entries": 5
+      "changed_entries": 18
     },
     "project_status_verdict": "整改中，未发布，研究有效性未证明"
   },
   "phase": {
     "workbench": "remediation",
-    "engineering": "ENGINEERING_PASS",
+    "engineering": "BLOCK",
     "next": "v2 integrity → real as-of evidence → >=20 historical blinds → >=3 live forwards",
     "verdict": "整改中，未发布，研究有效性未证明",
     "release_gate": "blocked",
     "cloud_gate": "blocked",
     "research_validity": "BLOCK",
     "SEC0": "BLOCK",
-    "NFP_LOOP": "ENGINEERING_PASS",
-    "NFP_BLIND_SCAFFOLD": "SCAFFOLD_PASS",
-    "NFP_FORWARD_SCAFFOLD": "SCAFFOLD_PASS",
+    "NFP_LOOP": "BLOCK",
+    "NFP_BLIND_SCAFFOLD": "BLOCK",
+    "NFP_FORWARD_SCAFFOLD": "BLOCK",
     "NFP_HISTORICAL_BLIND_RESEARCH": "BLOCK",
     "NFP_LIVE_FORWARD": "OBSERVING",
     "NFP_RESEARCH_COMPLETE": false,
@@ -68,15 +68,15 @@
       "evidence": [
         {
           "path": "artifacts/sec0_static_security_last.json",
-          "ok": true,
-          "detail": "ENGINEERING_PASS (artifacts/sec0_static_security_last.json)",
+          "ok": false,
+          "detail": "artifact stale (215.3h > 168h) (artifacts/sec0_static_security_last.json)",
           "kind": "artifact",
           "artifact_status": "PASS"
         },
         {
           "path": "artifacts/sec0_rollback_drill.json",
           "ok": false,
-          "detail": "artifact stale (174.7h > 168h) (artifacts/sec0_rollback_drill.json)",
+          "detail": "artifact stale (247.4h > 168h) (artifacts/sec0_rollback_drill.json)",
           "kind": "artifact",
           "artifact_status": "PASS"
         }
@@ -89,15 +89,15 @@
       "level": "engineering",
       "pass_verdict": "ENGINEERING_PASS",
       "research_credit": false,
-      "status": "engineering_pass",
-      "verdict": "ENGINEERING_PASS",
-      "passed": true,
+      "status": "block",
+      "verdict": "BLOCK",
+      "passed": false,
       "research_credit_granted": false,
       "evidence": [
         {
           "path": "artifacts/nfp_event_card_smoke.json",
-          "ok": true,
-          "detail": "ENGINEERING_PASS (artifacts/nfp_event_card_smoke.json)",
+          "ok": false,
+          "detail": "artifact stale (223.9h > 168h) (artifacts/nfp_event_card_smoke.json)",
           "kind": "artifact",
           "artifact_status": "ENGINEERING_PASS"
         }
@@ -110,15 +110,15 @@
       "level": "scaffold",
       "pass_verdict": "SCAFFOLD_PASS",
       "research_credit": false,
-      "status": "scaffold_pass",
-      "verdict": "SCAFFOLD_PASS",
-      "passed": true,
+      "status": "block",
+      "verdict": "BLOCK",
+      "passed": false,
       "research_credit_granted": false,
       "evidence": [
         {
           "path": "artifacts/nfp_blind_batch_latest.json",
-          "ok": true,
-          "detail": "SCAFFOLD_PASS (not research credit) (artifacts/nfp_blind_batch_latest.json)",
+          "ok": false,
+          "detail": "artifact stale (236.2h > 168h) (artifacts/nfp_blind_batch_latest.json)",
           "kind": "artifact",
           "artifact_status": "SCAFFOLD_PASS"
         }
@@ -131,15 +131,15 @@
       "level": "scaffold",
       "pass_verdict": "SCAFFOLD_PASS",
       "research_credit": false,
-      "status": "scaffold_pass",
-      "verdict": "SCAFFOLD_PASS",
-      "passed": true,
+      "status": "block",
+      "verdict": "BLOCK",
+      "passed": false,
       "research_credit_granted": false,
       "evidence": [
         {
           "path": "artifacts/nfp_forward_gate.json",
-          "ok": true,
-          "detail": "SCAFFOLD_PASS (not research credit) (artifacts/nfp_forward_gate.json)",
+          "ok": false,
+          "detail": "artifact stale (235.2h > 168h) (artifacts/nfp_forward_gate.json)",
           "kind": "artifact",
           "artifact_status": "SCAFFOLD_PASS"
         }
@@ -152,15 +152,15 @@
       "level": "engineering",
       "pass_verdict": "ENGINEERING_PASS",
       "research_credit": false,
-      "status": "engineering_pass",
-      "verdict": "ENGINEERING_PASS",
-      "passed": true,
+      "status": "block",
+      "verdict": "BLOCK",
+      "passed": false,
       "research_credit_granted": false,
       "evidence": [
         {
           "path": "artifacts/nfp_logical_split_smoke.json",
-          "ok": true,
-          "detail": "ENGINEERING_PASS (artifacts/nfp_logical_split_smoke.json)",
+          "ok": false,
+          "detail": "artifact stale (234.7h > 168h) (artifacts/nfp_logical_split_smoke.json)",
           "kind": "artifact",
           "artifact_status": "ENGINEERING_PASS"
         }
@@ -293,14 +293,14 @@
         {
           "path": "propagation.html",
           "ok": true,
-          "detail": "exists (1361 lines)",
+          "detail": "exists (1373 lines)",
           "kind": "structural",
           "artifact_status": null
         },
         {
           "path": "static/propagation_app.js",
           "ok": true,
-          "detail": "exists (5729 lines)",
+          "detail": "exists (6310 lines)",
           "kind": "structural",
           "artifact_status": null
         },
@@ -315,8 +315,8 @@
     }
   ],
   "git": {
-    "commit": "897853b9f4208118884a7b36cd22f4a272ea9aff",
-    "short": "897853b",
+    "commit": "93aa926f3001ae2c37dffd62e9a9befb75f67339",
+    "short": "93aa926",
     "branch": "master",
     "dirty": true,
     "baseline_tag": null,
@@ -350,29 +350,29 @@
         "mode": "snapshot_stale",
         "usable": false,
         "as_of": "2026-07-13",
-        "age_hours": 251.33257527777778,
-        "detail": "observation age 251.3h > 120h",
+        "age_hours": 324.04043527777776,
+        "detail": "observation age 324.0h > 120h",
         "cannot_treat_as_live_confirm": true
       },
       "dgs10": {
         "mode": "snapshot_stale",
         "usable": false,
         "as_of": "2026-07-13",
-        "age_hours": 251.33257527777778,
-        "detail": "observation age 251.3h > 120h",
+        "age_hours": 324.04043527777776,
+        "detail": "observation age 324.0h > 120h",
         "cannot_treat_as_live_confirm": true
       }
     },
     "market_snapshot_updated_at": "2026-07-15T05:14:06.834Z"
   },
   "files": {
-    "static/propagation_app.js": 5729,
+    "static/propagation_app.js": 6310,
     "static/research_workbench.js": 2040,
     "static/propagation_engine.js": 1926,
-    "static/data.js": 2252,
+    "static/data.js": 2271,
     "static/nfp_event_card.js": 630,
-    "index.html": 72,
-    "package.json": 134
+    "index.html": 74,
+    "package.json": 165
   },
   "npm_scripts": [
     "smoke:micro",
@@ -497,7 +497,38 @@
     "nfp:fetch-vendor-windows",
     "nfp:databento-estimate",
     "nfp:fetch-databento-windows",
-    "smoke:nfp-databento"
+    "smoke:nfp-databento",
+    "smoke:cc06-api-v1",
+    "smoke:cc07a-registry",
+    "smoke:cc07b-graph",
+    "test:graph-domain",
+    "smoke:cc07c-graph-domain",
+    "test:scenario-domain",
+    "diff:scenario-v2-domain",
+    "smoke:scenario-domain-failclosed",
+    "smoke:cc08-scenario-domain",
+    "check:scenario-domain-browser",
+    "smoke:cc09-architecture",
+    "smoke:cc09-research-credit-scan",
+    "smoke:cc10-heldout-prep-gate",
+    "smoke:cc11-unseen-blind-freeze",
+    "smoke:cc11-scope-correction",
+    "smoke:cc12-dev-e2e",
+    "smoke:ai-collab-exec-pointer",
+    "cc13:seed",
+    "cc13:local",
+    "smoke:cc13-local",
+    "smoke:prod01-daily-ops",
+    "prod01:local",
+    "ops:l0",
+    "ops:l1",
+    "ops:l2",
+    "ops:layered",
+    "ops:freshness",
+    "ops:incident",
+    "smoke:ops01-layered",
+    "ensure:contracts-dist",
+    "smoke:data01-quality"
   ],
   "security": {
     "default_host": "127.0.0.1",
@@ -508,12 +539,12 @@
     "code_root": "F:\\financial-alert-system"
   },
   "meta": {
-    "run_at": "2026-07-23T11:19:55.127Z",
+    "run_at": "2026-07-26T12:02:25.012Z",
     "cwd": "F:\\financial-alert-system",
     "node": "v25.2.1",
     "platform": "win32",
-    "git_commit": "897853b9f4208118884a7b36cd22f4a272ea9aff",
-    "git_commit_short": "897853b",
+    "git_commit": "93aa926f3001ae2c37dffd62e9a9befb75f67339",
+    "git_commit_short": "93aa926",
     "git_branch": "master",
     "git_dirty": true,
     "git_tag_baseline": "baseline-f-drive-2026-07-11",
