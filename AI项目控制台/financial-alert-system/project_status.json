@@ -1,7 +1,7 @@
 {
   "version": "project-status-v3",
   "builder_version": "project-status-builder-v3",
-  "generated_at": "2026-07-26T12:02:25.012Z",
+  "generated_at": "2026-07-27T03:15:10.583Z",
   "product": "financial-alert-system",
   "source_of_truth": "acceptance_registry.json + acceptance_status.js + project_status_builder.js",
   "verdict": "整改中，未发布，研究有效性未证明",
@@ -31,7 +31,7 @@
     },
     "git_scope": {
       "dirty": true,
-      "changed_entries": 18
+      "changed_entries": 20
     },
     "project_status_verdict": "整改中，未发布，研究有效性未证明"
   },
@@ -69,14 +69,14 @@
         {
           "path": "artifacts/sec0_static_security_last.json",
           "ok": false,
-          "detail": "artifact stale (215.3h > 168h) (artifacts/sec0_static_security_last.json)",
+          "detail": "artifact stale (230.5h > 168h) (artifacts/sec0_static_security_last.json)",
           "kind": "artifact",
           "artifact_status": "PASS"
         },
         {
           "path": "artifacts/sec0_rollback_drill.json",
           "ok": false,
-          "detail": "artifact stale (247.4h > 168h) (artifacts/sec0_rollback_drill.json)",
+          "detail": "artifact stale (262.6h > 168h) (artifacts/sec0_rollback_drill.json)",
           "kind": "artifact",
           "artifact_status": "PASS"
         }
@@ -97,7 +97,7 @@
         {
           "path": "artifacts/nfp_event_card_smoke.json",
           "ok": false,
-          "detail": "artifact stale (223.9h > 168h) (artifacts/nfp_event_card_smoke.json)",
+          "detail": "artifact stale (239.1h > 168h) (artifacts/nfp_event_card_smoke.json)",
           "kind": "artifact",
           "artifact_status": "ENGINEERING_PASS"
         }
@@ -118,7 +118,7 @@
         {
           "path": "artifacts/nfp_blind_batch_latest.json",
           "ok": false,
-          "detail": "artifact stale (236.2h > 168h) (artifacts/nfp_blind_batch_latest.json)",
+          "detail": "artifact stale (251.4h > 168h) (artifacts/nfp_blind_batch_latest.json)",
           "kind": "artifact",
           "artifact_status": "SCAFFOLD_PASS"
         }
@@ -139,7 +139,7 @@
         {
           "path": "artifacts/nfp_forward_gate.json",
           "ok": false,
-          "detail": "artifact stale (235.2h > 168h) (artifacts/nfp_forward_gate.json)",
+          "detail": "artifact stale (250.4h > 168h) (artifacts/nfp_forward_gate.json)",
           "kind": "artifact",
           "artifact_status": "SCAFFOLD_PASS"
         }
@@ -160,7 +160,7 @@
         {
           "path": "artifacts/nfp_logical_split_smoke.json",
           "ok": false,
-          "detail": "artifact stale (234.7h > 168h) (artifacts/nfp_logical_split_smoke.json)",
+          "detail": "artifact stale (249.9h > 168h) (artifacts/nfp_logical_split_smoke.json)",
           "kind": "artifact",
           "artifact_status": "ENGINEERING_PASS"
         }
@@ -293,7 +293,7 @@
         {
           "path": "propagation.html",
           "ok": true,
-          "detail": "exists (1373 lines)",
+          "detail": "exists (1374 lines)",
           "kind": "structural",
           "artifact_status": null
         },
@@ -315,8 +315,8 @@
     }
   ],
   "git": {
-    "commit": "93aa926f3001ae2c37dffd62e9a9befb75f67339",
-    "short": "93aa926",
+    "commit": "4e80971efd367210b10de10e661d7541875e8344",
+    "short": "4e80971",
     "branch": "master",
     "dirty": true,
     "baseline_tag": null,
@@ -350,16 +350,16 @@
         "mode": "snapshot_stale",
         "usable": false,
         "as_of": "2026-07-13",
-        "age_hours": 324.04043527777776,
-        "detail": "observation age 324.0h > 120h",
+        "age_hours": 339.25322611111113,
+        "detail": "observation age 339.3h > 120h",
         "cannot_treat_as_live_confirm": true
       },
       "dgs10": {
         "mode": "snapshot_stale",
         "usable": false,
         "as_of": "2026-07-13",
-        "age_hours": 324.04043527777776,
-        "detail": "observation age 324.0h > 120h",
+        "age_hours": 339.25322611111113,
+        "detail": "observation age 339.3h > 120h",
         "cannot_treat_as_live_confirm": true
       }
     },
@@ -371,7 +371,7 @@
     "static/propagation_engine.js": 1926,
     "static/data.js": 2271,
     "static/nfp_event_card.js": 630,
-    "index.html": 74,
+    "index.html": 75,
     "package.json": 165
   },
   "npm_scripts": [
@@ -539,12 +539,12 @@
     "code_root": "F:\\financial-alert-system"
   },
   "meta": {
-    "run_at": "2026-07-26T12:02:25.012Z",
+    "run_at": "2026-07-27T03:15:10.583Z",
     "cwd": "F:\\financial-alert-system",
     "node": "v25.2.1",
     "platform": "win32",
-    "git_commit": "93aa926f3001ae2c37dffd62e9a9befb75f67339",
-    "git_commit_short": "93aa926",
+    "git_commit": "4e80971efd367210b10de10e661d7541875e8344",
+    "git_commit_short": "4e80971",
     "git_branch": "master",
     "git_dirty": true,
     "git_tag_baseline": "baseline-f-drive-2026-07-11",

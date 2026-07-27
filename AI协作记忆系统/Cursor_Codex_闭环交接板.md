@@ -3,17 +3,17 @@ type: Cursor_Codex闭环交接板
 schema_version: 2
 tags: [AI协作, Cursor, Codex, Obsidian, 产品路线图, V3.1, PRD-EVENT-REGISTRY-09]
 created: 2026-07-26
-updated: '2026-07-26'
+updated: '2026-07-27'
 project: financial-alert-system
 loop_id: PRD-EVENT-REGISTRY-09
 acceptance: EVENT_RESEARCH_REGISTRY_V1_PASS
-revision: 0
-turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+revision: 4
+turn: 4
+next_actor: 'human'
+status: 'done'
 max_turns: 4
 last_writer: 'human'
-written_at: '2026-07-26T21:45:00.000Z'
+written_at: '2026-07-27T02:27:05.111Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -70,55 +70,41 @@ V3.1 执行计划已形成（docs/ai-collab/产品发展执行计划_V3.1_事件
 | 项 | 值 |
 |---|---|
 | loop_id | `PRD-EVENT-REGISTRY-09` |
-| stage | Batch A ✅ → Batch B — 台账页面 |
-| status / next_actor | pending_exec / cursor |
-| HEAD | `73f5ce4` |
+| stage | V3.1 已完成并归档 |
+| status / next_actor | done / human |
+| HEAD | `8b4f576` |
 | batch_a (视图契约) | `DONE` |
-| batch_b (台账页面) | `PENDING` |
-| batch_c (真实走查) | `PENDING` |
-| acceptance | `NOT_STARTED` |
+| batch_b (台账页面) | `DONE` |
+| batch_c (真实走查) | `DONE` |
+| acceptance | `EVENT_RESEARCH_REGISTRY_V1_PASS` |
 | deferred | BADGE / 技术加固 → V3.2+ |
 
-## 3. 当前指令（Cursor — Batch B：台账页面）
+## 3. 最终验收
 
 ```text
-Batch B 基于 Batch A 的视图契约，创建 event_research_registry.html 台账页面。
+结论：EVENT_RESEARCH_REGISTRY_V1_PASS。
 
-1. 页面结构（参考 V3.1 执行计划第 6 节）：
-   - 顶部"现在最该处理"区域（最多 3 张行动卡）
-   - 生命周期分组列表
-   - 最小筛选（生命周期、事件类型、时间范围、来源、事前记录有无、收尾卡有无）
-   - 每条记录卡片：名称+event_id、时间、主状态、最多两个辅助提示、一个主动作、"查看详情"次动作
-   - 技术标签和完整 refs 默认折叠
+产品 tip：8b4f576。
 
-2. 数据源：
-   - registry API: GET /api/research/records → 全部 registry 记录
-   - 日历 API: GET /api/calendar/upcoming?days=30 → 候选事件
-   - V3 结果存在性检查（检查 data/event_result_v3/ 目录对应文件）
-   - 使用 lib/event_registry_view.js 的 classifyVisibility / deriveLifecycle / sortByPriority
+最终验证：
+- 事件台账视图单元测试 58/58 PASS；
+- 真实数据走查 34/34 PASS；
+- check suite 7/7 PASS；
+- 浏览器内联台账逻辑语法通过，并与 Node 视图保持 DATA_REVIEW / 身份冲突规则一致。
 
-3. 页面行为：
-   - 加载后调用 registry API 获取数据
-   - 调用日历 API 获取候选事件
-   - 使用视图契约分类/派生/排序
-   - 渲染顶部 3 条优先行动
-   - 渲染生命周期分组列表
-   - 筛选器实时过滤
-   - 点击主动作跳转到正确页面
+当前 Top 3：
+1. US Reciprocal Tariff Announcement — 已发生 481 天；
+2. 美国2月非农就业 — 已发生 143 天；
+3. 谷歌(GOOGL) 季度财报 — 已发生 5 天。
 
-4. 错误和空态（fail-loud）：
-   - registry API 不可用 → 显示加载失败，不展示假数据
-   - 没有活跃事件 → 显示如何从日历/Inbox 纳入
-   - 候选源不可用 → 已纳入事件仍可显示
-   - 状态无法判定 → 进入"信息待核验"
+数据边界：
+- 两条旧 Inbox 测试残留继续非破坏性隔离；
+- nfp_2026_04 因来源日期矛盾进入 DATA_REVIEW；
+- nfp_2026_02 是 2 月参考期、3 月 6 日发布的正常产品事件，不再误报；
+- 不宣称 RESEARCH_PASS / DATA_QUALITY_PASS / RELEASE_PASS。
 
-5. 集成到工作台：
-   - 加入统一工作台主入口（navigation bar 或工作台首页）
-   - 确认不破坏既有页面路由
-
-Batch B 完成标志：event_research_registry.html 可加载、可筛选、三条优先行动可见。
+PRD-EVENT-REGISTRY-09 完成，V3.1 归档。后续产品阶段须另行规划，不自动开环。
 ```
-
 ## 4. 执行记录
 
 ### 开环（turn 0）
@@ -155,6 +141,15 @@ V3.1 执行计划已落盘（产品发展执行计划_V3.1_事件运营台账_20
 优先级 top 3：inbox 较旧事件（572天）→ 真实已发生待复盘 → NEEDS_REVIEW
 ```
 
+### Human 集中产品验收 R1（turn 1）
+
+```text
+结论：CHANGES_REQUIRED。
+
+已确认：页面和六类生命周期走查完成；51/51 view tests、35/35 walkthrough 通过。
+阻断：正式优先队列 Top 1 为旧测试残留 A|B，不是真实金融事件。
+退回 Cursor 做一次最小数据可见性修复；不扩大范围。
+```
 ## 5. 审核预留
 
 本环无 Codex 预审核。Batch A–C 内部执行后直接进入 Human 集中产品验收。
@@ -166,6 +161,10 @@ V3.1 执行计划已落盘（产品发展执行计划_V3.1_事件运营台账_20
 |---|---|---|---|
 | — | human | 批准 V3.1 计划 | 开 PRD-EVENT-REGISTRY-09 |
 | 0 | cursor | Batch A: lib/event_registry_view.js 创建，51/51 测试通过 | batch_a ✅ → Batch B 就绪 |
+| 1 | cursor | Batch B: event_research_registry.html 台账页面创建，导航入口加入各页面，searchParams bug 修复，check suite 7/7 通过 | batch_b ✅ → Batch C 就绪 |
+| 2 | cursor | Batch C: 真实事件集中走查 35/35 PASS，生命周期全覆盖（CANDIDATE/TRACKING_PRE/ONGOING/OCCURRED_PENDING_RESULT/REVIEWED/NEEDS_REVIEW），FOMC 通过日历正常入口纳入作为持续事件 | batch_c ✅ → 集中产品验收就绪 |
+| 3 | cursor | R2 三处修复：写入源隔离（POST 入口合成检测）+ 命名前缀冲突检测 + Top 3 断言加强。53/53 + 35/35 + 7/7 全部 PASS | CHANGES_REQUIRED 修复 → 待 Human 复核 |
+| 4 | human/codex | 最终事实修正：仅显式标记 nfp_2026_04；保留正常的 2 月非农发布滞后；58/58 + 34/34 + 7/7 | `EVENT_RESEARCH_REGISTRY_V1_PASS` → done/human |
 
 ## 7. Human 备注
 
