@@ -1,19 +1,19 @@
 ---
 type: Cursor_Codex闭环交接板
 schema_version: 2
-tags: [AI协作, Cursor, Codex, Obsidian, 产品路线图, V3.1, PRD-EVENT-REGISTRY-09]
-created: 2026-07-26
+tags: [AI协作, Cursor, Codex, Obsidian, 产品路线图, V3.2, PRD-EVENT-DAILY-10]
+created: 2026-07-27
 updated: '2026-07-27'
 project: financial-alert-system
-loop_id: PRD-EVENT-REGISTRY-09
-acceptance: EVENT_RESEARCH_REGISTRY_V1_PASS
-revision: 4
-turn: 4
+loop_id: PRD-EVENT-DAILY-10
+acceptance: EVENT_DAILY_LOOP_V1_PASS
+revision: 2
+turn: 3
 next_actor: 'human'
 status: 'done'
 max_turns: 4
 last_writer: 'human'
-written_at: '2026-07-27T02:27:05.111Z'
+written_at: '2026-07-27T05:05:44.934Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,32 +24,34 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 ---
 # Cursor ↔ Codex 闭环交接板
 
-> [!important] 当前执行：**PRD-EVENT-REGISTRY-09 · V3.1 事件运营台账**
+> [!important] 当前执行：**PRD-EVENT-DAILY-10 · V3.2 真实事件摄入与日常推进**
 >
-> 前环 `PRD-EVENT-RESULT-UX-08` 已归档（`RESULT_UX_V1_PASS`）。
-> 本环：建立事件运营台账，用户在 60 秒内找到当前最该处理的事件。
-> 复用现有 registry、日历、研究记录、收尾卡。不建第二套存储。
-> 验收：`EVENT_RESEARCH_REGISTRY_V1_PASS`。
+> 前环 `PRD-EVENT-REGISTRY-09` 已归档（`EVENT_RESEARCH_REGISTRY_V1_PASS`）。
+> 本环：用户在台账中发现候选事件，确认后进入 registry，按时间形态进入正确生命周期。
+> 不重建事件系统，不建第二套存储。
+> 验收：`EVENT_DAILY_LOOP_V1_PASS`。
 
 ## 0. 闭环协议
 
 ```text
-V3.1 执行计划已形成（docs/ai-collab/产品发展执行计划_V3.1_事件运营台账_2026-07-26.md）
-→ Batch A: 台账视图契约（可见性分类 + 生命周期 + 优先级）
-→ Batch B: 台账页面（event_research_registry.html）
-→ Batch C: 真实事件集中走查 → EVENT_RESEARCH_REGISTRY_V1_READY
+V3.2 执行计划已批准（docs/ai-collab/产品发展执行计划_V3.2_真实事件摄入与日常推进_2026-07-27.md）
+产品基线：8b4f576（V3.1 归档 HEAD）。
+→ Batch A: 候选合流（日历 + Inbox 统一候选区）
+→ Batch B: 台账内确认纳入与原地反馈
+→ Batch C: 真实事件日常走查 → EVENT_DAILY_LOOP_V1_READY
 → 集中产品验收 → PASS / REVISE
 ```
 
 ### 0.1 硬边界
 
-- 不创建第二个 registry
-- 不重写研究记录、收尾卡或六子机制
-- 不引入 AI 自动优先级
-- 不删除现有 registry 记录
-- 不根据标题自动合并事件
-- 测试记录默认隐藏，验证样本不进入活跃优先级
-- 身份冲突和时间缺失必须显示为待核验，不得静默通过
+- 不重写 registry
+- 不新增数据库
+- 不做复杂抓取平台
+- 不自动纳入未确认新闻
+- 不做 AI 事件评分
+- 不做跨事件比较
+- 不做日报推送
+- 不做研究有效性验证
 - 禁止宣称 `RESEARCH_PASS` / `DATA_QUALITY_PASS` / `RELEASE_PASS`
 
 ## 1. 任务目标
@@ -58,117 +60,126 @@ V3.1 执行计划已形成（docs/ai-collab/产品发展执行计划_V3.1_事件
 |---|---|
 | 所属轨道 | `PROD` |
 | 审核等级 | `R1`（整环一次集中产品验收） |
-| 一句话目标 | 用户在 60 秒内找到当前最该处理的事件，一次点击进入正确步骤 |
-| 成功标准 | `EVENT_RESEARCH_REGISTRY_V1_PASS` |
-| 计划文档 | 产品发展执行计划 V3.1：事件运营台账 |
-| 新页面 | `event_research_registry.html` |
-| 产品基线 | `73f5ce4` |
+| 一句话目标 | 用户在台账中发现候选事件，确认后进入 registry，按时间形态进入正确生命周期 |
+| 成功标准 | `EVENT_DAILY_LOOP_V1_PASS` |
+| 计划文档 | 产品发展执行计划 V3.2：真实事件摄入与日常推进 |
+| 核心页面 | `event_research_registry.html`（已有台账） |
+| 产品基线 | `8b4f576` |
 | max_turns | 4 |
 
 ## 2. 仪表盘
 
 | 项 | 值 |
 |---|---|
-| loop_id | `PRD-EVENT-REGISTRY-09` |
-| stage | V3.1 已完成并归档 |
+| loop_id | `PRD-EVENT-DAILY-10` |
+| stage | V3.2 已完成并归档 |
 | status / next_actor | done / human |
-| HEAD | `8b4f576` |
-| batch_a (视图契约) | `DONE` |
-| batch_b (台账页面) | `DONE` |
-| batch_c (真实走查) | `DONE` |
-| acceptance | `EVENT_RESEARCH_REGISTRY_V1_PASS` |
-| deferred | BADGE / 技术加固 → V3.2+ |
+| HEAD | `73ebbce` |
+| batch_a (候选合流) | `DONE` |
+| batch_b (确认纳入) | `DONE` |
+| batch_c (P1 阻断修复) | `DONE` |
+| acceptance | `EVENT_DAILY_LOOP_V1_PASS` |
+| deferred | 跨事件对比、日报推送、研究验证 → V3.3+ |
 
 ## 3. 最终验收
 
 ```text
-结论：EVENT_RESEARCH_REGISTRY_V1_PASS。
+结论：EVENT_DAILY_LOOP_V1_PASS。
 
-产品 tip：8b4f576。
+产品 tip：73ebbce。
 
-最终验证：
-- 事件台账视图单元测试 58/58 PASS；
-- 真实数据走查 34/34 PASS；
-- check suite 7/7 PASS；
-- 浏览器内联台账逻辑语法通过，并与 Node 视图保持 DATA_REVIEW / 身份冲突规则一致。
+Human 产品走查：
+- 在 8013 日常入口完成候选发现、确认纳入、原地反馈、打开研究记录和返回台账；
+- 日历与 Inbox 来源可区分；
+- 重复纳入保持幂等；
+- 时间未知、突发/持续与待核验事件保持诚实生命周期；
+- 候选加载失败显示错误与重试，不再静默隐藏。
 
-当前 Top 3：
-1. US Reciprocal Tariff Announcement — 已发生 481 天；
-2. 美国2月非农就业 — 已发生 143 天；
-3. 谷歌(GOOGL) 季度财报 — 已发生 5 天。
+自动证据：
+- 台账单元测试 69/69 PASS；
+- V3.2 集中走查在候选消费前 41/41 PASS；
+- V3.1 回归走查通过。
 
-数据边界：
-- 两条旧 Inbox 测试残留继续非破坏性隔离；
-- nfp_2026_04 因来源日期矛盾进入 DATA_REVIEW；
-- nfp_2026_02 是 2 月参考期、3 月 6 日发布的正常产品事件，不再误报；
-- 不宣称 RESEARCH_PASS / DATA_QUALITY_PASS / RELEASE_PASS。
-
-PRD-EVENT-REGISTRY-09 完成，V3.1 归档。后续产品阶段须另行规划，不自动开环。
+收口说明：
+- Human 走查正常消费了现有日历候选，事后重跑旧脚本不再满足“至少一条未消费候选”的前置条件；
+- 该问题登记为测试可重复性技术债，不影响用户主路径，不开启新审核环；
+- 未宣称 RESEARCH_PASS / DATA_QUALITY_PASS / RELEASE_PASS；
+- V3.3 未开环。
 ```
 ## 4. 执行记录
 
 ### 开环（turn 0）
 
 ```text
-V3.0 全线已归档（V3.0 工程 PASS → UX-08 产品 PASS → RESULT_UX_V1_PASS）。
-V3.1 执行计划已落盘（产品发展执行计划_V3.1_事件运营台账_2026-07-26.md）。
-产品基线：73f5ce4。
-拟定 acceptance：EVENT_RESEARCH_REGISTRY_V1_PASS（不代表研究有效性或数据质量通过）。
+V3.1 全线已归档（EVENT_RESEARCH_REGISTRY_V1_PASS）。
+V3.2 执行计划已批准（产品发展执行计划_V3.2_真实事件摄入与日常推进_2026-07-27.md）。
+产品基线：8b4f576。
+拟定 acceptance：EVENT_DAILY_LOOP_V1_PASS（不代表研究有效性或数据质量通过）。
 等待执行 Batch A。
 ```
 
-### Batch A 完成（turn 1）
+### Batch A（候选合流 — 完成）
 
 ```text
-产物：lib/event_registry_view.js（约 420 行）
-测试：lib/test_event_registry_view.js（51 项测试全部通过）
-验证：真实 registry 23 条记录端到端走查通过
-集成：加入 check suite（run_suite.js），7/7 PASS，无回归
-
-分类结果：
-- TEST 4（test_* 记录）
-- VALIDATION 4（smoke_fixture 历史样本）
-- PRODUCT 10（产品事件）
-- TIME_REVIEW 2（cpi/ppi 无 scheduled_at）
-- IDENTITY_REVIEW 1（inbox_reg_b4aff1d6dee1bd74 ↔ earnings_googl_2025_q2 重复）
-
-生命周期关键判定：
-- earnings_nvda_2026_q2 → TRACKING_PRE（未来 11 天）
-- earnings_aapl_2026_q2 → TRACKING_PRE（未来 4 天）
-- earnings_googl/msft/tsla_2026_q2 → OCCURRED_PENDING_RESULT（已发生 4 天）
-- cpi/ppi → TIME_REVIEW → NEEDS_REVIEW
-
-优先级 top 3：inbox 较旧事件（572天）→ 真实已发生待复盘 → NEEDS_REVIEW
+- 服务端新增 GET /api/research/candidates：统一返回日历+Inbox候选
+- 视图契约新增 findUnifiedCandidates()：合并、去重、过滤测试、排序
+- 台账页面顶部新增统一候选区（来源标签、时间状态、确认纳入按钮）
+- 11 个新增单元测试，69/69 PASS，34/34 走查 PASS
 ```
 
-### Human 集中产品验收 R1（turn 1）
+### Batch B（台账内确认与原地反馈 — 完成）
 
 ```text
-结论：CHANGES_REQUIRED。
-
-已确认：页面和六类生命周期走查完成；51/51 view tests、35/35 walkthrough 通过。
-阻断：正式优先队列 Top 1 为旧测试残留 A|B，不是真实金融事件。
-退回 Cursor 做一次最小数据可见性修复；不扩大范围。
+- “确认纳入”按钮接通日历和 Inbox 权威纳入入口
+- 纳入成功后卡片原地变为生命周期卡片（含生命周期标签 + “打开研究记录”链接）
+- 重复确认保持幂等：显示“已在研究列表中”+ 查看现有记录链接
+- 失败卡片显示原因 + 重试按钮
+- 生命周期组和优先级在后台静默刷新，不重新加载候选区
+- 时间未知事件纳入后自动进入 NEEDS_REVIEW 生命周期
 ```
+
+### Batch C（最小收尾 — P1 四项阻断修复）
+
+```text
+- POST /api/research/adopt-from-calendar: 服务端权威纳入端点，candidate_id → calendarEvents 解析
+- POST /api/research/adopt-from-inbox: 扩展支持客户端 InboxStore 内联回退
+- 统一候选区错误状态：候选加载失败显示错误+重试按钮，不再静默隐藏
+- 日历纳入改为服务端权威端点（客户端只提交 candidate_id，不从 DOM 拼装）
+- loadData() 从客户端 InboxStore 读取真实 Inbox 项，与日历候选合并展示
+- V3.2 集中走查 scripts/smoke_v32_walkthrough.js: 12 场景 41 PASS
+- V3.1 回归 36/36，单元测试 69/69
+```
+
+### 等待 Human 产品验收
+
+```text
+P1 四项阻断已全部修复：
+1. ✅ Inbox 候选接通：仪表板从 InboxStore 读取真实项
+2. ✅ 日历权威纳入：服务端端点解析，客户端只提交 candidate_id
+3. ✅ 候选加载失败错误状态：错误+重试按钮可见
+4. ✅ V3.2 集中走查：41/41 PASS，覆盖完整主路径
+等待 Human 验收 → EVENT_DAILY_LOOP_V1_PASS / REVISE
+```
+
 ## 5. 审核预留
 
-本环无 Codex 预审核。Batch A–C 内部执行后直接进入 Human 集中产品验收。
-最大审核回合：3（若 REVISE）。
+本环 Batch A-C 内部连续执行后直接进入 Human 集中产品验收。
+最大审核回合：2（若 REVISE）。
 
 ## 6. 回合历史
 
 | turn | actor | 动作 | 结果 |
 |---|---|---|---|
-| — | human | 批准 V3.1 计划 | 开 PRD-EVENT-REGISTRY-09 |
-| 0 | cursor | Batch A: lib/event_registry_view.js 创建，51/51 测试通过 | batch_a ✅ → Batch B 就绪 |
-| 1 | cursor | Batch B: event_research_registry.html 台账页面创建，导航入口加入各页面，searchParams bug 修复，check suite 7/7 通过 | batch_b ✅ → Batch C 就绪 |
-| 2 | cursor | Batch C: 真实事件集中走查 35/35 PASS，生命周期全覆盖（CANDIDATE/TRACKING_PRE/ONGOING/OCCURRED_PENDING_RESULT/REVIEWED/NEEDS_REVIEW），FOMC 通过日历正常入口纳入作为持续事件 | batch_c ✅ → 集中产品验收就绪 |
-| 3 | cursor | R2 三处修复：写入源隔离（POST 入口合成检测）+ 命名前缀冲突检测 + Top 3 断言加强。53/53 + 35/35 + 7/7 全部 PASS | CHANGES_REQUIRED 修复 → 待 Human 复核 |
-| 4 | human/codex | 最终事实修正：仅显式标记 nfp_2026_04；保留正常的 2 月非农发布滞后；58/58 + 34/34 + 7/7 | `EVENT_RESEARCH_REGISTRY_V1_PASS` → done/human |
+| — | human | 批准 V3.2 计划，V3.1 归档 | 开 PRD-EVENT-DAILY-10 |
+| 0 | cursor | Batch A 候选合流 | 统一候选区 + 11 测试，69 PASS |
+| 1 | cursor | Batch B 原地反馈 | 原地生命周期过渡 + 幂等 + 失败可见 |
+| 2 | cursor | Batch C P1 阻断修复 | 真实 Inbox + 权威纳入 + 错误状态 + V3.2 走查 41 PASS |
+| 3 | human | 集中产品走查完成 | `EVENT_DAILY_LOOP_V1_PASS` → done/human |
 
 ## 7. Human 备注
 
-- V3.0 全线归档（RESULT_UX_V1_PASS）
-- V3.1 执行计划已冻结，不重新讨论范围
-- FORWARD / RESEARCH_PASS / DATA_QUALITY_PASS / RELEASE_PASS 禁止在本环声称
-- 真实持续事件必须在 Batch C 前通过正常入口纳入 registry
+- V3.1 全线归档（EVENT_RESEARCH_REGISTRY_V1_PASS）
+- V3.2 执行计划已冻结，不重新讨论范围
+- RESEARCH_PASS / DATA_QUALITY_PASS / RELEASE_PASS 禁止在本环声称
+- Batch A-C 连续执行，不分批审核
+- V3.3 仍未授权，须由 Human 另行开环
