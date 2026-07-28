@@ -1,19 +1,19 @@
 ---
 type: Cursor_Codex闭环交接板
 schema_version: 2
-tags: [AI协作, Cursor, Codex, Obsidian, 产品路线图, V3.5, PRD-LOCAL-CONTINUITY-13]
+tags: [AI协作, Cursor, Codex, Obsidian, 真实运营, REAL-USE-01]
 created: 2026-07-28
 updated: '2026-07-28'
 project: financial-alert-system
-loop_id: PRD-LOCAL-CONTINUITY-13
-acceptance: LOCAL_PRODUCT_CONTINUITY_V1_PASS
-revision: 14
-turn: 4
+loop_id: REAL-USE-01
+acceptance: REAL_EVENT_OPERATION_PILOT_V1
+revision: 16
+turn: 1
 next_actor: 'human'
-status: 'done'
+status: 'idle'
 max_turns: 3
-last_writer: 'human'
-written_at: '2026-07-28T19:11:42.8053842+08:00'
+last_writer: 'cursor'
+written_at: '2026-07-28T19:44:00+08:00'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,106 +24,71 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板
 
-> [!important] 当前状态：**PRD-LOCAL-CONTINUITY-13 · V3.5 已完成并归档**
+> [!important] **执行Cursor_Codex闭环交接板当前指令** · REAL-USE-01 Day 0
 >
-> 产品验收：`LOCAL_PRODUCT_CONTINUITY_V1_PASS @ e50c46c`
-> 状态：`done / human`
-> 归档：`docs/ai-collab/闭环归档/V3.5_LOCAL_PRODUCT_CONTINUITY_完结归档_2026-07-28.md`
+> 当前状态：`idle / human`
+> 本环不是新功能开发，而是 14 天真实事件运营试运行的启动与 Day 0 数据准备。
 
-## 0. 产品边界
+## 0. 硬边界
 
-- 本环完成唯一启动入口、V3 产品资产导出和隔离恢复；
-- 默认资产范围限于 V3 事件研究产品资产；
-- 恢复只写入新的空目录，不覆盖原数据；
-- 不上云、不重写数据库；
-- 未声明 `RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+- 试运行期：2026-07-29 至 2026-08-11；
+- 仅使用现有产品能力，不扩建新模块；
+- 每个事件不做 Codex 审核；
+- 只有真实 P1、数据损坏、安全或事实错误才开最小修复；
+- 历史样本只作 `RETROSPECTIVE`，不得包装成事前判断；
+- 不宣称 `RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
 
-## 1. 任务目标
+## 1. 当前任务
 
 | 字段 | 内容 |
 |---|---|
-| 所属轨道 | `PROD` |
-| 一句话目标 | 一个入口启动今日简报，并能导出、隔离恢复 V3 产品资产 |
-| 成功标准 | `LOCAL_PRODUCT_CONTINUITY_V1_PASS` |
-| 产品起始基线 | `2661ddd` |
-| 最终产品 tip | `e50c46c` |
-| 执行计划 | `产品发展执行计划_V3.5_本地产品交付与研究资产保全_2026-07-27.md` |
+| 所属轨道 | `PROD_USE` |
+| stage | REAL-USE-01 Day 0 事件纳入与事前冻结 |
+| status / next_actor | `pending_exec` / `cursor` |
+| HEAD | `73ebe59` |
+| 产品基线 | `e50c46c` |
+| 执行计划 | `docs/ai-collab/真实事件运营试运行计划_REAL-USE-01_2026-07-28.md` |
+| 事件篮子与日志 | `docs/ai-collab/真实事件运营试运行_REAL-USE-01_事件篮子与执行日志_2026-07-29.md` |
 
-## 2. 仪表盘
+## 2. Day 0 只执行以下内容
 
-| 项 | 值 |
-|---|---|
-| loop_id | `PRD-LOCAL-CONTINUITY-13` |
-| stage | V3.5 已完成并归档 |
-| status / next_actor | `done` / `human` |
-| HEAD | `e50c46c` |
-| Batch A | 完成：唯一启停入口、今日简报、产品状态页 |
-| Batch B | 完成：自包含资产包、manifest、SHA-256、敏感内容拒绝 |
-| Batch C | 完成：空目录事务恢复、隔离实例、真实事件走查 |
-| acceptance | `LOCAL_PRODUCT_CONTINUITY_V1_PASS` |
+1. 启动现有本地产品并确认今日简报可打开；
+2. 通过现有受支持入口纳入缺失事件：
+   - `us_gdp_2026_q2_advance`
+   - `us_employment_2026_07`
+   - `us_qoz_proposed_rules_2026`
+3. 为六项核心事件绑定交接日志中列出的权威来源；
+4. 核对事件身份，不得错误合并；
+5. 在发布前为以下三项冻结 checkpoint，并保留不可变证据：
+   - `fed_fomc_2026_07`
+   - `us_gdp_2026_q2_advance`
+   - `us_employment_2026_07`
+6. QOZ 事件必须使用 `SOURCE_TIME_UNCERTAIN`，不得填造精确发布时间；
+7. 记录 Day 1 数据根和资产数量。
 
-## 3. 最终交付
+## 3. 明确不做
 
-- `start_local_product.bat` / `stop_local_product.bat`，默认端口 `8013`；
-- `local_product_status.html` 与 `/api/v3/product/status`；
-- `/api/v3/product/export` 自包含导出包；
-- `/api/v3/product/restore` 空目录事务恢复；
-- `/api/v3/product/start-restored` / `stop-restored` 隔离实例管理；
-- `FAS_PRODUCT_DATA_ROOT` 接入注册表、收尾卡、准备清单、简报状态和分析存档；
-- `.gitattributes` 固定 Windows `.bat` 为 CRLF。
+- 不新增接口、页面或数据库；
+- 不补跑全量技术验收；
+- 不把微软、谷歌财报计入本轮核心证据；
+- 不对历史事件补写事前预测；
+- 不为完成 checkpoint 而绕过现有产品入口；
+- 不提前声明 `REAL_EVENT_OPERATION_PILOT_V1`。
 
-## 4. Codex 最终复审
+## 4. Day 0 完成条件
 
-Codex 工程复审通过：
+- 三项缺失事件已由受支持入口纳入并能重新打开；
+- 六项事件身份与来源无错配；
+- 三项未来日历事件在正式发布前冻结 checkpoint；
+- QOZ 时间状态诚实为不确定；
+- 日志只记录进展，不复制产品事实；
+- 无数据损坏或 P1 产品阻断。
 
-- 导出包不依赖实时数据目录；
-- manifest 数量、大小、重复路径和 SHA-256 fail-closed；
-- staging 完整成功后才提交恢复目标；
-- owner-only 停止，不按端口误杀外部程序；
-- 异常清理先停止实例，停止失败时保留 owner 与数据目录并令测试失败；
-- V3.5 完整走查 `61/61 PASS`。
+Day 0 完成后把本板切为 `idle / human`，Human 从 2026-07-29 开始按每日简报真实使用。中途不设集中技术 PASS。
 
-结论：工程侧允许进入 Human 产品验收。
+## 5. 退出与升级
 
-## 5. Human 产品验收
-
-- [x] 唯一入口启动 → 今日简报
-- [x] 查看数据与备份状态
-- [x] 导出资产包
-- [x] 预览并恢复到空目录
-- [x] 独立端口打开恢复实例
-- [x] 打开同一事件、研究记录、收尾卡和准备清单
-- [x] 停止恢复实例
-- [x] 确认原产品未受影响
-
-正式入口复验：
-
-- `start_local_product.bat`：exit 0，`8013` 正常监听；
-- 今日简报与备份状态页：HTTP 200；
-- `stop_local_product.bat`：exit 0，`8013` 与 owner 均清理。
-
-Human 结论：`8/8 PASS`。
-
-## 6. 最终证据
-
-- 完整走查：`61/61 PASS`
-- 导出与恢复文件：`12/12 SHA-256` 一致
-- 真实事件：`fed_fomc_2026_06`
-- 注册表、V3 收尾卡、准备清单：隔离实例中均可打开
-- 原始产品资产前后：`12/12 SHA-256` 一致
-- 外部监听端口：未被误停
-- 验收后残留：无 `8013`、`18014–18020` 监听，无测试 owner 与恢复目录
-- GitHub `origin/master`：`e50c46c`
-
-## 7. 最终结论与下一步
-
-`LOCAL_PRODUCT_CONTINUITY_V1_PASS @ e50c46c`
-
-V3 产品发展阶段在此结束，不自动开启 V4.0。Human 后续另行选择：
-
-1. 日常使用和维护；
-2. 回到真实 forward / 研究有效性轨道；
-3. 规划 V4 多人协作或云部署；
-4. 暂停扩展并积累真实使用反馈。
-
-本环现为 `done / human`，无下一执行人。
+- 若 Day 0 只出现文案、布局、排序、更多测试等问题：登记观察并继续；
+- 若事件无法保存/重开、身份错配、checkpoint 可被无痕改写或数据损坏：停止并交 Human；
+- Day 7 只做轻量产品复盘；
+- Day 14 才集中判定 `REAL_EVENT_OPERATION_PILOT_V1`。
