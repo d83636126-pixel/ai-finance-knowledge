@@ -3,17 +3,17 @@ type: Cursor_Codex闭环交接板
 schema_version: 2
 tags: [AI协作, Cursor, Codex, Obsidian, 真实运营, REAL-USE-01]
 created: 2026-07-28
-updated: '2026-07-28'
+updated: '2026-07-29'
 project: financial-alert-system
 loop_id: REAL-USE-01
 acceptance: REAL_EVENT_OPERATION_PILOT_V1
-revision: 16
+revision: 17
 turn: 1
 next_actor: 'human'
 status: 'idle'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-07-28T19:44:00+08:00'
+last_writer: 'codex'
+written_at: '2026-07-29T05:42:17.407Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,10 +24,10 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板
 
-> [!important] **执行Cursor_Codex闭环交接板当前指令** · REAL-USE-01 Day 0
+> [!important] **执行Cursor_Codex闭环交接板当前指令** · REAL-USE-01 Day 1（修复后恢复）
 >
 > 当前状态：`idle / human`
-> 本环不是新功能开发，而是 14 天真实事件运营试运行的启动与 Day 0 数据准备。
+> 本环已完成最小 P1 修复并恢复 14 天真实事件运营；当前由 Human 按每日简报继续真实使用。
 
 ## 0. 硬边界
 
@@ -43,10 +43,10 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | 字段 | 内容 |
 |---|---|
 | 所属轨道 | `PROD_USE` |
-| stage | REAL-USE-01 Day 0 事件纳入与事前冻结 |
-| status / next_actor | `pending_exec` / `cursor` |
-| HEAD | `73ebe59` |
-| 产品基线 | `e50c46c` |
+| stage | REAL-USE-01 Day 1 真实运营（修复后恢复） |
+| status / next_actor | `idle` / `human` |
+| HEAD | `699e48a` |
+| 产品基线 | `699e48a` |
 | 执行计划 | `docs/ai-collab/真实事件运营试运行计划_REAL-USE-01_2026-07-28.md` |
 | 事件篮子与日志 | `docs/ai-collab/真实事件运营试运行_REAL-USE-01_事件篮子与执行日志_2026-07-29.md` |
 
@@ -85,6 +85,16 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - 无数据损坏或 P1 产品阻断。
 
 Day 0 完成后把本板切为 `idle / human`，Human 从 2026-07-29 开始按每日简报真实使用。中途不设集中技术 PASS。
+
+## 4A. 2026-07-29 最小修复与恢复
+
+- 修复提交：`699e48a`；
+- 专项反例：`REAL_USE_REPAIR_SMOKE_PASS`（26/26）；
+- 事件台账单元检查：69/69；
+- 真实数据事实修复：微软、Meta、Amazon、Apple、NVIDIA、CPI、ECB 共 7 项；
+- 检查点完整性：3/3 `VERIFIED`，同时验证文件哈希与 registry 绑定；
+- 本地产品：`127.0.0.1:8013` 已恢复，注册表 18 条，今日简报六分类接口可用；
+- 当前仅恢复试运行，不声明 `REAL_EVENT_OPERATION_PILOT_V1`、`RESEARCH_PASS` 或 `RELEASE_PASS`。
 
 ## 5. 退出与升级
 
