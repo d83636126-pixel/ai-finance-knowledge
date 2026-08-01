@@ -8,12 +8,12 @@ project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A2
 acceptance: POLICY_SOURCE_ACQUISITION_A2
 revision: 4
-turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+turn: 1
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-01T11:06:29.930Z'
+last_writer: 'cursor'
+written_at: '2026-08-01T11:36:43.777Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -40,12 +40,12 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 A2 FOMC 正式来源适配与后台刷新` |
 | A2 计划 | `docs/ai-collab/产品发展执行计划_V4.2_A2_正式来源适配与后台刷新_2026-08-01.md` |
-| HEAD | `8a17bfd` |
+| HEAD | `74870c7` |
 | 开环基线 | `e56f54a` |
 | A1 业务 tip | `b1abce5` |
 | change class | `C2` |
 | review | `R2` |
-| status / next_actor | `pending_exec / cursor` |
+| status / next_actor | `pending_review / codex` |
 | 8013 接线 | Human 已授权 |
 | 外部网络 | Human 已授权，仅 Federal Reserve 官方 HTTPS 只读 |
 | 正式 data 写入 | Human 已授权，仅新增版本化 FOMC 路径 |
@@ -194,13 +194,51 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | `A2_RUNTIME_API` | 25 | PASS（25/0） |
 | `A2_SCHEDULER` | 24 | PASS（24/0） |
 | `A2_DATA_PROTECTION` | 10 | PASS（10/0） |
+| `A2_P1_R4`（Codex R2 四组 P1 反例 + 加固） | 33 | PASS（33/0） |
 
-合计 **108 PASS / 0 FAIL**（`npm run smoke:v42-fomc-a2`，连续多次一致）。回滚实测：四开关逐层关闭 → `scheduler_disabled`/`source_disabled`/`write_disabled`/`api_disabled`(403)，正式 `data/` 零污染，代码回滚点 `b1abce5`、治理基线 `e56f54a`。
+合计 **141 PASS / 0 FAIL**（`npm run smoke:v42-fomc-a2`，rev4 P1 关闭后连续多次一致）。回滚实测：四开关逐层关闭 → `scheduler_disabled`/`source_disabled`/`write_disabled`/`api_disabled`(403)，正式 `data/` 零污染，代码回滚点 `b1abce5`、治理基线 `e56f54a`。
 
 ### 未覆盖项与残余风险
 
 - 未覆盖：`text_changes` 逐段差异（batch B）、自动事实提取（batch B）、政策倾向/鹰鸽解释与市场因果（batch C）；
 - 残余风险：计划任务为系统级操作需目标机交互用户执行（验收机已抽验）；正式刷新首次真正写正式 `data/` 在开关开启后于运行环境触发；真实网络行为依赖 Federal Reserve 站点结构稳定，解析器对结构变化 fail-closed。
+
+### R3 · rev4 关闭 Codex R2 四组 P1（反例已补齐，交 Codex 聚焦复审）
+
+rev2 交付经 R2 `CHANGES_REQUIRED` 后，本环仅关闭四组 P1、补齐对应反例，未扩展 Batch B/C/D。四项修复 + 反例断言全部通过。
+
+#### P1-1 能力边界 + 独立复算绑定（`lib/fomc_capability.js` + `lib/fomc_document_bundle.js` + `lib/fomc_document_store.js`）
+
+- 模块私有运行时随机 `CAPABILITY_SECRET` + 冻结不透明 `VERIFIED_CAPABILITY` 对象：adapter capability 不可由字符串/普通对象构造；`buildFomcDocumentBundle` 改为 identity 校验真实 capability；
+- 11 个 canonical 字段（event_id/meeting_date/source_version/final_url/final_domain/http_status/body_sha256/request_id/published_at/captured_at/document_hash）经 `canonicalProvenanceFields` 稳定串行化 + HMAC proof（`issueVerifiedProof`）；
+- 写入前 `store.validateWriteInput` 独立复算并绑定上述字段 + bundle hash，任一项被伪造 → `write_rejected_*` 且**零写入**；
+- 反例：无 capability 不 official、伪造 `VERIFIED_CAPABILITY`/`VERIFIED_ADAPTER_ID`/`VERIFIED_REGISTRY_KIND` 均不 official、手写 bundle/伪 text hash/缺 proof/改 proof/evil URL/伪 body hash/时间反转/超远未来 evaluated 全部拒绝。
+
+#### P1-2 API/CLI/scheduled 共享跨进程互斥（`lib/fomc_lock.js` + `lib/fomc_a2_api.js` + `scripts/fomc_a2_refresh.js`）
+
+- `refreshFomcEvent` 内部统一取得 `<root>/.locks/fomc_refresh_<event>.lock`（O_EXCL + owner-token + TTL 10min + 过期 stale reclaim），API / 手动 CLI / scheduled 三入口共享同一把锁；
+- 锁已持有时不取数不写入：API `409 task_running`、CLI 同 error、调度记 skipped（`task_running_lock_held`）；
+- 反例：三入口持锁时 source 调用计数均为 0（no_fetch）；释放后重获成功。
+
+#### P1-3 请求体错误 fail-closed + evaluated_at 服务端产生（`lib/fomc_a2_api.js`）
+
+- `/refresh` 取数/写入前校验：超限 → `413 payload_too_large`、读取错误 → `400 body_read_error`、非法 JSON → `400 invalid_json`、请求体携带 `evaluated_at` → `400 evaluated_at_not_allowed`；
+- 正式 bundle 的 `evaluated_at` 由服务端构建时产生；store 另以超远未来（>5min skew）拒绝兜底；
+- 反例：三类错误均 4xx 且 source 调用计数 0；合法 `{"force":true}` → 200。
+
+#### P1-4 单一 job_id 生命周期（`lib/fomc_a2_api.js` + `lib/fomc_document_store.js`）
+
+- 刷新开始前生成唯一 `job_id`，成功/失败终态更新同一作业记录，无遗留 running；
+- 反例：API 返回可核验 `job_id`（`job_…`）、每次运行恰好 1 条 success job、无残留 running 记录。
+
+#### 测试与证据
+
+- 共享离线 testkit：新增 `scripts/fomc_a2_testkit.js`（makeDoc/makeGenuinePair/makeGenuineBundle/makeStubSource，产出 genuine verified 证据，确定性）；
+- 回归：A1 **106/106**、A2 **141/141**（含新 `A2_P1_R4` 33 断言，覆盖四组 P1 + 加固反例）、A4 **25/25**，全部 PASS；
+- 加固（评审驱动）：锁 stale reclaim 原子 rename（杜绝双持锁 TOCTOU）；refreshFomcEvent 未捕获异常终态化同一 job 为 failed 并清理 inflight；合法 JSON 字面量 `null` 不崩溃；`safeId` 路径穿越兜底；
+- 正式 `data/` **零变化**：178 文件树 hash `f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`（复现计算一致）；
+- 调度只读核对：`FAS-FOMC-A2-Refresh` 仍 `ABSENT`（本环未安装系统任务）；
+- 未新增正式运行数据、未改动 fixture/既有文件、未扩展 Batch B/C/D。
 
 ## 5. Codex 集中 R2 指令
 
@@ -240,7 +278,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 4. 每次成功/失败刷新只有一个可追踪 job_id；终态后无遗留 running。
 5. 复跑 A1 106 项、A2 108 项及新增反例；正式 `data/` 原始字节清单不变。
 
-本轮未运行会安装系统任务的 A4；只读核对结果为 `ABSENT FAS-FOMC-A2-Refresh`。在四组 P1 关闭前，不得声明 `POLICY_SOURCE_ACQUISITION_A2`，不得进入 Batch B。
+rev4：四组 P1 已由 Cursor 关闭并补齐反例（见 §4 R3）；A4 本轮已运行 25/25；`FAS-FOMC-A2-Refresh` 只读核对仍 `ABSENT`。在 Codex 聚焦复核通过前，不得声明 `POLICY_SOURCE_ACQUISITION_A2`，不得进入 Batch B。
 
 仅在本板为 `pending_review / codex` 后执行。Codex 必须独立复核：
 
@@ -250,6 +288,14 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 4. 8013 正常态、空态、错事件和刷新失败态均可观察；
 5. 调度 owner、互斥、窗口、重试、停用和移除可验证；
 6. 六个子机制证据独立，正式 diff 未越出授权范围。
+
+#### rev4 聚焦复审目标（四组 P1 关闭验证）
+
+1. **P1-1**：无 `verified_provenance` + 公共常量字符串（`VERIFIED_CAPABILITY`/`VERIFIED_ADAPTER_ID`/`VERIFIED_REGISTRY_KIND`）不得得到 official READY；evil URL/伪 hash/时间反转/手写 bundle 均 `write_rejected_*` 且零写入；genuine 路径仍可写。
+2. **P1-2**：持有文件锁后经 API、CLI、scheduled 三入口均不取数不写入，返回结构化 `task_running` / `task_running_lock_held`；释放后重获成功。
+3. **P1-3**：超限（413）/读取错误/非法 JSON/`evaluated_at` 注入均在副作用前返回 4xx；source 调用计数 0。
+4. **P1-4**：每次刷新一个唯一 `job_id`，终态更新同一作业，无遗留 running，API 返回可核验 `job_id`。
+5. 复跑 A1 106 / A2 141（含 `A2_P1_R4` 33 反例 + 加固）/ A4 25；正式 `data/` 178 文件树 hash `f055a2db…fe104` 不变；`FAS-FOMC-A2-Refresh` 保持 `ABSENT`。
 
 PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 完成并可进入 V4.2 Batch B；不表示总体验收、研究质量或发布通过。
 
@@ -276,3 +322,11 @@ PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 完成并可进入 V4.2 Batch B；
 - 复核 tip `8a17bfd`；既有 A1 106/106、A2 108/108 通过，但四组未覆盖反例成立；
 - 阻断：official provenance 可伪造、API/调度未共享文件锁、请求体错误 fail-open、单次刷新产生双 job_id 与遗留 running；
 - 板切回 `pending_exec / cursor`；四组 P1 关闭前不得声明 A2 验收或进入 Batch B。
+
+### R3 · Cursor rev4 关闭 Codex R2 四组 P1 → 置 `pending_review / codex`
+
+- 关闭 P1-1（能力边界 + 独立复算绑定）、P1-2（共享跨进程互斥）、P1-3（请求体 fail-closed + evaluated_at 服务端产生）、P1-4（单一 job_id 生命周期）；
+- 新增共享离线 testkit `scripts/fomc_a2_testkit.js`；A2 冒烟扩到 7 机制 141 断言（`A2_P1_R4` = 33 反例 + 加固）；
+- 回归：A1 **106/106**、A2 **141/141**、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`FAS-FOMC-A2-Refresh` 只读核对 `ABSENT`；
+- 释放租约，置 `pending_review / codex`（turn 0→1），交 Codex 聚焦复审；
+- 未声明 `POLICY_SOURCE_ACQUISITION_A2` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
