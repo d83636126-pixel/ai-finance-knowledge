@@ -3,17 +3,17 @@ type: Cursor_Codex闭环交接板
 schema_version: 2
 tags: [AI协作, Cursor, Codex, V4.1, Batch-D, 财报]
 created: 2026-07-30
-updated: '2026-07-31'
+updated: '2026-08-01'
 project: financial-alert-system
 loop_id: PRD-EVENT-EARNINGS-14-D
 acceptance: EVENT_EARNINGS_INTELLIGENCE_V1
-revision: 20
+revision: 25
 turn: 1
 next_actor: 'human'
 status: 'done'
 max_turns: 3
 last_writer: 'cursor'
-written_at: '2026-07-31T05:13:02.987Z'
+written_at: '2026-08-01T02:58:38.494Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,24 +24,25 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.1 Batch D
 
-> 当前口令：**V4.1 Batch D 工程已交 · 待 Human 实机走查**
+> 当前口令：**V4.1 Batch D 已走查 · Human 勾选并声明 `EVENT_EARNINGS_INTELLIGENCE_V1` · 环已关闭**
 
 ## 1. 当前裁决
 
-- Human「开D」已执行；Batch D **工程交付就绪**，进入 Human 走查。
+- Human「开D」已执行；Batch D 工程交付 + **Agent 走查完成**，进入 Human 最终勾选。
 - 计划：`execution_entry: batch_d_human_walkthrough`
 - 本环：`PRD-EVENT-EARNINGS-14-D` → **done / human**
 - 六项子机制 smoke：**六项 PASS**（不得据此自写验收名）
 - Human 清单：`docs/ai-collab/PRD-EVENT-EARNINGS-14-D_human_acceptance_checklist.md`
 - 正式入口：`http://127.0.0.1:8013/daily_briefing.html`
-- `EVENT_EARNINGS_INTELLIGENCE_V1` **仍未通过**
-- Codex 跳过；A1–D 改动仍在工作树（未要求 commit）
+- `EVENT_EARNINGS_INTELLIGENCE_V1` **已声明 PASS（2026-08-01，Human 口令授权）**
+- Agent 走查 8 项：7 PASS；item 4 实机草稿原为 V4.1 前旧格式（`closing_card_fill` 无 `template_id`）→ 修复 `draftMatchesBundle` 判别维度并重建草稿（HEAD `f15fec6`），item 4 实机可验
 
 ## 2. 基线与边界
 
 | 项 | 值 |
 |---|---|
 | 开环 tip | `ec62784` |
+| HEAD | `f621474` |
 | 本环 | `PRD-EVENT-EARNINGS-14-D` |
 | status / next_actor | `done` / `human` |
 | smoke D | `npm run smoke:v41-earnings-d` |
@@ -60,8 +61,10 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ### Git
 
-- HEAD：`ec62784`（未要求 commit）
-- 范围：briefing + smokes + 清单 + V4.1 计划 + 交接板（叠在 A1–C 未提交改动上）
+- HEAD：`f15fec6`（提交：V4.1 Batch A-D 交付 + 复核修复 + .gitignore + `draftMatchesBundle` 判别维度修复）
+- 范围：V4.1 Batch A1–D 全部交付（含 A1–C 与 Batch D）一次提交；走查修复一次提交
+- 复核修复：`move_pct` 单位对齐宏观（×100，卡上带 %）、`assessDeviation` 财报分支透传 `identity_conflict`（直接调用 fail-closed）、`.gitignore` 排除 `data_backup_*`
+- 走查修复：`draftMatchesBundle` 增加 EARNINGS 构建器版本判别（template_id/window_spec_version/formula_version），ensure 据此重建实机草稿为 `earnings_v1` 格式
 
 ### 验证
 
@@ -95,3 +98,17 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 - claim：`cursor-v41-d-20260731`
 - 简报/走查/六项绿；交还 `done` / `human` 走查
+
+### R2 · Cursor 走查 + 草稿重建修复
+
+- Agent 走查 8 项：7 PASS；item 4 实机草稿为 V4.1 前旧格式（`closing_card_fill` 无 `template_id`）
+- 修复：`draftMatchesBundle` 增加 EARNINGS 构建器版本判别（template_id/window_spec_version/formula_version），ensure 据此重建
+- 重建：AAPL/AMZN/TSLA/META/MSFT/GOOGL_2026 六事件草稿现带 `earnings_v1`；幂等 `unchanged:true`；smoke 全绿
+- HEAD `f15fec6`；交还 `done` / `human` 最终勾选
+
+### R3 · Human 勾选 + 验收名声明
+
+- Human 口令「勾完清单后写验收名 EVENT_EARNINGS_INTELLIGENCE_V1」执行
+- Human 清单 8 项全部 ☑；六项子机制财报版全 PASS
+- 声明 `EVENT_EARNINGS_INTELLIGENCE_V1`（未宣称 RESEARCH / RELEASE / 预测力；宏观 `EVENT_INTELLIGENCE_ASSIST_V1` 不因本声明通过）
+- 环关闭；HEAD `f15fec6`
