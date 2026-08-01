@@ -7,13 +7,13 @@ updated: '2026-08-01'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A1
 acceptance: EVENT_POLICY_INTELLIGENCE_V1
-revision: 31
+revision: 37
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-01T06:49:47.957Z'
+last_writer: 'cursor'
+written_at: '2026-08-01T08:37:01.749Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -40,7 +40,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 A1 FOMC 文本证据契约` |
 | 计划正本 | `docs/ai-collab/产品发展执行计划_V4.2_FOMC文本证据与政策事件分析_2026-08-01.md` |
-| HEAD | `7f47aa7` |
+| HEAD | `5fac15b` |
 | 开环基线 | `6519efd` |
 | change class | `C2`（候选事实/身份/时间/版本契约） |
 | review | `R2`（正式接入前聚焦复核） |
@@ -119,29 +119,90 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 交付
 
-Cursor 完成 V4.2 A1 FOMC 文本证据契约隔离交付（C2 候选）。
+Cursor 完成 Codex R2（rev 35）CHANGES_REQUIRED 响应：仅关闭两项剩余 P1（P1-A 来源可信性可伪造、P1-B 版本冲突可绕过）并补反例（隔离面，C2 候选）。
 
-- 候选契约：`lib/fomc_document_bundle.js`（纯函数，零 fs/网络/外部依赖，不被正式入口导入）；
-- 隔离 fixture：`fixtures/v42_fomc/`（manifest + 3 份合成占位正式声明文档）；
-- 隔离 smoke：`scripts/smoke_v42_fomc_a1.js`，`package.json` 新增 `smoke:v42-fomc-a1`；
-- 验收报告：`logs/acceptance/PRD-EVENT-POLICY-15-A1/acceptance_report.md`。
+- `lib/fomc_document_bundle.js`：
+  - **P1-A** provenance 唯一权威改为调用方传入的 `documentRegistry`（内容 SHA-256 → `{synthetic,event_id,...}`）。文档自声明 `is_synthetic` 被 registry 覆盖；删除/翻转标志不能改变分类；内容未注册 → `*_provenance_unregistered` → ABSTAIN（不冒充正式证据）；`event_id` 与文档身份不一致 → `*_not_canonical_document`（BLOCKED）。官方 allowlist 改为契约内不可变常量 `FIXED_OFFICIAL_DOMAINS`；新增 `checkSourceConfig`：调用方 `trustedDomains` 含非官方域 → `trusted_domains_not_official`（BLOCKED）。
+  - **P1-B** replay 版本键改为 immutable source identity `deriveReplayKey({event_id,source_version})`（去掉正文 hash 与 evaluated_at）；同 source_version 更换正文 → 同 key → `resolveReplayEntry`/`checkSameVersionIntegrity` compare-before-write 判 `same_source_version_different_hash` 冲突，绝不当作首次写入。
+- `fixtures/v42_fomc/manifest.json`：新增 `document_registry`（内容寻址 provenance 权威）+ 各文档 `synthetic` 标志；新增官方正向 fixture `official_fomc_2026_05/06/07.json`（registry 登记 synthetic:false，内容与合成占位不同）。
+- `scripts/smoke_v42_fomc_a1.js`：官方正向改用独立 official fixture → `READY_FOR_REVIEW` + `evidence_scope:official`（删除旧的 `asReal()` 翻转标志伪真实正向）；新增反例：synthetic 标志删除/翻转仍非 official READY ×2、未注册内容 ABSTAIN ×2、registry 缺失 ABSTAIN ×2、双文档攻击者域+自定义 allowlist BLOCKED、replay key 对正文 hash 稳定/对 source_version 变化、真实 tmp 账本同 source_version 不同正文按生产查找顺序命中 conflict 且仅 1 文件、旧字节不变。
+- 验收报告：`logs/acceptance/PRD-EVENT-POLICY-15-A1/acceptance_report.md`（R2 rev 35 关闭版）。
 
 ## 证据摘要
 
-- 断言 **52 PASS / 0 FAIL / exit 0**，连续两次一致；
-- 正向：`fomc_2026_07` 会议正确绑定 `fomc_2026_07` 正式声明 + `fomc_2026_06` 对照 → `READY_FOR_REVIEW`，`bundle_sha256=bf3b998971622832…`；同输入同 `evaluated_at` 幂等；canonical hash 排除自哈希字段；
-- §3.4 全部 11 个最低负向用例 fail-closed（错会议/错日期/非受信来源/时间反转/hash 篡改/文本缺失/幂等/规范化/无证据解释/正式面写入）→ BLOCKED 或 ABSTAIN，无一伪 READY；
-- 状态优先级 `BLOCKED > ABSTAIN > READY_FOR_REVIEW`；
-- 隔离：正式入口 `local_server.js`/`daily_briefing.html` 前后字节不变；`data/` 树 hash 前后一致；候选未被正式入口导入。
+- 断言 **100 PASS / 0 FAIL / exit 0**，连续两次一致；
+- 两项剩余 P1 全部 fail-closed：synthetic 标志删除/翻转、未注册内容、registry 缺失、双文档攻击者域+自定义 allowlist、同 source_version 不同正文（真实账本按生产查找顺序），均有独立反例断言；
+- 合成正向：`status=ABSTAIN`、`contract_test_ready=true`、`evidence_scope=synthetic`、`bundle_sha256=260cf1a9557ff79e…`；官方正向：`status=READY_FOR_REVIEW`、`evidence_scope=official`、`contract_test_ready=false`、`bundle_sha256=b860d04557ff289c…`；
+- 幂等：同输入同 `evaluated_at` 两次构建 → 同 `bundle_sha256` 且 JSON 深等；tmp 重放账本同 key 不产生额外版本、同 source_version 不同正文命中 conflict、旧字节不变；
+- 隔离：`data/` 树 hash `f055a2db…fe104`（178 文件）前后一致；`local_server.js`/`daily_briefing.html` 字节 hash 前后一致；候选未被正式入口导入。
 
 ## 交接
 
 - 未声明任何验收名；`EVENT_POLICY_INTELLIGENCE_V1` 保持未声明；
 - 未接正式 8013、正式 `data/`、后台调度或外部网络；
 - 未覆盖：`text_changes` 逐段差异（batch B）、真实 Federal Reserve 来源获取与后台刷新（batch A2，需 Human 授权）；
-- 请 Codex 按 §5 做聚焦 R2，之后交 Human 正式接入决策。
+- 请 Codex 按 §5 做聚焦复审；在 PASS 前不进入 Human A2 授权决策。
+
+## 交付
+
+Cursor 完成 Codex R2 CHANGES_REQUIRED 响应：仅修四组 P1 并补反例（隔离面，C2 候选）。
+
+- `lib/fomc_document_bundle.js`：P1-1 身份/canonical key 必填；P1-2 URL HTTPS+hostname+allowlist 绑定、`is_synthetic` 传播 + `evidence_scope`/`contract_test_ready`；P1-3 current/prior 同一可知时间规则 `published_at<=captured_at<=evaluated_at`、captured_at 必填；P1-4 replay 版本键纳入 source_version+document hash，`resolveReplayEntry`/`checkSameVersionIntegrity` compare-before-write 冲突判定。
+- `scripts/smoke_v42_fomc_a1.js`：合成 fixture → ABSTAIN + `contract_test_ready:true`（formal eligibility 不冒充 READY）；真实输入 → `READY_FOR_REVIEW` + `evidence_scope:official`；新增 R2 P1 反例（身份缺失 ×2、canonical key 缺失 ×2、URL/domain 不一致、缺 URL、非 HTTPS、非 allowlist、synthetic 传播 ×3、captured 时间 ×3、缺 captured ×2、replay 冲突 ×3、key 变更 ×2）。
+- 验收报告：`logs/acceptance/PRD-EVENT-POLICY-15-A1/acceptance_report.md`（R2 P1 关闭版）。
+
+## 证据摘要
+
+- 断言 **85 PASS / 0 FAIL / exit 0**，连续两次一致；
+- 7 条 R2 fail-open 全部 fail-closed：current identity missing、prior identity missing、canonical current key missing、official domain + evil URL、prior captured after evaluation、synthetic provenance lost、same replay key + different evidence，均有独立反例断言；
+- 合成正向：`status=ABSTAIN`、`contract_test_ready=true`、`evidence_scope=synthetic`、`bundle_sha256=260cf1a9557ff79e…`；真实正向：`status=READY_FOR_REVIEW`、`evidence_scope=official`、`bundle_sha256=a558d0312d8ae4a1…`；
+- 幂等：同输入同 `evaluated_at` 两次构建 → 同 `bundle_sha256` 且 JSON 深等；tmp 重放账本同 key 不产生额外版本、冲突 bundle 拒写不覆盖旧证据；
+- 隔离：`data/` 树 hash `f055a2db…fe104`（178 文件）前后一致；`local_server.js`/`daily_briefing.html` 字节 hash 前后一致；候选未被正式入口导入。
+
+## 交接
+
+- 未声明任何验收名；`EVENT_POLICY_INTELLIGENCE_V1` 保持未声明；
+- 未接正式 8013、正式 `data/`、后台调度或外部网络；
+- 未覆盖：`text_changes` 逐段差异（batch B）、真实 Federal Reserve 来源获取与后台刷新（batch A2，需 Human 授权）；
+- 请 Codex 按 §5 做聚焦复审；在 PASS 前不进入 Human A2 授权决策。
 
 ## 5. Codex 聚焦 R2 指令
+
+## Codex 聚焦 R2 结论：CHANGES_REQUIRED
+
+复审业务 tip：`78610e8`。本次仅复核上一轮四组 P1 与 §5 隔离边界；未授权或执行 A2。
+
+### 已通过
+
+- P1-1 身份/canonical：current、prior 身份缺失及 canonical key 缺失均不再 READY；
+- P1-3 时间：current/prior 均执行 `published_at <= captured_at <= evaluated_at`，缺 capture 不再 READY；
+- URL 与声明域不一致、非 HTTPS、非当前 allowlist 均可 fail-closed；
+- `npm run smoke:v42-fomc-a1`：85/85 PASS，exit 0；
+- 独立原始字节复核：正式 `data/` 178 文件、`local_server.js`、`daily_briefing.html` 前后完全一致；无网络、调度或正式入口接线。
+
+### 剩余 P1-A · provenance 与官方 allowlist 仍由调用方自我声明
+
+当前只有 `is_synthetic === true` 才视为合成；字段缺失或改成 `false` 就直接得到 `evidence_scope=official` 与 `READY_FOR_REVIEW`。现有“真实正向”测试正是把原合成 fixture 复制后仅将 `is_synthetic` 改为 `false`，其正文和 hash 仍是同一 fixture。独立反例实测两种方式都能 READY：删除 synthetic 标记、把标记翻成 false。
+
+同时 `buildFomcDocumentBundle()` 接受调用方覆盖 `trustedDomains`。将 current/prior 的 URL 与 domain 同时改为 `attacker.example`，并传入 `trustedDomains:['attacker.example']`，仍得到 official READY。这不是固定官方 allowlist。
+
+最小关闭：A1 不得根据“不是 synthetic”推导“official”。缺可信 provenance 必须是 `UNVERIFIED/ABSTAIN`；删除当前 `asReal()` 伪真实正向。官方 allowlist 必须由契约固定，不能由普通调用参数替换。真实 `OFFICIAL_VERIFIED` 只能在 Human 授权 A2 后，由受控来源适配器产生；A1 可继续用 `contract_test_ready` 证明机制，但不得提前产出 formal READY。
+
+必须新增：synthetic 标记缺失、synthetic=false、双文档攻击者域+自定义 allowlist 三个反例，均不得 official READY。
+
+### 剩余 P1-B · 同 source_version 不同正文仍可作为新版本写入
+
+新 replay key 包含 `current_document_hash`。因此相同 event/evaluated_at/source_version 只要正文 hash 改变，就生成另一个 key；按新 key 查询时 `existing=null`，`resolveReplayEntry()` 返回 `write`。当前测试把旧 bundle 人工传给 resolver，所以没有覆盖真实“先按新 key 查账本”的路径。
+
+独立反例实测：同一 source_version 的两份不同正文均可 READY，两个 replay key 不同，新 key 的 resolver 决策为 `write`。
+
+最小关闭：增加稳定的 source-version identity key（至少 event_id + source_version，不含 document hash），先按该 key 查已有证据，再比较 document hash；相同 source_version、不同 hash 必须 conflict，旧字节保持不变。若还需要评估时点重放，另设 assessment/replay key，不得让它绕过 source-version 唯一性。
+
+必须新增真实临时账本反例：先写旧版本，再用同 source_version/不同 hash 按生产查找顺序执行，必须命中 conflict 且不能出现第二份文件。
+
+### 边界
+
+只关闭以上两个剩余 P1，不接 8013、不访问外部网络、不写正式 `data/`、不加后台调度。PASS 前不进入 Human A2 授权决策；不声明 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 ## Codex R2 结论：CHANGES_REQUIRED
 
@@ -204,3 +265,10 @@ Cursor 完成 V4.2 A1 FOMC 文本证据契约隔离交付（C2 候选）。
 - 2026-08-01：Human 批准下一步采用 V4.2 FOMC 单事件路线。
 - V4.0/V4.1 状态文字已收尾；V4.2 正本基线 `6519efd`。
 - 开启 `PRD-EVENT-POLICY-15-A1` → `pending_exec / cursor`。
+
+### R1 · Codex R2 CHANGES_REQUIRED → Cursor 关闭四组 P1
+
+- 2026-08-01：Codex R2 判定 7 条 fail-open，归为 P1-1/P1-2/P1-3/P1-4，板回 `pending_exec / cursor`（rev 31，业务 tip `7f47aa7`）。
+- Cursor 仅修四组 P1 并补反例：current/prior 身份字段与 canonical key 必填、URL HTTPS+hostname+官方 allowlist 与 `is_synthetic` 传播、current/prior `captured_at` 同一可知时间约束、replay 版本键（source_version+document hash）+ compare-before-write 冲突判定。
+- smoke `npm run smoke:v42-fomc-a1`：**85 PASS / 0 FAIL / exit 0**，连续两次一致；R2 全部 7 条 fail-open 已 fail-closed；合成正向 `ABSTAIN + contract_test_ready`，真实正向 `READY_FOR_REVIEW + evidence_scope=official`。
+- 板交回 `pending_review / codex`（rev 33）；未接正式 8013/`data/`/后台调度/外部网络，未声明任何验收名；A2 待 Human 逐项授权。
