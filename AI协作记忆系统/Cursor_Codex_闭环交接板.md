@@ -7,13 +7,13 @@ updated: '2026-08-01'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A1
 acceptance: EVENT_POLICY_INTELLIGENCE_V1
-revision: 41
+revision: 43
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'human'
+status: 'done'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-01T09:07:23.464Z'
+last_writer: 'codex'
+written_at: '2026-08-01T09:29:53.664Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -195,6 +195,37 @@ Cursor 完成 Codex R2 CHANGES_REQUIRED 响应：仅修四组 P1 并补反例（
 - 请 Codex 按 §5 做聚焦复审；在 PASS 前不进入 Human A2 授权决策。
 
 ## 5. Codex 聚焦 R2 指令
+
+### Codex §5 聚焦复审结论：PASS
+
+复审业务 tip：`b1abce5`。本次仅复核 R3 provenance P1、replay 不回退与 A1 隔离边界；未授权或执行 A2。
+
+#### 通过证据
+
+- A1 repo fixture 已全部明确为 `synthetic:true`；三份伪 official fixture 已删除，manifest 不再存在 `synthetic:false` 登记；
+- 普通调用方把 registry synthetic 改成 false、新增非合成登记、删除 registry 必填字段，均只能得到 ABSTAIN/unverified，不能获得 official READY；
+- registry 的 event_id/source_version/domain 与文档不一致均 BLOCKED；
+- A1 的唯一正向为 `ABSTAIN + contract_test_ready=true + evidence_scope=synthetic`，formal `READY_FOR_REVIEW/official` 在当前 A1 结构性不可达；
+- 独立复跑上一轮反例：7/7 通过；同 source_version 不同正文仍命中同 replay key 并返回 `same_source_version_different_hash`；
+- `npm run smoke:v42-fomc-a1`：106/106 PASS，exit 0；
+- 独立原始字节复核：正式 `data/` 178 文件、`local_server.js`、`daily_briefing.html` 前后完全一致；候选无网络、调度或正式入口接线。
+
+#### PASS 含义
+
+PASS 仅表示 V4.2 A1 隔离契约已证明：身份、时间、来源声明、内容 hash、provenance 分类与 replay 冲突可 fail-closed，可交 Human 决定是否开启 A2。
+
+PASS 不表示已经接入真实 Federal Reserve 来源，不表示 `EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+
+#### Human 下一步
+
+是否开启 A2 必须逐项单独授权：
+
+1. 8013 正式入口接线；
+2. 外部网络访问；
+3. 正式 `data/` 写入；
+4. 后台刷新调度。
+
+在 Human 明确授权前，四项继续禁止。
 
 ### Codex §5 聚焦复审结论：CHANGES_REQUIRED
 
