@@ -7,13 +7,13 @@ updated: '2026-08-01'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A1
 acceptance: EVENT_POLICY_INTELLIGENCE_V1
-revision: 27
+revision: 31
 turn: 0
 next_actor: 'cursor'
 status: 'pending_exec'
 max_turns: 3
-last_writer: 'human'
-written_at: '2026-08-01T05:21:56.154Z'
+last_writer: 'codex'
+written_at: '2026-08-01T06:49:47.957Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -40,7 +40,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 A1 FOMC 文本证据契约` |
 | 计划正本 | `docs/ai-collab/产品发展执行计划_V4.2_FOMC文本证据与政策事件分析_2026-08-01.md` |
-| HEAD | `6519efd` |
+| HEAD | `7f47aa7` |
 | 开环基线 | `6519efd` |
 | change class | `C2`（候选事实/身份/时间/版本契约） |
 | review | `R2`（正式接入前聚焦复核） |
@@ -117,9 +117,74 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 4. Cursor 完成报告
 
-待执行。
+## 交付
+
+Cursor 完成 V4.2 A1 FOMC 文本证据契约隔离交付（C2 候选）。
+
+- 候选契约：`lib/fomc_document_bundle.js`（纯函数，零 fs/网络/外部依赖，不被正式入口导入）；
+- 隔离 fixture：`fixtures/v42_fomc/`（manifest + 3 份合成占位正式声明文档）；
+- 隔离 smoke：`scripts/smoke_v42_fomc_a1.js`，`package.json` 新增 `smoke:v42-fomc-a1`；
+- 验收报告：`logs/acceptance/PRD-EVENT-POLICY-15-A1/acceptance_report.md`。
+
+## 证据摘要
+
+- 断言 **52 PASS / 0 FAIL / exit 0**，连续两次一致；
+- 正向：`fomc_2026_07` 会议正确绑定 `fomc_2026_07` 正式声明 + `fomc_2026_06` 对照 → `READY_FOR_REVIEW`，`bundle_sha256=bf3b998971622832…`；同输入同 `evaluated_at` 幂等；canonical hash 排除自哈希字段；
+- §3.4 全部 11 个最低负向用例 fail-closed（错会议/错日期/非受信来源/时间反转/hash 篡改/文本缺失/幂等/规范化/无证据解释/正式面写入）→ BLOCKED 或 ABSTAIN，无一伪 READY；
+- 状态优先级 `BLOCKED > ABSTAIN > READY_FOR_REVIEW`；
+- 隔离：正式入口 `local_server.js`/`daily_briefing.html` 前后字节不变；`data/` 树 hash 前后一致；候选未被正式入口导入。
+
+## 交接
+
+- 未声明任何验收名；`EVENT_POLICY_INTELLIGENCE_V1` 保持未声明；
+- 未接正式 8013、正式 `data/`、后台调度或外部网络；
+- 未覆盖：`text_changes` 逐段差异（batch B）、真实 Federal Reserve 来源获取与后台刷新（batch A2，需 Human 授权）；
+- 请 Codex 按 §5 做聚焦 R2，之后交 Human 正式接入决策。
 
 ## 5. Codex 聚焦 R2 指令
+
+## Codex R2 结论：CHANGES_REQUIRED
+
+目标业务 tip：`7f47aa7`。本次只审 §5 A1 隔离契约，未授权或执行 A2。
+
+### 已确认通过
+
+- 现有 `npm run smoke:v42-fomc-a1`：52/52 PASS，exit 0；
+- A1 无网络或后台调度调用，未接 `local_server.js`、`daily_briefing.html` 或正式 `data/`；
+- 独立按原始字节 SHA-256 复核：178 个正式数据文件前后完全一致，两个正式入口文件前后完全一致；
+- 明确缺当前/上一期全文可 ABSTAIN，已覆盖的错会议、时间反转和已登记 hash 篡改可 BLOCKED。
+
+### P1-1 · 文档身份与 canonical key 仍 fail-open
+
+`collectMissing()` 未要求 current/prior 的 `event_id`、`meeting_date`、`event_type`；`checkIdentityBinding()` 仅在字段存在时比较。删掉当前或上一期全部身份字段，结果仍为 `READY_FOR_REVIEW`。此外，只要 canonical map 非空，即使缺少 current 对应 key，`checkHashIntegrity()` 也跳过核验并返回 READY。
+
+最小关闭：current/prior 身份字段必填并与事件/紧邻会议精确绑定；canonical map 必须分别包含 current 与 prior 的明确条目，缺 key 必须 ABSTAIN/BLOCKED。新增四个独立反例。
+
+### P1-2 · 来源 URL 与合成 provenance 可伪装正式证据
+
+来源信任只比较调用方提供的 `source.domain` 字符串，不解析并绑定 `source.url`。将 URL 改为 `https://attacker.example/...`、保留 `domain=federalreserve.gov`，仍为 READY。输入 `is_synthetic=true` 在 bundle/source_refs 中完全丢失，同时输出 `source_version=official-*` 与 READY，违反“fixture 不冒充正式证据”。
+
+最小关闭：要求 HTTPS URL；解析后的 hostname 必须与声明 domain 及固定官方 allowlist 一致；保留并传播 provenance/evidence_scope。合成 fixture 可以证明机制可运行，但 formal evidence eligibility 必须 ABSTAIN（如需机制状态，另设 `contract_test_ready`，不得复用正式 READY）。新增 URL/domain 不一致、缺 URL、synthetic 不可正式 READY 反例。
+
+### P1-3 · prior 的可知时间未受 evaluated_at 约束
+
+`checkTimeIntegrity()` 只检查 prior 的 `published_at`，不检查 `prior.captured_at`。把 prior `captured_at` 放到 `evaluated_at` 之后仍为 READY；prior capture 早于 prior publish 也未阻断。
+
+最小关闭：对 current/prior 使用同一可知时间规则：`published_at <= captured_at <= evaluated_at`；正式可回放证据缺 capture 时间不得 READY。新增未来采集、采集早于发布、缺 capture 三个反例。
+
+### P1-4 · replay 测试实际允许同 key 无痕覆盖
+
+`deriveReplayKey()` 只包含 `event_id|evaluated_at`。同一 event/evaluated_at 下，将正文与 canonical hash 一起改变、保持同一 source_version，两个不同 bundle 均为 READY、replay key 相同而 bundle hash 不同。当前 smoke 连续两次 `writeFileSync` 同一路径后，以“仅 1 个文件”为幂等通过条件，恰好没有检测覆盖冲突。
+
+最小关闭：将 immutable source identity（至少 event_id、source_version、document/bundle hash）纳入版本键，或提供 compare-before-write 冲突判定；同 source_version 对应不同 document hash 必须 BLOCKED，不能覆盖旧证据。新增“同 key 不同 bundle”“同 version 不同 hash”负向测试。
+
+### 独立反例结果
+
+7 条实际 fail-open：current identity missing、prior identity missing、canonical current key missing、official domain + evil URL、prior captured after evaluation、synthetic provenance lost、same replay key + different evidence。均已在本次评审中实际运行并观察到非预期 READY。
+
+### 边界与下一步
+
+只修上述四组 P1，不接 8013、不访问外部网络、不写正式 data/、不加后台调度。修复后交 Codex 聚焦复审；在 PASS 前不进入 Human A2 授权决策，不声明 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 仅在本板为 `pending_review / codex` 后执行。聚焦检查：
 
