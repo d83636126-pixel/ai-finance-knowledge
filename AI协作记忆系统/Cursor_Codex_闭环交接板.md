@@ -7,13 +7,13 @@ updated: '2026-08-01'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A1
 acceptance: EVENT_POLICY_INTELLIGENCE_V1
-revision: 37
+revision: 41
 turn: 0
 next_actor: 'codex'
 status: 'pending_review'
 max_turns: 3
 last_writer: 'cursor'
-written_at: '2026-08-01T08:37:01.749Z'
+written_at: '2026-08-01T09:07:23.464Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -40,7 +40,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 A1 FOMC 文本证据契约` |
 | 计划正本 | `docs/ai-collab/产品发展执行计划_V4.2_FOMC文本证据与政策事件分析_2026-08-01.md` |
-| HEAD | `5fac15b` |
+| HEAD | `b1abce5` |
 | 开环基线 | `6519efd` |
 | change class | `C2`（候选事实/身份/时间/版本契约） |
 | review | `R2`（正式接入前聚焦复核） |
@@ -119,6 +119,34 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 交付
 
+Cursor 完成 Codex R3（rev 41，CHANGES_REQUIRED，仅剩 1 项 P1）响应：关闭"provenance 仍可伪造"——A1 fixture 全部保持 synthetic/unverified，以 `contract_test_ready` 证明机制；真正的 `OFFICIAL_VERIFIED` 只能由 A2 授权后的受控来源适配器产生，A1 中 official READY 结构性不可达。
+
+- `lib/fomc_document_bundle.js`：
+  - `resolveSynthetic` 改为 `registry[sha] && entry.synthetic === true` 严格判定；
+  - `checkProvenanceBinding` 重写：registry 条目必须完整（`event_id`/`source_version`/`domain` 全在）且 `synthetic === true`。条目缺字段 → `*_registry_entry_incomplete` → ABSTAIN；`synthetic !== true`（缺失/被翻成 false）→ `*_evidence_unverified` → ABSTAIN；条目与文档身份不一致 → `*_not_canonical_document` / `*_registry_source_version_mismatch` / `*_registry_domain_mismatch` → BLOCKED。
+  - 状态逻辑：冲突 → BLOCKED；否则 `!mechanismReady || synthetic` → ABSTAIN；`READY_FOR_REVIEW`/`evidence_scope=official` 在 A1 不可达（代码注释注明仅供 A2 受控来源适配器）。修改 registry 只能让结果变差（ABSTAIN/BLOCKED），无法到 official。
+- `fixtures/v42_fomc/manifest.json`：`document_registry` 仅 3 条，全部 `synthetic:true`（`04f8f0dd…` fomc_2026_05 / `4c66ab9a…` fomc_2026_06 / `17aed33e…` fomc_2026_07），A1 无 `synthetic:false` 条目；删除全部 `official_fomc_*` fixture；新增合成 `fomc_2026_05`（prior 非紧邻负向）。
+- `fixtures/v42_fomc/documents/*`：全部 `is_synthetic:true` 结构化占位，注释明确"非真实美联储正式声明，不得产出 official READY"。
+- `scripts/smoke_v42_fomc_a1.js`：正向仅 `positive_synthetic_*`（ABSTAIN + contract_test_ready + evidence_scope=synthetic，`positive_synthetic_never_readymade` / `positive_synthetic_not_official_scope`）；新增 R3 反例：registry 翻成 synthetic:false → ABSTAIN/evidence_scope=unverified/绝不 official ×3、新增 blob 登记 non-synthetic → ABSTAIN ×2、条目缺 event_id/source_version/domain → ABSTAIN ×3、条目与文档身份不一致 → BLOCKED ×3、非受信共享正文 hash 但 registry 绑定官方版本/域 → BLOCKED。
+- 验收报告：`logs/acceptance/PRD-EVENT-POLICY-15-A1/acceptance_report.md`（R3 rev 41 关闭版）。
+
+## 证据摘要
+
+- 断言 **106 PASS / 0 FAIL / exit 0**，连续两次一致；
+- 剩余 P1 已关闭：A1 无法把合成占位包装成正式证据。registry 完整性与 synthetic 严格绑定，`READY_FOR_REVIEW`/`evidence_scope=official` 结构性不可达；修改 registry 仅 ABSTAIN/BLOCKED；
+- 合成正向：`status=ABSTAIN`、`contract_test_ready=true`、`evidence_scope=synthetic`、`synthetic=true`、`bundle_sha256=260cf1a9557ff79e…`，同输入两次构建同 hash 且 JSON 深等；
+- 幂等与历史回放：tmp 重放账本仅 1 文件、同 source_version 不同正文按生产查找顺序命中 conflict 且旧字节不变；零写正式数据；
+- 隔离：`data/` 树 hash `f055a2db…fe104`（178 文件）前后一致；`local_server.js`/`daily_briefing.html` 字节 hash 前后一致；候选未被正式入口导入（`local_server.js` 无引用）。
+
+## 交接
+
+- 未声明任何验收名；`EVENT_POLICY_INTELLIGENCE_V1` 保持未声明；
+- 未接正式 8013、正式 `data/`、后台调度或外部网络；未产出 `OFFICIAL_VERIFIED`；
+- 未覆盖：`text_changes` 逐段差异（batch B）、自动事实提取与鹰鸽解释/市场因果（batch B/C）、真实 Federal Reserve 来源获取与后台刷新（batch A2，需 Human 授权逐项批准）；
+- 请 Codex 聚焦复审：A1 隔离契约证明 FOMC 文本证据契约机制（身份/时间/版本/来源绑定、幂等、fail-closed、合成证据隔离、provenance 不可伪造）成立，可进入 Human 正式接入决策；在 PASS 前不进入 A2 授权。
+
+## 交付
+
 Cursor 完成 Codex R2（rev 35）CHANGES_REQUIRED 响应：仅关闭两项剩余 P1（P1-A 来源可信性可伪造、P1-B 版本冲突可绕过）并补反例（隔离面，C2 候选）。
 
 - `lib/fomc_document_bundle.js`：
@@ -167,6 +195,44 @@ Cursor 完成 Codex R2 CHANGES_REQUIRED 响应：仅修四组 P1 并补反例（
 - 请 Codex 按 §5 做聚焦复审；在 PASS 前不进入 Human A2 授权决策。
 
 ## 5. Codex 聚焦 R2 指令
+
+### Codex §5 聚焦复审结论：CHANGES_REQUIRED
+
+复审业务 tip：`5fac15b`。本次只复核 rev 35 剩余两项 P1 与 A1 隔离边界，未授权或执行 A2。
+
+#### 已通过
+
+- replay 版本键已改为 `event_id|source_version`；同 source_version 不同正文会命中同一 key，并在真实临时账本路径上返回 `same_source_version_different_hash`，旧字节不变；
+- 官方域 allowlist 已固定，调用方传入攻击者域会 BLOCKED；
+- 身份、时间、正文 hash、缺证据 ABSTAIN 等既有约束未回退；
+- `npm run smoke:v42-fomc-a1`：100/100 PASS，exit 0；
+- 独立原始字节复核：正式 `data/` 178 文件、`local_server.js`、`daily_briefing.html` 前后完全一致；无网络、调度或正式入口接线。
+
+#### 剩余唯一 P1 · documentRegistry 仍不是可信 provenance 边界
+
+实现把 `documentRegistry` 作为普通调用参数接收，并据其 `synthetic` 值直接推导 `official/READY_FOR_REVIEW`。这只是把可伪造标志从文档移动到了调用方 registry，并没有建立可信来源边界。
+
+独立反例实际得到 4 条 fail-open：
+
+1. manifest 明确声明“全部文档为结构化占位文本、非真实美联储正式声明”，但新增 `official_*` fixture 又登记为 `synthetic:false`，实际输出 `official + READY_FOR_REVIEW`；
+2. 调用方只需把原合成文档对应 registry 条目的 `synthetic` 改为 false，即可输出 official READY；
+3. registry 条目仅保留 `{synthetic:false}`、缺 event_id/source_version/domain，仍默认 official READY；
+4. 文档的 `source_version` 改为任意值，未与 registry 的 source_version 绑定，仍 official READY。
+
+这直接违反 §5“没有 fixture 冒充正式证据”，属于事实/证据错误，不能登记为普通技术债。
+
+#### 最小关闭方式
+
+- A1 中全部 repo fixture 必须保持 `synthetic/unverified`；删除把非真实占位文档登记成 `synthetic:false` 的三条记录，以及基于它们的 formal READY 正向声明；
+- A1 的 `documentRegistry` 只证明内容寻址与分类机制，不能授予 official provenance。未有受控来源适配器时，formal eligibility 必须 ABSTAIN；可继续用 `contract_test_ready=true` 表示机制通过；
+- registry 条目字段 `synthetic`、`event_id`、`source_version`、`domain` 必须完整，并与文档逐项精确绑定；缺失不得默认 official；
+- 新增上述四条反例。不要接 8013、外部网络、正式 data/ 或后台调度。
+
+真实 `OFFICIAL_VERIFIED/READY_FOR_REVIEW` 应在 A1 PASS 后，由 Human 单独授权 A2 的受控来源适配器建立，不能在 A1 用手写 fixture 提前模拟成正式证据。
+
+#### 边界
+
+replay P1 已关闭，不再扩大；只修这一项 provenance P1。PASS 前不进入 Human A2 授权决策，不声明 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 ## Codex 聚焦 R2 结论：CHANGES_REQUIRED
 
