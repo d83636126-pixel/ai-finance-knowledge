@@ -1,19 +1,19 @@
 ---
 type: Cursor_Codex闭环交接板
 schema_version: 2
-tags: [AI协作, Cursor, Codex, V4.1, Batch-D, 财报]
-created: 2026-07-30
+tags: [AI协作, Cursor, Codex, V4.2, A1, FOMC]
+created: 2026-08-01
 updated: '2026-08-01'
 project: financial-alert-system
-loop_id: PRD-EVENT-EARNINGS-14-D
-acceptance: EVENT_EARNINGS_INTELLIGENCE_V1
-revision: 26
-turn: 1
-next_actor: 'human'
-status: 'done'
+loop_id: PRD-EVENT-POLICY-15-A1
+acceptance: EVENT_POLICY_INTELLIGENCE_V1
+revision: 27
+turn: 0
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-01T03:32:29.143Z'
+last_writer: 'human'
+written_at: '2026-08-01T05:21:56.154Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -22,102 +22,120 @@ vault_note: AI协作记忆系统/Cursor_Codex_闭环交接板.md
 repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 ---
 
-# Cursor ↔ Codex 闭环交接板：V4.1 Batch D
+# Cursor ↔ Codex 闭环交接板：V4.2 A1
 
-> 当前口令：**V4.1 Batch D 已验收（`EVENT_EARNINGS_INTELLIGENCE_V1`）· V4.0 宏观主线已收口（`EVENT_INTELLIGENCE_ASSIST_V1`）· 无活动环**
+> 当前口令：**执行Cursor_Codex闭环交接板当前指令 · V4.2 A1 FOMC 文本证据契约**
 
 ## 1. 当前裁决
 
-- Human「开D」已执行；Batch D 工程交付 + **Agent 走查完成**，进入 Human 最终勾选。
-- 计划：`execution_entry: batch_d_human_walkthrough`
-- 本环：`PRD-EVENT-EARNINGS-14-D` → **done / human**
-- 六项子机制 smoke：**六项 PASS**（不得据此自写验收名）
-- Human 清单：`docs/ai-collab/PRD-EVENT-EARNINGS-14-D_human_acceptance_checklist.md`
-- 正式入口：`http://127.0.0.1:8013/daily_briefing.html`
-- `EVENT_EARNINGS_INTELLIGENCE_V1` **已声明 PASS（2026-08-01，Human 口令授权）**
-- `EVENT_INTELLIGENCE_ASSIST_V1` **已声明 PASS（2026-08-01，Human 口令授权）**——V4.0 宏观（NFP/CPI/GDP）主线收口
-- Agent 走查 8 项：7 PASS；item 4 实机草稿原为 V4.1 前旧格式（`closing_card_fill` 无 `template_id`）→ 修复 `draftMatchesBundle` 判别维度并重建草稿（HEAD `f15fec6`），item 4 实机可验
+- Human 已批准《产品发展执行计划 V4.2：FOMC 文本证据与政策事件分析》。
+- 当前只开启 `PRD-EVENT-POLICY-15-A1`：隔离实现 FOMC 文本证据契约。
+- 执行者：Cursor；完成后交 Codex 做一次聚焦 R2。
+- 本环不得接正式 8013、正式 `data/`、后台调度、外部网络或真实来源写入。
+- `EVENT_POLICY_INTELLIGENCE_V1` 尚未声明；V4.0/V4.1 两个既有验收名保持不变。
 
 ## 2. 基线与边界
 
 | 项 | 值 |
 |---|---|
-| 开环 tip | `ec62784` |
-| HEAD | `9266561` |
-| 本环 | `PRD-EVENT-EARNINGS-14-D` |
-| status / next_actor | `done` / `human` |
-| smoke D | `npm run smoke:v41-earnings-d` |
-| 六项 | `npm run smoke:v41-earnings-six-mechanisms` |
+| stage | `V4.2 A1 FOMC 文本证据契约` |
+| 计划正本 | `docs/ai-collab/产品发展执行计划_V4.2_FOMC文本证据与政策事件分析_2026-08-01.md` |
+| HEAD | `6519efd` |
+| 开环基线 | `6519efd` |
+| change class | `C2`（候选事实/身份/时间/版本契约） |
+| review | `R2`（正式接入前聚焦复核） |
+| status / next_actor | `pending_exec / cursor` |
+| 回滚 | 恢复到 `6519efd`；A1 候选不得产生正式数据迁移 |
 
-硬边界：验收名未声明；不碰 `data_backup_*`；首批只验 AAPL/AMZN/TSLA。
+### 受保护不变量
 
-## 3. 本环允许范围（已执行）
+1. 不改变 V4.0 NFP/CPI/GDP 与 V4.1 EARNINGS 的验收语义或运行路径。
+2. 不把新闻、模型文本、缓存或 UI 默认值写成正式 FOMC 事实。
+3. 不允许相邻会议、旧声明或事后文本进入错误事件/事前时点。
+4. 不使用 FOMC 文本变化证明市场因果，不输出无依据“鹰派/鸽派”分数。
+5. 不写正式 `data/`，不导入 `local_server.js`，不修改正式简报、页面或调度。
+6. 不调用外部网络；A1 只使用安全、可复现 fixture。
+7. 不宣称 `RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
 
-1. 简报财报中文理由前置 + 深链文案（`briefing_intelligence_v4`）
-2. `smoke_v41_earnings_d` 三事件 Top3/深链
-3. `smoke_v41_earnings_six_mechanisms` 六项 PASS
-4. Human 清单文档
+## 3. Cursor 当前执行指令
 
-## 4. 完成证据
+### 3.1 业务目标
 
-### Git
+在隔离面证明：正确的 FOMC 会议能够绑定正确的正式声明和上一期对照文本，形成确定、可验证、幂等、可历史回放的 `FomcDocumentBundle`。
 
-- HEAD：`f15fec6`（提交：V4.1 Batch A-D 交付 + 复核修复 + .gitignore + `draftMatchesBundle` 判别维度修复）
-- 范围：V4.1 Batch A1–D 全部交付（含 A1–C 与 Batch D）一次提交；走查修复一次提交
-- 复核修复：`move_pct` 单位对齐宏观（×100，卡上带 %）、`assessDeviation` 财报分支透传 `identity_conflict`（直接调用 fail-closed）、`.gitignore` 排除 `data_backup_*`
-- 走查修复：`draftMatchesBundle` 增加 EARNINGS 构建器版本判别（template_id/window_spec_version/formula_version），ensure 据此重建实机草稿为 `earnings_v1` 格式
+### 3.2 允许交付
 
-### 验证
+- 候选契约/实现：建议 `lib/fomc_document_bundle.js`，但不得被正式入口导入；
+- 隔离 fixture：建议 `fixtures/v42_fomc/`；
+- 隔离 smoke：建议 `scripts/smoke_v42_fomc_a1.js`；
+- 可增加仅用于测试的 `package.json` script；
+- A1 契约说明或验收报告可写入 `docs/ai-collab/` 或 `logs/acceptance/PRD-EVENT-POLICY-15-A1/`。
 
-| 命令 | 退出码 |
-|---|---|
-| `npm run smoke:v41-earnings-d` | 0（21 PASS） |
-| `npm run smoke:v41-earnings-six-mechanisms` | 0（六项 PASS） |
-| `node scripts/smoke_v4_real_event_loop.js` | 0（51 PASS） |
-| `npm run smoke:v41-earnings-c` | 0（20 PASS） |
+若实际文件布局不同，交付报告必须逐项解释；不得借机修改正式运行模块。
 
-### 工件 SHA-256
+### 3.3 必须实现
 
-| 路径 | SHA-256 |
-|---|---|
-| `lib/briefing_intelligence_v4.js` | `580ef7468cbbd16ff1d2b0e19497b8318ebeee50b4aa3d3973a63194a0d54300` |
-| `scripts/smoke_v41_earnings_d.js` | `b5e649d1a89bd32c5728fac0c070ebad5bc5ec0d1af660e6f83d5342cbaeb7d8` |
-| `scripts/smoke_v41_earnings_six_mechanisms.js` | `45370b5c0e66e38e936803db8ebd6d0585ce485c7852f0ee1d5defff10b968d4` |
-| `docs/ai-collab/PRD-EVENT-EARNINGS-14-D_human_acceptance_checklist.md` | `2ab435c797723303538075a9389cd33b08dfaf873b1b62fff637910aaf425b74` |
+1. `FOMC` / `FOMC_POLICY` 归一为独立政策类型，不套宏观 surprise 或财报公式。
+2. 绑定 `event_id`、会议日期、`scheduled_at`、`published_at`、来源 URL/域、`evaluated_at` 和 `source_version`。
+3. 当前/上一期文本规范化为稳定段落 ID，并分别计算内容 SHA-256。
+4. bundle 计算排除自哈希字段的 canonical SHA-256；同输入幂等。
+5. 明确状态优先级：`BLOCKED > ABSTAIN > READY_FOR_REVIEW`。
+6. 身份冲突、hash 篡改、时间反转必须 BLOCKED；缺正式文本或缺上一期对照不得伪 READY。
+7. 历史回放只在隔离输入上计算，零写正式数据。
 
-## 5. Codex 复审
+### 3.4 最低负向用例
 
-跳过。
+- event_id 与会议日期不一致；
+- 当前声明实际属于相邻会议；
+- 非受信来源冒充正式声明；
+- `published_at > evaluated_at`；
+- 当前/上一期 hash 被篡改；
+- 当前文本缺失；
+- 上一期文本缺失；
+- 重复执行产生额外版本；
+- 段落顺序/换行规范化不稳定；
+- 输入含政策解释但无原文证据；
+- 尝试把候选 A1 写入正式数据根或由正式入口导入。
+
+### 3.5 验收证据
+
+- 明确 fixture 事件清单、可知时间、来源版本和 SHA-256；
+- 正向、负向断言数量与退出码；
+- 两次相同执行的输出 hash 和文件数一致；
+- 正式入口 diff=0、正式 data root 前后 hash/文件数不变；
+- 精确 Git diff、候选文件清单和回滚点；
+- 未覆盖项和 A2 正式来源接入前所需 Human 授权。
+
+### 3.6 交接要求
+
+完成后：
+
+1. 只提交 A1 候选业务文件、fixture、smoke 与对应验收文档；
+2. 更新本板为 `pending_review / codex`；
+3. 不自行连接正式产品，不自行打开 A2，不声明任何验收名；
+4. 租约必须释放。
+
+## 4. Cursor 完成报告
+
+待执行。
+
+## 5. Codex 聚焦 R2 指令
+
+仅在本板为 `pending_review / codex` 后执行。聚焦检查：
+
+1. 身份、会议日期与相邻会议错绑是否 fail-closed；
+2. `published_at/evaluated_at` 是否保证事前/事后隔离；
+3. 原文、段落、版本和 bundle hash 是否确定、幂等且不可无痕覆盖；
+4. 缺正式文本/上一期对照是否真实 ABSTAIN，而非默认 READY；
+5. 候选模块是否仍与正式入口、正式数据、调度和网络隔离；
+6. 测试是否证明正式数据零变化且没有 fixture 冒充正式证据。
+
+通过仅表示 A1 隔离契约可进入 Human 正式接入决策，不表示已获正式接入授权，也不表示 V4.2 产品验收通过。
 
 ## 6. 回合历史
 
-### R0 · Human 开 D
+### R0 · Human 批准并开 A1
 
-- 口令：开D → `pending_exec` / `cursor`
-
-### R1 · Cursor 交付 Batch D 工程
-
-- claim：`cursor-v41-d-20260731`
-- 简报/走查/六项绿；交还 `done` / `human` 走查
-
-### R2 · Cursor 走查 + 草稿重建修复
-
-- Agent 走查 8 项：7 PASS；item 4 实机草稿为 V4.1 前旧格式（`closing_card_fill` 无 `template_id`）
-- 修复：`draftMatchesBundle` 增加 EARNINGS 构建器版本判别（template_id/window_spec_version/formula_version），ensure 据此重建
-- 重建：AAPL/AMZN/TSLA/META/MSFT/GOOGL_2026 六事件草稿现带 `earnings_v1`；幂等 `unchanged:true`；smoke 全绿
-- HEAD `f15fec6`；交还 `done` / `human` 最终勾选
-
-### R3 · Human 勾选 + 验收名声明
-
-- Human 口令「勾完清单后写验收名 EVENT_EARNINGS_INTELLIGENCE_V1」执行
-- Human 清单 8 项全部 ☑；六项子机制财报版全 PASS
-- 声明 `EVENT_EARNINGS_INTELLIGENCE_V1`（未宣称 RESEARCH / RELEASE / 预测力；宏观 `EVENT_INTELLIGENCE_ASSIST_V1` 不因本声明通过）
-- 环关闭；HEAD `f15fec6`
-
-### R4 · V4.0 宏观主线收口（验收声明）
-
-- Human 口令「收 V4.0 宏观主线的口」+ 授权声明 `EVENT_INTELLIGENCE_ASSIST_V1`
-- 走查 7 项实机通过；A1(28)/A2(37)/A3(24)/C(22)/D(83)/六项(23)/真实事件环(51) 全绿
-- NFP 官方刷新 `nfp_2025_12`：READY（surprise −110、5 source_refs、data_quality ok）
-- 声明 `EVENT_INTELLIGENCE_ASSIST_V1`（未宣称 RESEARCH / DATA_QUALITY / RELEASE；不替代 V4.1 财报验收）
-- 清单：`docs/ai-collab/PRD-EVENT-INTELLIGENCE-13-D_human_acceptance_checklist.md`
+- 2026-08-01：Human 批准下一步采用 V4.2 FOMC 单事件路线。
+- V4.0/V4.1 状态文字已收尾；V4.2 正本基线 `6519efd`。
+- 开启 `PRD-EVENT-POLICY-15-A1` → `pending_exec / cursor`。
