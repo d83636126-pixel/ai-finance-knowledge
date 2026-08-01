@@ -7,13 +7,13 @@ updated: '2026-08-01'
 project: financial-alert-system
 loop_id: PRD-EVENT-EARNINGS-14-D
 acceptance: EVENT_EARNINGS_INTELLIGENCE_V1
-revision: 25
+revision: 26
 turn: 1
 next_actor: 'human'
 status: 'done'
 max_turns: 3
 last_writer: 'cursor'
-written_at: '2026-08-01T02:58:38.494Z'
+written_at: '2026-08-01T03:32:29.143Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,7 +24,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.1 Batch D
 
-> 当前口令：**V4.1 Batch D 已走查 · Human 勾选并声明 `EVENT_EARNINGS_INTELLIGENCE_V1` · 环已关闭**
+> 当前口令：**V4.1 Batch D 已验收（`EVENT_EARNINGS_INTELLIGENCE_V1`）· V4.0 宏观主线已收口（`EVENT_INTELLIGENCE_ASSIST_V1`）· 无活动环**
 
 ## 1. 当前裁决
 
@@ -35,6 +35,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - Human 清单：`docs/ai-collab/PRD-EVENT-EARNINGS-14-D_human_acceptance_checklist.md`
 - 正式入口：`http://127.0.0.1:8013/daily_briefing.html`
 - `EVENT_EARNINGS_INTELLIGENCE_V1` **已声明 PASS（2026-08-01，Human 口令授权）**
+- `EVENT_INTELLIGENCE_ASSIST_V1` **已声明 PASS（2026-08-01，Human 口令授权）**——V4.0 宏观（NFP/CPI/GDP）主线收口
 - Agent 走查 8 项：7 PASS；item 4 实机草稿原为 V4.1 前旧格式（`closing_card_fill` 无 `template_id`）→ 修复 `draftMatchesBundle` 判别维度并重建草稿（HEAD `f15fec6`），item 4 实机可验
 
 ## 2. 基线与边界
@@ -42,7 +43,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | 项 | 值 |
 |---|---|
 | 开环 tip | `ec62784` |
-| HEAD | `f621474` |
+| HEAD | `9266561` |
 | 本环 | `PRD-EVENT-EARNINGS-14-D` |
 | status / next_actor | `done` / `human` |
 | smoke D | `npm run smoke:v41-earnings-d` |
@@ -112,3 +113,11 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - Human 清单 8 项全部 ☑；六项子机制财报版全 PASS
 - 声明 `EVENT_EARNINGS_INTELLIGENCE_V1`（未宣称 RESEARCH / RELEASE / 预测力；宏观 `EVENT_INTELLIGENCE_ASSIST_V1` 不因本声明通过）
 - 环关闭；HEAD `f15fec6`
+
+### R4 · V4.0 宏观主线收口（验收声明）
+
+- Human 口令「收 V4.0 宏观主线的口」+ 授权声明 `EVENT_INTELLIGENCE_ASSIST_V1`
+- 走查 7 项实机通过；A1(28)/A2(37)/A3(24)/C(22)/D(83)/六项(23)/真实事件环(51) 全绿
+- NFP 官方刷新 `nfp_2025_12`：READY（surprise −110、5 source_refs、data_quality ok）
+- 声明 `EVENT_INTELLIGENCE_ASSIST_V1`（未宣称 RESEARCH / DATA_QUALITY / RELEASE；不替代 V4.1 财报验收）
+- 清单：`docs/ai-collab/PRD-EVENT-INTELLIGENCE-13-D_human_acceptance_checklist.md`
