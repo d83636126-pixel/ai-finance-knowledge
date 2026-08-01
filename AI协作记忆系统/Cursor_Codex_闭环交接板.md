@@ -7,13 +7,13 @@ updated: '2026-08-01'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A2
 acceptance: POLICY_SOURCE_ACQUISITION_A2
-revision: 2
+revision: 4
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-01T10:41:40.000Z'
+last_writer: 'codex'
+written_at: '2026-08-01T11:06:29.930Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -40,12 +40,12 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 A2 FOMC 正式来源适配与后台刷新` |
 | A2 计划 | `docs/ai-collab/产品发展执行计划_V4.2_A2_正式来源适配与后台刷新_2026-08-01.md` |
-| HEAD | `e56f54a` |
+| HEAD | `8a17bfd` |
 | 开环基线 | `e56f54a` |
 | A1 业务 tip | `b1abce5` |
 | change class | `C2` |
 | review | `R2` |
-| status / next_actor | `pending_review / codex` |
+| status / next_actor | `pending_exec / cursor` |
 | 8013 接线 | Human 已授权 |
 | 外部网络 | Human 已授权，仅 Federal Reserve 官方 HTTPS 只读 |
 | 正式 data 写入 | Human 已授权，仅新增版本化 FOMC 路径 |
@@ -204,6 +204,44 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 5. Codex 集中 R2 指令
 
+### R2 结论：`CHANGES_REQUIRED`
+
+复核目标：`8a17bfd`（业务提交 `1dad30c`）。改动范围符合 A2 允许文件面；Federal Reserve 两个正式 URL、任务已移除、正式工作树无运行数据变更均已核对。既有 `smoke:v42-fomc-a1` 为 106/106、`smoke:v42-fomc-a2` 为 108/108，但以下四组未覆盖反例会破坏正式验收语义。
+
+#### P1-1：official provenance 可由普通调用参数伪造
+
+- `buildFomcDocumentBundle()` 只比较导出的字符串 `VERIFIED_ADAPTER_ID` / `VERIFIED_REGISTRY_KIND`。把 fixture registry 的 `synthetic` 改为 `false` 并传入这两个字符串，在 current/prior 均无 `verified_provenance` 时仍得到 `READY_FOR_REVIEW + evidence_scope=official`。
+- `store.write()` 同样只检查可伪造字符串和字段是否非空。反例以 `event_id=fomc_2099_fake`、`final_url=https://evil.example/fake`、伪 hash、时间反转和手写 `READY_FOR_REVIEW` bundle 成功写入。
+- 修复要求：建立不可由普通对象/字符串构造的适配器能力边界；写入前独立复算并绑定 event、current/prior、官方 URL/域、HTTP 状态、正文/hash、source_version、发布时间/捕获/评估时间及 bundle hash。伪造上述任一项必须拒绝且零写入。
+
+#### P1-2：API 与计划任务没有共享跨进程互斥
+
+- 文件锁只存在于 CLI runner；`refreshFomcEvent()` 不检查或取得该锁。
+- 反例先持有 `fomc_refresh_fomc_2026_07.lock`，随后直接调用 API 刷新，结果仍 `ok=true` 且执行了取数。
+- 修复要求：API、手动 CLI、scheduled runner 进入同一刷新核心时必须取得同一 owner-token 文件锁；锁已持有时不得取数/写入，并返回结构化 `task_running`。
+
+#### P1-3：HTTP 请求体错误 fail-open，评估时间可由调用方改写
+
+- 发送 65,537 字节请求体时，`readBody()` 返回 `payload_too_large`，但 handler 忽略 `body.ok=false`，仍触发正式刷新；实测响应为 `503 fetch_failed`、取数调用次数为 1。
+- 非法 JSON 同样被静默忽略；`evaluated_at` 又由请求体直接进入正式 bundle，可把服务端评估时间改成任意未来值。
+- 修复要求：超限、读取失败、非法 JSON/字段必须在任何取数和写入前返回结构化 4xx；正式运行的 `evaluated_at` 由服务端产生，若保留注入只能限于显式测试依赖且不得从 HTTP 暴露。
+
+#### P1-4：一次刷新留下两个 job_id 和永久 running 记录
+
+- 初始 `writeJobRun(jobRecord)` 生成 ID 后未回写 `jobRecord`；终态再次生成另一个 ID。
+- 成功反例产生两个记录：一个永久 `running`、一个 `success`，API 返回的 `job_id` 为 `undefined`。这会破坏 last-run、运行中判断与审计追踪。
+- 修复要求：刷新开始前生成唯一 job_id，终态必须更新同一作业或以明确同一 run_id 的不可变事件链记录；成功/失败后不得残留无主 running，API 返回可核验 job_id。
+
+#### 最小复审集
+
+1. 无 `verified_provenance` + 公共常量字符串不得得到 official READY；evil URL/伪 hash/时间反转/手写 bundle 不得写入。
+2. 持有文件锁后通过 API、CLI、scheduled 三种入口均不得取数或写入。
+3. 超限请求体、读取错误、非法 JSON、HTTP 注入 `evaluated_at` 均在副作用前拒绝。
+4. 每次成功/失败刷新只有一个可追踪 job_id；终态后无遗留 running。
+5. 复跑 A1 106 项、A2 108 项及新增反例；正式 `data/` 原始字节清单不变。
+
+本轮未运行会安装系统任务的 A4；只读核对结果为 `ABSENT FAS-FOMC-A2-Refresh`。在四组 P1 关闭前，不得声明 `POLICY_SOURCE_ACQUISITION_A2`，不得进入 Batch B。
+
 仅在本板为 `pending_review / codex` 后执行。Codex 必须独立复核：
 
 1. 实际网络只触及授权官方域，重定向、失败、超时和限速 fail-closed；
@@ -232,3 +270,9 @@ PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 完成并可进入 V4.2 Batch B；
 - **transition rev1→2**：释放租约，置 `pending_review / codex`；验收报告 `logs/acceptance/PRD-EVENT-POLICY-15-A2/`；
 - 证据：六子机制 **108 PASS / 0 FAIL**；Gate 4 全量（真实 Task Scheduler）**31 PASS / 0 FAIL**；回归 A1 106 / A4 25；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
 - 未声明 `POLICY_SOURCE_ACQUISITION_A2` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+### R2 · Codex 聚焦复核 `CHANGES_REQUIRED`
+
+- 复核 tip `8a17bfd`；既有 A1 106/106、A2 108/108 通过，但四组未覆盖反例成立；
+- 阻断：official provenance 可伪造、API/调度未共享文件锁、请求体错误 fail-open、单次刷新产生双 job_id 与遗留 running；
+- 板切回 `pending_exec / cursor`；四组 P1 关闭前不得声明 A2 验收或进入 Batch B。
