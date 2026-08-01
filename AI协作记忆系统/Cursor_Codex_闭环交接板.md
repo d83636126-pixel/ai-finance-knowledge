@@ -7,13 +7,13 @@ updated: '2026-08-01'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A2
 acceptance: POLICY_SOURCE_ACQUISITION_A2
-revision: 0
+revision: 2
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'human'
-written_at: '2026-08-01T09:42:13.605Z'
+last_writer: 'cursor'
+written_at: '2026-08-01T10:41:40.000Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -45,7 +45,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | A1 业务 tip | `b1abce5` |
 | change class | `C2` |
 | review | `R2` |
-| status / next_actor | `pending_exec / cursor` |
+| status / next_actor | `pending_review / codex` |
 | 8013 接线 | Human 已授权 |
 | 外部网络 | Human 已授权，仅 Federal Reserve 官方 HTTPS 只读 |
 | 正式 data 写入 | Human 已授权，仅新增版本化 FOMC 路径 |
@@ -156,7 +156,51 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 4. Cursor 完成报告
 
-待 Cursor 执行后填写。
+四门（隔离获取 → 受控存储 → 8013 接线 → 后台调度）全部完成，六个独立子机制 PASS，交 Codex 做集中 R2。
+
+### 官方域与安全 URL 摘要
+
+- 固定 allowlist：`federalreserve.gov` / `www.federalreserve.gov`（`isTrustedDomain` 精确匹配、去 www 前缀，防子串/后缀攻击）；
+- 实际允许的官方 HTTPS 声明 URL（`FOMC_MEETINGS_2026`）：`https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm`（fomc_2026_06）、`https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm`（fomc_2026_07）；
+- 逐跳 host 再校验；真实抓取证明在隔离 tmp 数据根完成，未向正式 `data/` 落盘运行数据。
+
+### 正式新增文件清单与既有文件 hash
+
+- 正式新增（运行时能力，非运行数据）：`lib/fomc_official_source.js`、`lib/fomc_document_store.js`、`lib/fomc_a2_api.js`、`scripts/fomc_a2_refresh.js`、`scripts/fomc_a2_schedule.ps1`、`scripts/smoke_v42_fomc_a2.js`、`scripts/smoke_v42_fomc_a4.js`；
+- 正式 `data/` **零变化**：178 文件，树 hash `f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`（与 A1 基线逐字节一致）；
+- 既有正式入口：`local_server.js` / `daily_briefing.html` 字节 hash 前后一致（A1 smoke `neg11c`：A2 开关关闭时 `local_server.js` 不变；开启时仅经 `./lib/fomc_a2_api` 接线）。
+
+### 8013 端点与错误态
+
+`/api/fomc`（`FAS_FOMC_API=1`，否则 `403 api_disabled`；`local_server.js:3297-3300` 接管后 return）：
+
+- `GET /api/fomc/status`、`GET /api/fomc/bundle?event_id=`、`GET /api/fomc/versions?event_id=`、`GET /api/fomc/jobs`、`POST /api/fomc/refresh?event_id=`；
+- 错误态：400 `missing_event_id`、404 `unknown_event` / `unknown_fomc_api_route`、409 `task_running`、503 `source_disabled`/`write_disabled`/`unknown_event`/`missing_prior`/`last_refresh_failed`/`fetch_failed`/`refresh_timeout`/`identity_conflict`/`payload_too_large`/`body_read_error`。
+
+### 调度任务名、owner、安装/移除证据
+
+- 任务名：`FAS-FOMC-A2-Refresh`（固定单一，重复 install 幂等单实例）；
+- owner：`Administrator`（交互用户）、`LogonType Interactive`、`RunLevel Limited`；
+- `-MultipleInstances IgnoreNew` + `-ExecutionTimeLimit 10min` + 事件窗口 `[scheduled_at-6h, +72h]` + 跨进程互斥锁 + 有限重试（瞬态 2 次，5s/10s）；
+- 生命周期证据（`FAS_FOMC_TEST_TASKSCHED=1` 真实 Task Scheduler）：install→owner 可验证→reinstall 单实例→disable→remove→status ABSENT 无残留，全部 PASS（A4 smoke 31/0；测试后任务已移除）。
+
+### 六个子机制结果与回滚实测
+
+| 机制 | 断言 | 结果 |
+|---|---|---|
+| `A2_SOURCE_FETCH` | 16 | PASS（16/0） |
+| `A2_IDENTITY_TIME` | 15 | PASS（15/0） |
+| `A2_VERSION_STORE` | 18 | PASS（18/0） |
+| `A2_RUNTIME_API` | 25 | PASS（25/0） |
+| `A2_SCHEDULER` | 24 | PASS（24/0） |
+| `A2_DATA_PROTECTION` | 10 | PASS（10/0） |
+
+合计 **108 PASS / 0 FAIL**（`npm run smoke:v42-fomc-a2`，连续多次一致）。回滚实测：四开关逐层关闭 → `scheduler_disabled`/`source_disabled`/`write_disabled`/`api_disabled`(403)，正式 `data/` 零污染，代码回滚点 `b1abce5`、治理基线 `e56f54a`。
+
+### 未覆盖项与残余风险
+
+- 未覆盖：`text_changes` 逐段差异（batch B）、自动事实提取（batch B）、政策倾向/鹰鸽解释与市场因果（batch C）；
+- 残余风险：计划任务为系统级操作需目标机交互用户执行（验收机已抽验）；正式刷新首次真正写正式 `data/` 在开关开启后于运行环境触发；真实网络行为依赖 Federal Reserve 站点结构稳定，解析器对结构变化 fail-closed。
 
 ## 5. Codex 集中 R2 指令
 
@@ -179,4 +223,12 @@ PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 完成并可进入 V4.2 Batch B；
 - Human 明确授权开启 A2，并对 8013、外部网络只读、正式 data 写入、后台调度四项全部授权；
 - A2 计划与 A1 归档提交 `e56f54a`；
 - 新环 `PRD-EVENT-POLICY-15-A2` 开始于 `pending_exec / cursor`；
+- 未声明 `POLICY_SOURCE_ACQUISITION_A2` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+### R1 → R2 · Cursor claim rev0→1 → transition rev1→2 四门执行与交接
+
+- **claim rev0→1**：Cursor 取得租约（lease_owner/lease_actor=cursor），按 Gate 顺序执行四门，未跨门推进；
+- 交付：`lib/fomc_official_source.js`（Gate 1 隔离获取）、`lib/fomc_document_store.js`（Gate 2 受控存储）、`lib/fomc_a2_api.js` + `local_server.js` 接线（Gate 3）、`scripts/fomc_a2_refresh.js` + `scripts/fomc_a2_schedule.ps1`（Gate 4 后台刷新）；
+- **transition rev1→2**：释放租约，置 `pending_review / codex`；验收报告 `logs/acceptance/PRD-EVENT-POLICY-15-A2/`；
+- 证据：六子机制 **108 PASS / 0 FAIL**；Gate 4 全量（真实 Task Scheduler）**31 PASS / 0 FAIL**；回归 A1 106 / A4 25；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
 - 未声明 `POLICY_SOURCE_ACQUISITION_A2` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
