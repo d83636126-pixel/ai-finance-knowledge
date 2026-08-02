@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-B1
 acceptance: POLICY_TEXT_DIFF_B1
-revision: 16
+revision: 18
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-02T09:15:25.175Z'
+last_writer: 'cursor'
+written_at: '2026-08-02T09:46:39.181Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -39,12 +39,12 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 B1 确定性文本差异与政策事实` |
 | B1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_B_确定性文本差异与政策事实_2026-08-02.md` |
-| HEAD | `50b88aa` |
+| HEAD | `2d18ab6`（B1 R2 P1 关闭业务 tip） |
 | 开环基线 | `50b88aa`（A2 业务 tip） |
 | A1 / A2 业务 tip | `b1abce5` / `50b88aa` |
 | change class | `C2` |
 | review | `R2`（聚焦） |
-| status / next_actor | `pending_exec / cursor` |
+| status / next_actor | `pending_review / codex` |
 | 授权范围 | 沿用 V4.2 主计划与 A2 已授权面；本环为纯派生计算，无新外部网络/正式写入/后台调度需求 |
 | 回滚 | 删除未接入正式入口的 B1 候选模块与 smoke，恢复到 `50b88aa`；不迁移/删除正式产品数据 |
 
@@ -126,44 +126,43 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 4. Cursor 完成报告
 
-Cursor 完成报告（revision 13 → 14 · 置 `pending_review / codex`）
+Cursor 完成报告（revision 17 → 18 · 置 `pending_review / codex` · B1 R2 四组 P1 关闭）
 
-- 基线：开环 `50b88aa`（A2 业务 tip）。本轮仅新增 B1 候选模块 / smoke / 验收证据，未改正式 `data/`、未改既有生产入口语义。
-- 验收证据：`logs/acceptance/PRD-EVENT-POLICY-15-B1/gate{1,2,3,4}_*_evidence.json`。
+- 基线：开环 `50b88aa`（A2 业务 tip）。本业务 tip `2d18ab6` 仅关闭 Codex R2 要求的最小关闭项及对应负向测试；未改正式 `data/`、未改既有生产入口语义。
+- 复审目标：`2d18ab6`（四组 P1 修复 commit）。交接板 HEAD 与执行指针 `code_tip` 已统一绑定该 tip（P1-4 关闭）。
 
 ### Gate 顺序执行证据（TDD RED→GREEN，逐门推进，未跨门）
 
 | Gate | 交付 | 冒烟 | 断言 |
 |---|---|---|---|
-| 1 逐段文本差异引擎 | `lib/fomc_text_diff.js` | `scripts/smoke_v42_fomc_b1.js` | 57/57 PASS |
-| 2 明确决策事实提取 | `lib/fomc_decision_facts.js` | `scripts/smoke_v42_fomc_b1_gate2.js` | 24/24 PASS |
-| 3 主题定位 | `classifyTopic` + `TOPIC_RULES`（Gate1 同源落地） | `scripts/smoke_v42_fomc_b1_gate3.js` | 14/14 PASS |
+| 1 逐段文本差异引擎 | `lib/fomc_text_diff.js`（P1-1 SHA 独立复算） | `scripts/smoke_v42_fomc_b1.js` | 64/64 PASS |
+| 2 明确决策事实提取 | `lib/fomc_decision_facts.js`（P1-2 单段匹配/动作收紧/证据身份） | `scripts/smoke_v42_fomc_b1_gate2.js` | 33/33 PASS |
+| 3 主题定位 | `classifyTopic` + `TOPIC_RULES`（P1-3 词/短语边界 + MODIFIED 双侧证据 + 多主题保留） | `scripts/smoke_v42_fomc_b1_gate3.js` | 20/20 PASS |
 | 4 解释边界与数据保护 | `interpretation_status` 三态 + `derived_decision_facts` | `scripts/smoke_v42_fomc_b1_gate4.js` | 14/14 PASS |
+| P1-4 板绑定 | `scripts/ai_collab_board.js`（HEAD/code_tip 绑定 + 交接前检查） | `scripts/smoke_v42_fomc_b1_p14_board_check.js` | 5/5 PASS |
 
-- bundle 接线：`lib/fomc_document_bundle.js` 新增 `text_changes`（Gate1）与兄弟字段 `derived_decision_facts`（Gate2，纯文本派生，绝不继承输入 `decision_facts`），透传 `decision_facts` + `missing_fields` 语义不变。
-- 每门先写测试见 RED（MODULE_NOT_FOUND / 断言失败），再实现至 GREEN。
+- 五冒烟合计 **136 PASS / 0 FAIL**（64 + 33 + 20 + 14 + 5）。
+- 每门先写反例见 RED（断言失败），再实现至 GREEN；P1-4 交接前检查接线验证见 `smoke_v42_fomc_b1_p14_board_check.js`（Q1-Q5）。
 
 ### 五子机制结果
 
-1. `B_TEXT_DIFF` **PASS** —— 逐段差异确定、可复算、可定位：同输入同 method_version → 字节级同输出；`evidence_refs[]` 携带 `source_ref + paragraph_id + sha256`；跨页重排不误判为 MODIFIED/REMOVED+ADDED（reorder_notes 记录）。
-2. `B_DECISION_FACTS` **PASS** —— 纯文本派生目标利率区间（3.75/4.0）、决定方向（HOLD）、投票（11-1，仅 `approved by a vote of` 明确提供才提取）；缺证据记 `missing_fields`，绝不伪造；H1-H3 拒绝伪造/新闻/缓存事实源。
-3. `B_TOPIC_LOCATION` **PASS** —— 通胀/就业/经济活动主题定位；每个非 ABSTAIN 的 topic 关键词必须出现在该 change 自身 excerpt（可定位证据），缺证据 → ABSTAIN。
-4. `B_INTERPRETATION_BOUNDARY` **PASS** —— `FACT_ONLY / HYPOTHESIS / ABSTAIN` 三态枚举落地；本轮所有差异项 `FACT_ONLY`（B1 不伪造 HYPOTHESIS 支持/反证/缺口）；顶层与逐项无 score/similarity/confidence/hawk/dove/market_* 字段。
+1. `B_TEXT_DIFF` **PASS** —— P1-1 关闭：`normEntry()` 始终从规范化文本独立计算 SHA；输入 SHA 存在则校验，不一致置 `sha_mismatch` + 显式 warning，且排除于 UNCHANGED 对齐；补“同 SHA 不同文本”“同文本输入 SHA 错误”反例（C7a-C7d）。同输入同 method_version 字节级同输出；跨页重排不误判（reorder_notes）。
+2. `B_DECISION_FACTS` **PASS** —— P1-2 关闭：各事实必须在单一正式段落内完成匹配并返回该次匹配段落；动作仅接受明确委员会决定句式（participants/history/discussion 不得当决定）；段落缺 `id/sha256` 或 sha256 不一致 → 该事实 ABSTAIN；区间校验有限数 + lower <= upper + 合理范围 0..20%；补 participants 伪动作、跨段拼接、身份缺失/伪造、lower>upper、越界区间反例（P1_2a-P1_2f）。
+3. `B_TOPIC_LOCATION` **PASS** —— P1-3 关闭：词/短语边界匹配（priceless 不得命中 price、laboratory 不得命中 labor）；MODIFIED/UNCHANGED 审视 prior+current 双侧并记录 `topic_evidence` 来源侧；多主题保留 `topics[]`，`topic` 取优先级首主题。补 priceless/laboratory/prior 侧证据/多主题反例（P1_3a-P1_3f）。
+4. `B_INTERPRETATION_BOUNDARY` **PASS** —— `FACT_ONLY / HYPOTHESIS / ABSTAIN` 三态枚举不变；本轮差异项 `FACT_ONLY`；顶层与逐项无 score/similarity/confidence/hawk/dove/market_* 字段。
 5. `B_DATA_PROTECTION` **PASS** —— 正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`bundle_sha256` 幂等；回归 A1/A2/A4 零破坏。
 
-### 反例覆盖（对应 §3.5）
+### 反例覆盖（对应 §3.5 + Codex R2 四组 P1）
 
-- 同输入不同 method_version / 不同输入同输出 → 不变量保持；
-- 空 paragraphs、段落 ID 缺失、excerpt 确定性截断、跨页段落重排（循环移位全 UNCHANGED + 3 条 reorder_notes；插入移位不误判）→ 覆盖；
-- 目标利率区间 / 投票未明确提供 → 不伪造（`missing_fields` 记缺失）；
-- 文本措辞变化 → 不得出鹰/鸽结论（禁止字段断言 + 无 market_* 因果）；
-- 模型文本 / 新闻摘要 / 浏览器缓存 → 决策事实纯文本派生拒绝（H1/H2/H3）；
-- 既有 bundle 字节回写 → build 前后 `data/` 树 hash 前后比对零变化。
+- P1-1：同 SHA 不同文本 → 不判 UNCHANGED + warning；同文本输入 SHA 错误 → 不判 UNCHANGED + warning；正确 SHA → 仍 UNCHANGED 无 warning。
+- P1-2：participants 伪动作 → 不提取；跨段区间拼接 → 不提取；缺/错证据身份 → ABSTAIN + `missing_fields` 可见；lower>upper、越界区间 → 不伪造。
+- P1-3：`priceless`/`laboratory` 裸子串 → ABSTAIN；MODIFIED prior 侧通胀证据 → topic=inflation 且 `topic_evidence.inflation=["prior"]`；多主题 → `topics` 全保留。
+- P1-4：`pending_review` + HEAD=开环基线 → 判定违反且 `validateContent` fail(`pending_review_points_at_opening_baseline`)；`pending_review` + 业务 tip → 放行；`pending_exec` + 基线 → 放行。
 
 ### 正式数据 / 既有文件前后 hash
 
-- 本轮改动仅：新增 `lib/fomc_text_diff.js`、`lib/fomc_decision_facts.js`、`scripts/smoke_v42_fomc_b1*.js`、`logs/acceptance/PRD-EVENT-POLICY-15-B1/`；修改 `lib/fomc_document_bundle.js`（新增 `text_changes` / `derived_decision_facts` 兄弟字段）、`package.json`（仅 B1 命令）。
 - 正式 `data/` 178 文件树 hash：`f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`，build 前后零变化。
+- 本轮改动仅：`lib/fomc_text_diff.js`、`lib/fomc_decision_facts.js`、`scripts/ai_collab_board.js`、`scripts/smoke_v42_fomc_b1.js`、`scripts/smoke_v42_fomc_b1_gate2.js`、`scripts/smoke_v42_fomc_b1_gate3.js`、新增 `scripts/smoke_v42_fomc_b1_p14_board_check.js`、`logs/acceptance/PRD-EVENT-POLICY-15-B1/`。
 
 ### 回归
 
@@ -171,7 +170,7 @@ Cursor 完成报告（revision 13 → 14 · 置 `pending_review / codex`）
 
 ### 回滚实测
 
-- 删除未接入正式入口的 B1 候选模块与 smoke（`lib/fomc_text_diff.js`、`lib/fomc_decision_facts.js`、`scripts/smoke_v42_fomc_b1*.js`），`lib/fomc_document_bundle.js` / `package.json` 恢复 `50b88aa` → 可完整回退；正式 `data/` 不受影响。
+- 删除 B1 R2 修改面（`lib/fomc_text_diff.js`、`lib/fomc_decision_facts.js`、`scripts/ai_collab_board.js`、`scripts/smoke_v42_fomc_b1*.js`）并 `checkout 50b88aa` 恢复生产面 → 可完整回退；正式 `data/` 不受影响。
 
 ### 未覆盖项与残余风险
 
@@ -305,4 +304,16 @@ Cursor 完成报告（revision 13 → 14 · 置 `pending_review / codex`）
 - 交付：`lib/fomc_text_diff.js`（Gate 1 逐段差异引擎 + Gate 3 主题定位）、`lib/fomc_decision_facts.js`（Gate 2 决策事实提取）、Gate 4 解释边界与数据保护（`interpretation_status` 三态 + `derived_decision_facts` 兄弟字段，透传语义不变）；
 - 五子机制 **109 PASS / 0 FAIL**（Gate1 57 + Gate2 24 + Gate3 14 + Gate4 14）；回归 A1 **106/106**、A2 **152/152**、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
 - transition rev13→14：释放租约，置 `pending_review / codex`，交 Codex 聚焦 R2；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_TEXT_DIFF_B1` 或任何研究/数据质量/发布验收名。
+
+### R10 · Cursor claim rev16→17 关闭 Codex R2 四组 P1 → 置 `pending_review / codex`（2026-08-02）
+
+- Codex R2 聚焦复审 **CHANGES_REQUIRED**（复审 tip `e2b496f`），四组 P1：P1-1 SHA 独立复算、P1-2 决策事实单段匹配/动作收紧/证据身份、P1-3 主题词/短语边界 + MODIFIED 双侧证据 + 多主题、P1-4 板 HEAD/code_tip 绑定业务 tip + 交接前检查；
+- Cursor claim rev16→17（lease `cursor-b1-r2-p1`）后按最小关闭面执行，业务 tip `2d18ab6`：
+  - P1-1：`normEntry()` 独立复算 SHA，输入 SHA 校验不一致置 `sha_mismatch` + warning + 排除于 UNCHANGED 对齐；
+  - P1-2：各事实单段匹配 + 动作仅委员会决定句式 + 证据身份缺失/不一致 → ABSTAIN + 区间有限数/lower<=upper/0..20% 校验；
+  - P1-3：词/短语边界关键词 + MODIFIED 审视 prior+current 双侧记录 `topic_evidence` 来源侧 + `topics[]` 多主题保留；
+  - P1-4：`deriveOpeningBaseline` + `pendingReviewOpeningBaselineViolation` 接入 `validateContent`，禁止 `pending_review` 指向开环基线；
+- 五冒烟 **136 PASS / 0 FAIL**（Gate1 64 + Gate2 33 + Gate3 20 + Gate4 14 + P14 5）；回归 A1 **106/106**、A2 **152/152**、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
+- 板 §2 HEAD 更新为 `2d18ab6`、`sync-pointer` 绑定 `code_tip=2d18ab6`（P1-4 关闭）；transition rev17→18：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_TEXT_DIFF_B1` 或任何研究/数据质量/发布验收名。
