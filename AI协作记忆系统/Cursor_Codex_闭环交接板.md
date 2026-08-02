@@ -8,12 +8,12 @@ project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A2
 acceptance: POLICY_SOURCE_ACQUISITION_A2
 revision: 6
-turn: 1
-next_actor: 'cursor'
-status: 'pending_exec'
+turn: 2
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-02T02:47:42.699Z'
+last_writer: 'cursor'
+written_at: '2026-08-02T05:10:00.000Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -40,7 +40,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 A2 FOMC 正式来源适配与后台刷新` |
 | A2 计划 | `docs/ai-collab/产品发展执行计划_V4.2_A2_正式来源适配与后台刷新_2026-08-01.md` |
-| HEAD | `74870c7` |
+| HEAD | `9ad2f92` |
 | 开环基线 | `e56f54a` |
 | A1 业务 tip | `b1abce5` |
 | change class | `C2` |
@@ -194,9 +194,9 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | `A2_RUNTIME_API` | 25 | PASS（25/0） |
 | `A2_SCHEDULER` | 24 | PASS（24/0） |
 | `A2_DATA_PROTECTION` | 10 | PASS（10/0） |
-| `A2_P1_R4`（Codex R2 四组 P1 反例 + 加固） | 33 | PASS（33/0） |
+| `A2_P1_R4`（Codex R2/R4 四组 P1 反例 + rev6 导出面/公钥验签加固） | 42 | PASS（42/0） |
 
-合计 **141 PASS / 0 FAIL**（`npm run smoke:v42-fomc-a2`，rev4 P1 关闭后连续多次一致）。回滚实测：四开关逐层关闭 → `scheduler_disabled`/`source_disabled`/`write_disabled`/`api_disabled`(403)，正式 `data/` 零污染，代码回滚点 `b1abce5`、治理基线 `e56f54a`。
+合计 **150 PASS / 0 FAIL**（`npm run smoke:v42-fomc-a2`，rev6 P1-1 关闭后复跑一致）。回滚实测：四开关逐层关闭 → `scheduler_disabled`/`source_disabled`/`write_disabled`/`api_disabled`(403)，正式 `data/` 零污染，代码回滚点 `b1abce5`、治理基线 `e56f54a`。
 
 ### 未覆盖项与残余风险
 
@@ -240,6 +240,25 @@ rev2 交付经 R2 `CHANGES_REQUIRED` 后，本环仅关闭四组 P1、补齐对�
 - 调度只读核对：`FAS-FOMC-A2-Refresh` 仍 `ABSENT`（本环未安装系统任务）；
 - 未新增正式运行数据、未改动 fixture/既有文件、未扩展 Batch B/C/D。
 
+### R5 · rev6 关闭 R4 剩余 P1-1：Ed25519 公钥验签 + 生产导出面收敛（反例已补齐，交 Codex 聚焦复审）
+
+R4 阻断点：生产导出面暴露真实 `VERIFIED_CAPABILITY` 与 `issueVerifiedProof()`，同进程普通模块可自签有效 proof。本环只关闭这一项，未扩展 Batch B/C/D。
+
+#### 修复方式（5 点最小边界逐项落实）
+
+1. **生产导出面收敛**：`lib/fomc_capability.js` 不再导出 `VERIFIED_CAPABILITY` / `issueVerifiedProof`；导出面仅 `{ VERIFIED_ADAPTER_ID, VERIFIED_REGISTRY_KIND, PROOF_SCHEMA, canonicalProvenanceFields, claimProofSigner, verifyVerifiedProof }`。`claimProofSigner()` 一次性领取（适配器模块加载时领取，之后再调用返回 null），私钥（Ed25519）只活在模块闭包，永不跨模块传递。
+2. **签发进私有运行时边界**：仅正式来源适配器 `lib/fomc_official_source.js` 持有一次性签发函数，官方获取 + proof 签发 + bundle 构建全部走适配器受控路径；对外高层入口 `fetchVerifiedPair(spec, priorSpec)` 按 event_id 取数。bundle 层不再接收 capability/opts，`buildFomcDocumentBundle(input)` 内部经公钥验签独立判定 verified。
+3. **store 独立兜底**：`validateWriteInput` 新增 `doc.is_synthetic === true → write_rejected_synthetic`；落实 `published_at <= captured_at <= evaluated_at`（`write_rejected_time_inversion`）与 `verified_provenance.fetched_at === captured_at`（`write_rejected_fetched_at_mismatch` / `_fetched_at_invalid`）；并独立复算 canonical payload + 公钥验签（`write_rejected_proof`）。
+4. **反例走全部公开生产 API**：新增 `p1_1_*` 断言直接枚举 `fomc_capability` / `fomc_document_bundle` 导出面（确认无 capability/issuer/再导出）；把 A1 `is_synthetic:true` fixture（含翻转为 `is_synthetic:false` 的 R4 原手法）经 `makeDocumentRegistry` + `buildFomcDocumentBundle` 全部公开 API 驱动 → 不能 official READY、store 全部 `write_rejected_*` 且零写入；genuine 路径（经适配器受控 fetch 产出）仍可写。
+5. **正向证据经适配器受控 fetch 路径**：testkit `makeDoc` 通过注入官方 HTML 调用 `fetchFomcStatement`，由适配器内部一次性签发函数签名 proof；testkit 不导入生产签发器、不构造 capability。注入 fetch 仅在 `FAS_FOMC_TEST_FETCH=1`（仅 testkit 设置）时被 `httpGet` 接受，生产路径永不使用注入内容。
+
+#### 回归与证据
+
+- A1 **106/106**、A2 **150/150**（`A2_P1_R4` 扩到 42：新增 `p1_1_capability_exports_no_issuer_no_object` / `p1_1_bundle_no_capability_reexport` / `p1_1_claim_signature_one_time` / `p1_1_verify_rejects_forged_proof` / `p1_1_verify_rejects_missing_proof` / `p1_1_verify_genuine_proof_ok` / `p1_1_fixture_not_official` / `p1_1_fixture_not_ready_write_rejected` / `p1_1_fixture_synthetic_write_rejected` / `p1_1_flipped_fixture_write_rejected` / `p1_1_genuine_write_ok` / `p1_1_store_rejects_synthetic` / `p1_1_fetched_at_mismatch_rejected` / `p1_1_published_after_captured_rejected`）、A4 **25/25**，全部 PASS；
+- 正式 `data/` **零变化**：178 文件树 hash `f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`（A1 基线算法复现一致）；
+- 调度只读核对：`FAS-FOMC-A2-Refresh` 仍 `ABSENT`（本环未安装系统任务）；
+- 未新增正式运行数据、未改动 fixture/既有文件、未扩展 Batch B/C/D；`local_server.js` / `daily_briefing.html` 未触碰。
+
 ## 5. Codex 集中 R2 指令
 
 ### R3 聚焦复审结论：`CHANGES_REQUIRED`
@@ -276,6 +295,19 @@ rev2 交付经 R2 `CHANGES_REQUIRED` 后，本环仅关闭四组 P1、补齐对�
 5. 保持已通过的 P1-2/3/4 与 A1/A2/A4 回归不变，正式 `data/` 零变化。
 
 在 P1-1 真正关闭或 Human 明确调整威胁模型前，不得声明 `POLICY_SOURCE_ACQUISITION_A2`，不得进入 Batch B。
+
+#### rev6 聚焦复审目标（R4 剩余 P1-1 导出面 + 公钥验签关闭验证）
+
+Codex 必须独立复核：
+
+1. **导出面枚举**：`fomc_capability` 导出面无 `VERIFIED_CAPABILITY` / `issueVerifiedProof`；`fomc_document_bundle` 不再再导出 capability；`claimProofSigner()` 一次性领取（模块加载即被适配器领取，之后调用返回 null），Ed25519 私钥不跨模块传递。
+2. **公钥验签独立性**：伪造/缺失/篡改 proof 均拒绝（`p1_1_verify_rejects_forged_proof` / `_missing_proof`）；genuine proof（适配器受控 fetch 产出）通过（`_genuine_proof_ok`）；store 写前独立复算 canonical payload + 验签，篡改任一绑定字段 `write_rejected_*` 且零写入。
+3. **A1 fixture 全公开 API 反例**：`is_synthetic:true` fixture（含翻转为 false 的 R4 手法）经 `makeDocumentRegistry` + `buildFomcDocumentBundle` 驱动全部公开生产 API → 不能 official READY、store 全部拒绝且零写入；store `is_synthetic` 独立兜底。
+4. **时间序绑定**：`published_at <= captured_at = fetched_at <= evaluated_at` 全序；任一违反 → `write_rejected_time_inversion` / `_fetched_at_mismatch`。
+5. **测试 fetch 缝不泄生产**：`FAS_FOMC_TEST_FETCH` 仅 testkit 设置，`httpGet` 生产路径不接受注入内容，防伪造正文在适配器内产出有效签名 proof。
+6. 复跑 A1 106 / A2 150（含 `A2_P1_R4` 42 反例）/ A4 25；正式 `data/` 178 文件树 hash `f055a2db…fe104` 不变；`FAS-FOMC-A2-Refresh` 保持 `ABSENT`。
+
+PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 的 P1-1 关闭可确认；不表示总体验收、研究质量或发布通过。
 
 ### R2 结论：`CHANGES_REQUIRED`
 
@@ -371,3 +403,11 @@ PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 完成并可进入 V4.2 Batch B；
 - P1-2 共享锁、P1-3 HTTP fail-closed、P1-4 单一 job_id 已通过；
 - P1-1 仍阻断：生产模块公开真实 `VERIFIED_CAPABILITY` 与 `issueVerifiedProof()`，A1 synthetic fixture 可被普通模块自签为 official 并成功写入；
 - 板切回 `pending_exec / cursor`；只允许关闭此一项，不扩展 Batch B/C/D。
+
+### R5 · Cursor rev6 关闭 R4 剩余 P1-1 → 置 `pending_review / codex`
+
+- 关闭 P1-1：Ed25519 公钥验签（`fomc_capability` 不再导出 capability/issuer，`claimProofSigner` 一次性领取、私钥不出闭包；`fomc_document_bundle` 不再再导出 capability，`buildFomcDocumentBundle(input)` 内部公钥验签）；store 独立兜底（`is_synthetic` 拒绝 + `published_at <= captured_at = fetched_at <= evaluated_at` 绑定）；签发仅存于适配器受控路径，testkit 经注入官方 HTML 走正式 fetch 面产出 genuine 证据，生产路径不接受注入 fetch；
+- 新增 `p1_1_*` 14 项反例直接枚举生产导出面 + A1 fixture（含翻转 `is_synthetic:false`）经全部公开 API 不能 official/write；
+- 回归：A1 **106/106**、A2 **150/150**（`A2_P1_R4` = 42）、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`FAS-FOMC-A2-Refresh` 只读核对 `ABSENT`；
+- 释放租约，置 `pending_review / codex`（turn 1→2），交 Codex 聚焦复审（rev6 目标见 §5）；
+- 未声明 `POLICY_SOURCE_ACQUISITION_A2` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
