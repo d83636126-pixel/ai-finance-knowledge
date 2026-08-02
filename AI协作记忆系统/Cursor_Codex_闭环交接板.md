@@ -30,7 +30,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 - V4.2 A1（FOMC 文本证据契约）已 PASS 归档；V4.2 A2（正式来源适配与后台刷新）经 Codex R10 最终聚焦复审 **PASS**，交接板转 `done / human`（revision 11 / turn 2）。
 - Human（2026-08-02）正式确认 **`POLICY_SOURCE_ACQUISITION_A2`** 完成并验收，并授权另开 **Batch B 新环**（确定性文本差异与政策事实）。
-- 当前执行者：Cursor；完成 Batch B 交付后交 Codex 做一次聚焦 R2。
+- **B1 环已关闭**：Codex R2 聚焦复审 **PASS**（`codex_r2_final_review.md`，复审 tip `2d18ab6`），交接板转 `done / human`（revision 20）；Human（2026-08-02）正式确认 **`POLICY_TEXT_DIFF_B1`** 完成并验收。
 - 本环不做政策倾向/鹰鸽解释、不把文本差异压成不可解释的单一分数、不接新外部网络、不改既有生产入口语义；不声明 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 ## 2. 基线、授权与边界
@@ -44,7 +44,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | A1 / A2 业务 tip | `b1abce5` / `50b88aa` |
 | change class | `C2` |
 | review | `R2`（聚焦） |
-| status / next_actor | `pending_review / codex` |
+| status / next_actor | `done / human`（2026-08-02 确认 `POLICY_TEXT_DIFF_B1`） |
 | 授权范围 | 沿用 V4.2 主计划与 A2 已授权面；本环为纯派生计算，无新外部网络/正式写入/后台调度需求 |
 | 回滚 | 删除未接入正式入口的 B1 候选模块与 smoke，恢复到 `50b88aa`；不迁移/删除正式产品数据 |
 
@@ -342,3 +342,11 @@ Codex 对 `POLICY_TEXT_DIFF_B1` 工程实现给出 **PASS**，交接板可转为
 - 五冒烟 **136 PASS / 0 FAIL**（Gate1 64 + Gate2 33 + Gate3 20 + Gate4 14 + P14 5）；回归 A1 **106/106**、A2 **152/152**、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
 - 板 §2 HEAD 更新为 `2d18ab6`、`sync-pointer` 绑定 `code_tip=2d18ab6`（P1-4 关闭）；transition rev17→18：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_TEXT_DIFF_B1` 或任何研究/数据质量/发布验收名。
+
+### R11 · Codex R2 聚焦复审 PASS + Human 确认 + B1 归档（2026-08-02）
+
+- Codex R2 聚焦复审 **PASS**（`codex_r2_final_review.md`，复审 tip `2d18ab6`）：SHA 独立复算 / 政策事实不伪造 / 主题定位 / 板绑定业务 tip 四组 P1 独立复核全部通过；交接板 rev18→20 转 `done / human`；
+- Human（2026-08-02）正式确认 **`POLICY_TEXT_DIFF_B1`** 完成并验收（`acceptance_report.md` 置 `accepted_human` / `acceptance_declared: true`）；
+- B1 归档 `docs/ai-collab/闭环归档/V4.2_B1_确定性文本差异与政策事实_PASS_2026-08-02.md`（业务 tip `2d18ab6`，治理 tip `eeed106`）；
+- 业务仓 `eeed106` / Obsidian `63f1b33` 双仓 clean、交接板镜像字节一致；是否另开后续 Batch 由 Human 决定；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
