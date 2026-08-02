@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A2
 acceptance: POLICY_SOURCE_ACQUISITION_A2
-revision: 9
+revision: 11
 turn: 2
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'human'
+status: 'done'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-02T08:17:18.518Z'
+last_writer: 'codex'
+written_at: '2026-08-02T08:28:23.835Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -281,6 +281,28 @@ R7 阻断点：① 生产导出面仍能领取真实签发器（`claimProofSigne
 - 未新增正式运行数据、未改动 fixture/既有文件、未扩展 Batch B/C/D。
 
 ## 5. Codex 集中 R2 指令
+
+### R10 · Codex 最终聚焦复审结论：PASS
+
+复审 tip：`50b88aa`。本轮只复核 R7 留下的 P1-1 两个反例，没有扩展 Batch B。
+
+#### 独立反例结论
+
+1. `lib/fomc_capability.js` 的生产导出面只剩固定标识、公钥、canonical 计算与验签器；不存在 `claimProofSigner`、issuer、capability 或等价签发入口。全新子进程先枚举该模块后，`lib/fomc_official_source.js` 仍可正常加载，导入顺序不再造成签发器被抢占或适配器拒绝启动。
+2. 即使设置 `FAS_FOMC_TEST_FETCH=1` 并传入伪造 `opts.fetch`，正式 `fetchFomcStatement()` 也不会调用注入函数，只走正式 HTTPS transport；独立反例结果为 `injected_fetch_calls=0`、`document_issued=false`。测试 transport 已移到 `scripts/fomc_a2_testkit.js`，通过 `finally` 恢复进程级 `https.get`。
+
+#### 回归证据
+
+- A1：**106/106 PASS**；
+- A2：六个子机制及 P1 组全部通过，合计 **152/152 PASS**（`A2_P1_R4` **44/44**）；
+- A4：**25/25 PASS**，系统任务生命周期仍按开关未执行；
+- 本轮没有正式来源写入、没有推进 Batch B、没有声明产品或研究级 PASS。
+
+#### 判定边界
+
+Codex 对 A2 工程实现给出 **PASS**，交接板可转为 `done / human`。该 PASS 只表示 R7 阻断关闭及 `POLICY_SOURCE_ACQUISITION_A2` 已具备 Human 确认条件；它不代替 Human 正式声明，也不自动开启 Batch B。
+
+非阻断边界：当前 Ed25519 key 只作为本地可信进程内的完整性/来源路径护栏，不构成对拥有仓库源码或本机文件系统访问者的外部密码学认证。后续若需要跨机器或第三方可验证来源，应另行采用外部密钥保管或独立签发服务；本项不阻断本地 A2 产品能力。
 
 ### rev7 聚焦复审目标（R7 两反例关闭验证）
 
