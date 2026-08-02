@@ -187,11 +187,6 @@ Cursor 完成报告（revision 23 · 置 `pending_review / codex`）
 
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
-Cursor 完成报告（待 C1 执行后填写 · 置 `pending_review / codex`）
-
-- 基线：开环 `2d18ab6`（B1 业务 tip）。
-- 完成后在此列明：Gate 顺序执行证据、五子机制结果、反例覆盖、正式数据/既有文件前后 hash、回滚实测、未覆盖项与残余风险；交接板 HEAD 与执行指针 `code_tip` 绑定实际 C1 业务 tip。
-
 ## 5. Codex 集中 R2 指令
 
 聚焦复审目标（本环为证据约束草稿，范围收敛到五子机制与四类风险）：
