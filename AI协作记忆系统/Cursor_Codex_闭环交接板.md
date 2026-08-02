@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-B1
 acceptance: POLICY_TEXT_DIFF_B1
-revision: 12
+revision: 14
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'human'
-written_at: '2026-08-02T08:40:03.491Z'
+last_writer: 'cursor'
+written_at: '2026-08-02T09:01:43.789Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -126,11 +126,72 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 4. Cursor 完成报告
 
-（待 Cursor 完成 Batch B 后填写。）
+Cursor 完成报告（revision 13 → 14 · 置 `pending_review / codex`）
+
+- 基线：开环 `50b88aa`（A2 业务 tip）。本轮仅新增 B1 候选模块 / smoke / 验收证据，未改正式 `data/`、未改既有生产入口语义。
+- 验收证据：`logs/acceptance/PRD-EVENT-POLICY-15-B1/gate{1,2,3,4}_*_evidence.json`。
+
+### Gate 顺序执行证据（TDD RED→GREEN，逐门推进，未跨门）
+
+| Gate | 交付 | 冒烟 | 断言 |
+|---|---|---|---|
+| 1 逐段文本差异引擎 | `lib/fomc_text_diff.js` | `scripts/smoke_v42_fomc_b1.js` | 57/57 PASS |
+| 2 明确决策事实提取 | `lib/fomc_decision_facts.js` | `scripts/smoke_v42_fomc_b1_gate2.js` | 24/24 PASS |
+| 3 主题定位 | `classifyTopic` + `TOPIC_RULES`（Gate1 同源落地） | `scripts/smoke_v42_fomc_b1_gate3.js` | 14/14 PASS |
+| 4 解释边界与数据保护 | `interpretation_status` 三态 + `derived_decision_facts` | `scripts/smoke_v42_fomc_b1_gate4.js` | 14/14 PASS |
+
+- bundle 接线：`lib/fomc_document_bundle.js` 新增 `text_changes`（Gate1）与兄弟字段 `derived_decision_facts`（Gate2，纯文本派生，绝不继承输入 `decision_facts`），透传 `decision_facts` + `missing_fields` 语义不变。
+- 每门先写测试见 RED（MODULE_NOT_FOUND / 断言失败），再实现至 GREEN。
+
+### 五子机制结果
+
+1. `B_TEXT_DIFF` **PASS** —— 逐段差异确定、可复算、可定位：同输入同 method_version → 字节级同输出；`evidence_refs[]` 携带 `source_ref + paragraph_id + sha256`；跨页重排不误判为 MODIFIED/REMOVED+ADDED（reorder_notes 记录）。
+2. `B_DECISION_FACTS` **PASS** —— 纯文本派生目标利率区间（3.75/4.0）、决定方向（HOLD）、投票（11-1，仅 `approved by a vote of` 明确提供才提取）；缺证据记 `missing_fields`，绝不伪造；H1-H3 拒绝伪造/新闻/缓存事实源。
+3. `B_TOPIC_LOCATION` **PASS** —— 通胀/就业/经济活动主题定位；每个非 ABSTAIN 的 topic 关键词必须出现在该 change 自身 excerpt（可定位证据），缺证据 → ABSTAIN。
+4. `B_INTERPRETATION_BOUNDARY` **PASS** —— `FACT_ONLY / HYPOTHESIS / ABSTAIN` 三态枚举落地；本轮所有差异项 `FACT_ONLY`（B1 不伪造 HYPOTHESIS 支持/反证/缺口）；顶层与逐项无 score/similarity/confidence/hawk/dove/market_* 字段。
+5. `B_DATA_PROTECTION` **PASS** —— 正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`bundle_sha256` 幂等；回归 A1/A2/A4 零破坏。
+
+### 反例覆盖（对应 §3.5）
+
+- 同输入不同 method_version / 不同输入同输出 → 不变量保持；
+- 空 paragraphs、段落 ID 缺失、excerpt 确定性截断、跨页段落重排（循环移位全 UNCHANGED + 3 条 reorder_notes；插入移位不误判）→ 覆盖；
+- 目标利率区间 / 投票未明确提供 → 不伪造（`missing_fields` 记缺失）；
+- 文本措辞变化 → 不得出鹰/鸽结论（禁止字段断言 + 无 market_* 因果）；
+- 模型文本 / 新闻摘要 / 浏览器缓存 → 决策事实纯文本派生拒绝（H1/H2/H3）；
+- 既有 bundle 字节回写 → build 前后 `data/` 树 hash 前后比对零变化。
+
+### 正式数据 / 既有文件前后 hash
+
+- 本轮改动仅：新增 `lib/fomc_text_diff.js`、`lib/fomc_decision_facts.js`、`scripts/smoke_v42_fomc_b1*.js`、`logs/acceptance/PRD-EVENT-POLICY-15-B1/`；修改 `lib/fomc_document_bundle.js`（新增 `text_changes` / `derived_decision_facts` 兄弟字段）、`package.json`（仅 B1 命令）。
+- 正式 `data/` 178 文件树 hash：`f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`，build 前后零变化。
+
+### 回归
+
+- A1 `smoke_v42_fomc_a1.js` **106/106**；A2 `smoke_v42_fomc_a2.js` **152/152（PASS）**；A4 `smoke_v42_fomc_a4.js` **25/25（PASS）**。
+
+### 回滚实测
+
+- 删除未接入正式入口的 B1 候选模块与 smoke（`lib/fomc_text_diff.js`、`lib/fomc_decision_facts.js`、`scripts/smoke_v42_fomc_b1*.js`），`lib/fomc_document_bundle.js` / `package.json` 恢复 `50b88aa` → 可完整回退；正式 `data/` 不受影响。
+
+### 未覆盖项与残余风险
+
+- fixtures 为合成 FOMC 声明；真实官方文本的超长 excerpt 截断、跨页重排密度未全量核对；
+- `HYPOTHESIS` 分支（支持/反证/缺口/可证伪条件）属 Batch C 政策推断，本轮仅落地三态枚举与 FACT_ONLY/ABSTAIN 使用，未验证 HYPOTHESIS 内容契约；
+- 投票名册（"Voting for the monetary policy action were: …"）本身不构成计数，本轮按缺证据处理（不伪造）；若未来需从名册推导，须 Batch C 单独授权。
+
+未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_TEXT_DIFF_B1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
 
-（待 Cursor 交回后填写聚焦复审目标。）
+聚焦复审目标（本环为纯派生计算，范围收敛到五子机制与四类风险）：
+
+1. **B_TEXT_DIFF 确定性 / 可复算 / 可定位** —— 复核 `computeTextChanges` 三阶段算法（sha256 精确匹配 → 同 ordinal MODIFIED → 余量 ADDED/REMOVED）；重点：同输入同版本字节级同输出、跨页重排不误判、`excerptOf` 截断确定性、`normEntry` 派生 id 稳定性、`evidence_refs[]` 可解析到真实段落。
+2. **B_DECISION_FACTS 不伪造** —— 复核 `extractDecisionFacts` 三提取器（target_range / action / vote）正则边界：区间锚定不吞 "to"、动作动词覆盖不误报、投票仅在明确计数时提取；`derived_decision_facts` 是否绝对不继承输入 `decision_facts`（H1 反例）、拒绝新闻/缓存事实源（H2/H3）。
+3. **B_TOPIC_LOCATION 可追溯** —— 复核 `classifyTopic` 优先级（inflation > employment > economic_activity）与关键词边界；每个非 ABSTAIN 的 topic 是否都能在 change 自身 excerpt 中定位关键词。
+4. **B_INTERPRETATION_BOUNDARY** —— 复核禁止字段断言（score / similarity / confidence / hawk / dove / market_*）是否覆盖顶层与逐项；`HYPOTHESIS` 是否不自动伪造。
+5. **B_DATA_PROTECTION** —— 复核 build 前后 `data/` 树 hash 零变化、`bundle_sha256` 幂等、A1/A2 透传 `decision_facts` + `missing_fields` 语义不变（A1:325 断言仍绿）。
+
+请就以上给出 **PASS / CHANGES_REQUIRED** 裁决；如 CHANGES_REQUIRED 需列可复现反例与最小关闭要求，不扩展 Batch B/C/D。
 
 ## 6. 回合历史
 
@@ -199,3 +260,11 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - A2 归档 `docs/ai-collab/闭环归档/V4.2_A2_FOMC正式来源适配与后台刷新_PASS_2026-08-02.md`（业务 tip `50b88aa`）；
 - Human 授权另开 **Batch B 新环 `PRD-EVENT-POLICY-15-B1`**（确定性文本差异与政策事实），交接板 revision 11 → 12，置 `pending_exec / cursor`（turn 0）；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+
+### R9 · Cursor B1 四门执行与交接 → 置 `pending_review / codex`
+
+- 开环基线 `50b88aa`（A2 业务 tip）；Cursor 按 Gate 1-4 顺序执行四门（TDD RED→GREEN），未跨门推进；
+- 交付：`lib/fomc_text_diff.js`（Gate 1 逐段差异引擎 + Gate 3 主题定位）、`lib/fomc_decision_facts.js`（Gate 2 决策事实提取）、Gate 4 解释边界与数据保护（`interpretation_status` 三态 + `derived_decision_facts` 兄弟字段，透传语义不变）；
+- 五子机制 **109 PASS / 0 FAIL**（Gate1 57 + Gate2 24 + Gate3 14 + Gate4 14）；回归 A1 **106/106**、A2 **152/152**、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
+- transition rev13→14：释放租约，置 `pending_review / codex`，交 Codex 聚焦 R2；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_TEXT_DIFF_B1` 或任何研究/数据质量/发布验收名。
