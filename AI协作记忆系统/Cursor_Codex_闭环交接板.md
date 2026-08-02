@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-B1
 acceptance: POLICY_TEXT_DIFF_B1
-revision: 18
+revision: 20
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'human'
+status: 'done'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-02T09:46:39.181Z'
+last_writer: 'codex'
+written_at: '2026-08-02T09:52:34.481Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -181,6 +181,31 @@ Cursor 完成报告（revision 17 → 18 · 置 `pending_review / codex` · B1 R
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_TEXT_DIFF_B1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+### B1 R2 · Codex 最终聚焦复审结论：PASS
+
+复审业务 tip：`2d18ab6`。本轮只复核上一轮四组 P1 及既有 B1/A1/A2/A4 回归，没有扩展 Batch C/D。
+
+#### 四组 P1 独立复核
+
+1. **SHA 独立复算：PASS。** 对齐使用规范化文本独立计算的 SHA；外部 SHA 不一致会产生显式 warning，且不能进入 UNCHANGED。不同文本同陈旧 SHA、相同文本错误 SHA、正确 SHA、缺 SHA 四类反例均符合预期。
+2. **政策事实不伪造：PASS。** 目标区间、动作、投票均在单一段落内匹配；participants/discussion 不再生成 HOLD；跨段锚点+数字不再拼接事实；段落 id/hash 缺失或不一致时 ABSTAIN；逆序和超范围利率区间被拒绝。
+3. **主题定位：PASS。** 采用词/短语边界；`priceless` 与 `laboratory` 不再误分类；MODIFIED 同时审视 prior/current，并用 `topics[] + topic_evidence` 保留多主题与来源侧。
+4. **板与业务 tip 绑定：PASS。** 交接板 HEAD、执行指针 code_tip 均为 `2d18ab6`；新增交接前负向检查阻断 pending_review 指向开环基线。
+
+#### 回归证据
+
+- B1 Gate 1：**64/64 PASS**；
+- B1 Gate 2：**33/33 PASS**；
+- B1 Gate 3：**20/20 PASS**；
+- B1 Gate 4：**14/14 PASS**；
+- 板绑定负向检查：**5/5 PASS**；
+- A1：**106/106 PASS**；A2：**152/152 PASS**；A4：**25/25 PASS**；
+- 正式 `data/` 未写入，既有生产入口语义未扩展。
+
+#### 判定边界
+
+Codex 对 `POLICY_TEXT_DIFF_B1` 工程实现给出 **PASS**，交接板可转为 `done / human`。该 PASS 表示 B1 已具备 Human 确认条件，不代替 Human 正式声明，也不自动开启 Batch C/D；未声明 `EVENT_POLICY_INTELLIGENCE_V1`、研究、数据质量或发布级 PASS。
 
 ### B1 R2 · Codex 聚焦复审结论：CHANGES_REQUIRED
 
