@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 25
+revision: 27
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-02T16:50:07.707Z'
+last_writer: 'cursor'
+written_at: '2026-08-02T17:13:27.400Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -41,7 +41,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 C1 证据约束草稿` |
 | C1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_C_证据约束草稿_2026-08-02.md` |
-| HEAD | `71b1dbc`（C1 业务 tip） |
+| HEAD | `57d6aab`（C1 R14 P1 关闭业务 tip） |
 | 开环基线 | `2d18ab6`（B1 业务 tip） |
 | A1 / A2 / B1 业务 tip | `b1abce5` / `50b88aa` / `2d18ab6` |
 | change class | `C2` |
@@ -131,53 +131,80 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 4. Cursor 完成报告
 
-Cursor 完成报告（revision 23 · 置 `pending_review / codex`）
 
-- 基线：开环 `2d18ab6`（B1 业务 tip）。本轮仅新增 C1 候选模块 / smoke / 验收证据，未改正式 `data/`、未改既有生产入口语义。
-- 验收证据：`logs/acceptance/PRD-EVENT-POLICY-15-C1/gate{1,2,3,4}_*_evidence.json`。
+Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关闭）
 
-### Gate 顺序执行证据（TDD 先测后实现，逐门推进，未跨门）
+- 基线：R13 C1 业务 tip `71b1dbc`。本轮仅关闭 Codex R2 复审（`06dd172` / `codex_r2_review.md`）的四组 P1 并补可复现反例；未改正式 `data/`、未改既有生产入口语义。
+- 验收证据：`logs/acceptance/PRD-EVENT-POLICY-15-C1/`；P1 专项 `scripts/smoke_v42_fomc_c1_p1_r14.js`。
 
-| Gate | 交付 | 冒烟 | 断言 |
-|---|---|---|---|
-| 1 事前证据约束 | `buildExAntePlan`（focus_paragraphs / possible_changes / counter_evidence / abstain_conditions） | `scripts/smoke_v42_fomc_c1_gate1.js` | 39/39 PASS |
-| 2 事后证据锚定 | `anchorExPost`（decision_facts / missing_fields / evidence_refs） | `scripts/smoke_v42_fomc_c1_gate2.js` | 21/21 PASS |
-| 3 无模型事实呈现 | `factsOnlyView` + `factSourceGuard` | `scripts/smoke_v42_fomc_c1_gate3.js` | 20/20 PASS |
-| 4 自动稿隔离 + 推断可溯 | `buildResearchNote` + `evidenceDraftFromBundle` + `validateHumanRevision` + `assertNoForbiddenInferenceFields` | `scripts/smoke_v42_fomc_c1_gate4.js` | 19/19 PASS |
+### P1-1 事前冻结：事后生成的模板不得被标成 READY
 
-- bundle 接线：`lib/fomc_document_bundle.js` 契约内补充派生字段 `research_note`（`{ method_version, ex_ante, ex_post }`）；事前 `ex_ante` 只派生自 `prior`（事前冻结），事后 `ex_post` 锚定实际决定 / 逐项文本变化 / 来源与数据缺口。透传 `decision_facts` + `missing_fields` 语义不变，`bundle_sha256` 幂等保持。
-- 每门先写测试见 RED（MODULE_NOT_FOUND / 断言失败），再实现至 GREEN。
+`buildExAntePlan` 接收并校验 `generatedAt` / `currentPublishedAt` / `freezeHash` / `method_version`：
 
-### 五子机制结果
+- `generated_at >= current.published_at`（时间缺失 / 非法 / 反转）或冻结快照缺失 / hash 不匹配 → **ABSTAIN**（`freeze_invalid`），事后生成不得冒充事前冻结；
+- 无任何冻结参数 → **`RETROSPECTIVE_EX_ANTE_TEMPLATE`**（`pre_event_frozen:false`），不再标 READY / 事前冻结措辞；
+- 真实冻结 → **`EX_ANTE_READY`**，`freeze` 绑定 `freeze_sha256 / generated_at / current_published_at / method_version / prior_source_ref / prior_text_sha256`；
+- ex-post 引用该已存在冻结快照（`ex_ante_reference.freeze_sha256`）。
 
-1. `C_INFERENCE_TRACEABILITY` **PASS** —— 每项推断带 `support[]` / `counter_evidence[]` / `gaps[]` / `falsifiable_conditions[]` / `method_version`，且 `support`/`counter_evidence` 全部可定位到 `source_ref + paragraph_id`；全量遍历研究记录无缺失（P_every_inference_contract）；无自动鹰鸽 / 单一分数 / 市场因果字段（禁止字段断言，顶层与逐项）。
-2. `C_EX_ANTE_CONSTRAINT` **PASS** —— 事前研究记录含关注段落（5 段，source_ref + paragraph_id + reason + topics）、可能变化（每关注段一个候选，含支持侧证据）、反证（prior 正式文本延续性标记，方向中立）、弃权条件（`next_statement_unavailable` / `decision_not_stated` / 缺基线追加）；同输入同 method_version 字节级同输出；缺证据 → ABSTAIN，不猜测。
-3. `C_EX_POST_ANCHOR` **PASS** —— 实际决定（HOLD 3.75–4，evidence_refs 2 条可定位）、逐项文本变化（7 条全带 evidence_refs）、来源与数据缺口（投票缺口 `vote` 记入 missing_fields 并集 + bundle 缺口，conflicts 锚定）；仅在正式声明明确提供时锚定，输入伪造 `decision_facts` 不继承（纯文本派生）。
-4. `C_MODEL_FREE_RENDER` **PASS** —— `factsOnlyView` 无模型直接渲染事实与差异（text_changes / decision_facts / research_note / missing_fields / conflicts / source_refs）；`factSourceGuard` 拒绝 model/news/cache 与缺 source_ref/paragraph_id；视图无模型输出键（model_output/llm/summary）。
-5. `C_DRAFT_ISOLATION` **PASS** —— 自动稿（`evidenceDraftFromBundle`，`auto_draft:true`）与人工修订分域；`validateHumanRevision` 检出改事前冻结版本 / 正式时间 / 正式 hash / 覆盖自动稿决策事实 / 覆盖逐项文本变化；合规修订（仅追加 human_note）通过；人工不得改正式原文/hash/时间/事前冻结版本。
+反例：P1-1_generated_at_2099_abstain、P1-1_missing_current_time_abstain、P1-1_invalid_time_abstain、P1-1_reversed_time_abstain、P1-1_no_freeze_snapshot_abstain、P1-1_wrong_freeze_hash_abstain、P1-1_freeze_ready_binds、P1-1_ex_post_references_frozen_snapshot、P1-1_no_freeze_not_ready。
 
-### 反例覆盖（对应 C1 计划 §6 + 交接板 §3.5）
+### P1-2 事实源 allowlist 接入锚定路径：新闻/缓存/模型不可伪装正式事实
 
-- 推断不带支持/反证/缺口/可证伪条件 → 全字段断言 fail（B_pc_contract_* / P_every_inference_contract）；
-- 自动鹰鸽结论、措辞变化直接证市场因果 → 禁止字段断言 + 无 market_* 因果（D / M / P_no_forbidden_anywhere）；
-- 无模型时不显示事实/差异 → `factsOnlyView` 可直接序列化渲染（K_*）；
-- 人工修订覆盖自动稿、或修改正式原文/hash/时间/事前冻结版本 → 检出并 fail（O2–O7）；
-- 目标区间/投票/决定在声明中未明确提供仍生成推断 → 伪造 fail（G / F_fixture_vote_gap）；
-- 模型文本、新闻摘要、浏览器缓存尝试作为事实源 → `factSourceGuard` 拒绝（L_*）；
-- 既有 bundle 字节被回写/覆盖 → `bundle_sha256` 幂等 + `data/` 树 hash 零变化（E / J / N / P_bundle_bytes_stable）。
+- `factSourceGuard` 改为 **allowlist**：仅 `kind=official` + `verified:true` + `source_ref`（文档级 scope 免 `paragraph_id`）；`llm` / `browser_cache` / `news_summary` / `MODEL_OUTPUT` 等别名一律拒绝（allowlist 非黑名单）；
+- `anchorExPost` 接入 provenance：非 official、`verified=false`、或 `source_ref` 与 `currentSourceRef` 不一致 → **ABSTAIN**，不靠 source_ref 字符串自证；
+- `buildResearchNote` 重算 canonical `text_changes`：调用方伪数组 → `text_changes_evidence_mismatch` 冲突，锚定结果用 canonical 而非传入数组。
+
+反例：P1-2_source_rejected_news/cache/model/llm/browser_cache/news_summary/MODEL_OUTPUT、P1-2_unverified_abstain、P1-2_ref_mismatch_abstain、P1-2_guard_allowlist、P1-2_official_verified_reads、P1-2_fake_text_changes_rejected、P1-2_anchored_is_canonical。
+
+### P1-3 人工修订隔离：完整自动域冻结，拒绝伪 autoDraft 基线
+
+- `evidenceDraftFromBundle` 绑定 `meta.freeze_sha256`（自动域冻结指纹，64-hex）；
+- `validateHumanRevision` 拒绝调用方自带的伪 autoDraft 基线（`auto_draft_freeze_missing`）与自洽性篡改（`auto_draft_tampered`）；
+- 冻结完整 `meta / source / ex_ante / ex_post` 自动域：`bundle_sha256`、`method_version`、current/prior `source_ref`、`status`、`source_text_sha256`、`missing_fields`、`conflicts`、决策事实与逐项文本变化；人工仅 `human_*` 顶层键命名空间。
+
+反例：P3-1_bundle_sha256_bound、P3-1_method_version_bound、P3-1_source_ref_bound、P3-1_gaps_conflicts_bound、P3-1_status_bound、P3-2_fake_auto_draft_rejected、P3-2_tampered_baseline_rejected、P3-3_compliant_revision_ok。
+
+### P1-4 推断语义可证伪 + 值级禁止 + 词边界 + 空反证显式 gap
+
+- 方向中立的"可能变化"标 **`SCENARIO`**（`monitoring_conditions`，不携带 `falsifiable_conditions`/`proposition`），不再冒充可证伪 HYPOTHESIS；
+- 只有带明确命题 / 观察窗口 / PASS-FAIL 判据的内容才可标 `HYPOTHESIS`（`assertInferenceContract` 强制：`proposition_required` / `observation_window_required` / `pass_fail_criteria_required_nonempty`）；
+- `assertNoForbiddenInferenceFields` 增加值级扫描：`hawkish` / `dovish` / `hawks` / `doves`、`stocks will rise` 等市场因果、market expect；
+- `stabilityMarkers` 用词边界（`discontinued` 不再截出 `continued`；`changed` 不误报 `unchanged`）；
+- 空反证 → 显式 gap（`no continuity counter-evidence`），不用空数组机械通过。
+
+反例：P4-1_scenario_not_hypothesis、P4-1_fake_hypothesis_rejected、P4-1_genuine_hypothesis_accepted、P4-2_value_level_hawkish/dovish_rejected、P4-3_discontinued_no_false_continued、P4-3_continued_matches、P4-3_unchanged_boundary、P4-4_empty_counter_explicit_gap。
+
+### 五子机制结果（维持 R13 通过项，P1 关闭后全部保留）
+
+1. `C_INFERENCE_TRACEABILITY` **PASS** —— 全量遍历研究记录：每项推断带 `support[]` / `counter_evidence[]` / `gaps[]` / `monitoring_conditions[]` / `method_version`，SCENARIO 契约经 `assertInferenceContract` 强制；伪 HYPOTHESIS 拒绝、真 HYPOTHESIS 通过；禁止字段断言覆盖顶层与逐项、值级扫描覆盖鹰鸽/市场因果。
+2. `C_EX_ANTE_CONSTRAINT` **PASS** —— 事前只派生自 prior；缺证据 → ABSTAIN；真实冻结 → READY 绑定 freeze hash；无冻结 → 历史回放模板。
+3. `C_EX_POST_ANCHOR` **PASS** —— 实际决定 / 逐项文本变化 / 来源与数据缺口仅来自正式文本 + 已验证 provenance，可定位 `source_ref + paragraph_id`；伪 text_changes 不采纳（canonical 重算）。
+4. `C_MODEL_FREE_RENDER` **PASS** —— `factsOnlyView` 无模型直接渲染事实与差异；视图无模型输出键；allowlist 拒绝 model/news/cache 别名。
+5. `C_DRAFT_ISOLATION` **PASS** —— 自动稿与人工修订分域；人工不得改正式原文/hash/时间/事前冻结版本；伪 autoDraft 基线拒绝；人工仅 human_* 命名空间。
+
+### 反例覆盖（对应 Codex R2 `codex_r2_review.md` 四组 P1 + 交接板 §3.5）
+
+- 事件后生成 / 时间缺失非法反转 / 无冻结快照 → ABSTAIN，不标 READY（P1-1_*）；
+- 官方句式 + news/cache/model/别名来源 → ABSTAIN，不 READY+HOLD（P1-2_source_rejected_*）；
+- 伪 text_changes → 冲突 + canonical 锚定（P1-2_fake_text_changes_rejected）；
+- 篡改 meta.bundle_sha256 / method_version / source_refs / 清空 missing_fields/conflicts / 改 status → 检出（P3-1_*）；
+- 整份伪 autoDraft 替换 / 指纹不自洽 → 拒绝（P3-2_*）；
+- 方向中立"可能变化"标 SCENARIO 不冒充 HYPOTHESIS；值级 hawkish/dovish/market 禁止；discontinued 词边界；空反证显式 gap（P4-*）；
+- 既有 bundle 字节被回写/覆盖 → `bundle_sha256` 幂等 + `data/` 树 hash 零变化（P_DATA_zero_change）。
 
 ### 正式数据 / 既有文件前后 hash
 
-- 本轮改动仅：新增 `lib/fomc_evidence_draft.js`、`scripts/smoke_v42_fomc_c1_*.js`、`logs/acceptance/PRD-EVENT-POLICY-15-C1/`；修改 `lib/fomc_document_bundle.js`（契约内新增派生字段 `research_note`）、`package.json`（仅 C1 命令）。
+- 本轮改动：`lib/fomc_evidence_draft.js`（四组 P1 关闭）、`lib/fomc_document_bundle.js`（research_note 接线 factSource provenance）、`scripts/smoke_v42_fomc_c1_gate{1,2,3,4}.js`（语义更新）、新增 `scripts/smoke_v42_fomc_c1_p1_r14.js`、`package.json`（`smoke:v42-fomc-c1-p1`）。
 - 正式 `data/` 178 文件树 hash：`f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`，build 前后零变化。
 
 ### 回归
 
-- A1 `smoke_v42_fomc_a1.js` **106/106**；A2 `smoke_v42_fomc_a2.js` **152/152（PASS）**；A4 `smoke_v42_fomc_a4.js` **25/25（PASS）**；B1 全量 **136/136（PASS）**；C1 四门 **99/99（PASS）**。
+- C1 P1 专项 **40/40**；C1 四门 **49/33/28/30**（Gate1 49 + Gate2 33 + Gate3 28 + Gate4 30）；
+- A1 `smoke_v42_fomc_a1.js` **106/106**；A2 `smoke_v42_fomc_a2.js` **PASS**；A4 `smoke_v42_fomc_a4.js` **25/25**；B1 全量 **136/136（PASS）**。
 
 ### 回滚实测
 
-- 删除未接入正式入口的 C1 候选模块与 smoke（`lib/fomc_evidence_draft.js`、`scripts/smoke_v42_fomc_c1_*.js`），`lib/fomc_document_bundle.js` / `package.json` 恢复 `2d18ab6` → 可完整回退；正式 `data/` 不受影响。
+- 恢复到 R13 业务 tip `71b1dbc`：`lib/fomc_evidence_draft.js` / `lib/fomc_document_bundle.js` / `package.json` / C1 smoke 回退，删除 `scripts/smoke_v42_fomc_c1_p1_r14.js` → 可完整回退；正式 `data/` 不受影响。
 
 ### 未覆盖项与残余风险
 
@@ -237,6 +264,18 @@ Cursor 完成报告（revision 23 · 置 `pending_review / codex`）
 5. **C_DATA_PROTECTION** —— 复核 build 前后 `data/` 树 hash 零变化、`bundle_sha256` 幂等、A1/A2/B1 透传语义不变。
 
 请就以上给出 **PASS / CHANGES_REQUIRED** 裁决；如 CHANGES_REQUIRED 需列可复现反例与最小关闭要求，不扩展 Batch C/D 之外的授权面。
+
+### C1 R14 · Cursor 关闭四组 P1，待 Codex 聚焦复审（2026-08-03）
+
+关闭业务 tip：`57d6aab`。Cursor claim rev25→26（lease `cursor-c1-r2-p1`）按四组 P1 逐项关闭并补可复现反例，交 Codex 对上一轮 CHANGES_REQUIRED 的四组 P1 做聚焦复审。
+
+- **P1-1 事前冻结已关闭**：`buildExAntePlan` 接收并校验 `generatedAt`/`currentPublishedAt`/`freezeHash`/`method_version`；`generated_at >= current.published_at`（时间缺失/非法/反转）或缺/错冻结快照 → `ABSTAIN`（`freeze_invalid`）；无冻结输入 → `RETROSPECTIVE_EX_ANTE_TEMPLATE`（`pre_event_frozen:false`），不再标 READY；真实冻结 → `EX_ANTE_READY` 且 `freeze` 绑定 `freeze_sha256/generated_at/current_published_at/method_version/prior_source_ref/prior_text_sha256`；ex-post 引用该已存在冻结快照（`ex_ante_reference.freeze_sha256`）。反例：`smoke_v42_fomc_c1_p1_r14.js` P1-1_*（generated_at=2099、缺时间、非法时间、时间反转、无快照、错 hash）。
+- **P1-2 事实源 allowlist 已关闭**：`factSourceGuard` 为 allowlist（仅 `official` + `verified:true` + source_ref；文档级 scope 免 paragraph_id），`llm`/`browser_cache`/`news_summary`/`MODEL_OUTPUT` 等别名一律拒绝；`anchorExPost` 接入 provenance 校验（非 official 或 verified=false 或 source_ref 与 currentSourceRef 不一致 → `ABSTAIN`）；`buildResearchNote` 重算 canonical `text_changes`，调用方伪数组 → `text_changes_evidence_mismatch` 冲突，锚定结果用 canonical 而非传入数组。反例：P1-2_source_rejected_*/unverified/ref_mismatch/guard_allowlist/fake_text_changes。
+- **P1-3 人工修订完整自动域冻结已关闭**：`evidenceDraftFromBundle` 绑定 `meta.freeze_sha256`（自动域冻结指纹，64-hex）；`validateHumanRevision` 拒绝调用方自带的伪 autoDraft 基线（`auto_draft_freeze_missing`）与自洽性篡改（`auto_draft_tampered`），冻结完整 `meta/source/ex_ante/ex_post` 自动域（bundle_sha256、method_version、source refs、status、source_text_sha256、missing_fields、conflicts、事实与差异），人工仅 `human_*` 命名空间。反例：P3-1_*（bundle_sha256/method_version/source_refs/gaps+conflicts/status 逐字段篡改）、P3-2_*（整份伪 autoDraft / 指纹不自洽）、P3-3（合规 human_note 通过）。
+- **P1-4 推断语义已关闭**：方向中立的"可能变化"标 `SCENARIO`（`monitoring_conditions`，不携带 falsifiable_conditions/proposition），不再冒充可证伪 `HYPOTHESIS`；只有带明确命题/观察窗口/PASS-FAIL 判据才可标 HYPOTHESIS（`assertInferenceContract` 强制）；`assertNoForbiddenInferenceFields` 增加值级扫描（`hawkish/dovish/hawks/doves`、`stocks will rise` 等市场因果、market expect）；`stabilityMarkers` 用词边界（`discontinued` 不再截出 `continued`）；空反证 → 显式 gap（`no continuity counter-evidence`），不用空数组机械通过。反例：P4-1_*/P4-2_*/P4-3_*/P4-4_*。
+- **回归与数据保护**：C1 四门 **49/33/28/30 PASS**、P1 专项 **40/40 PASS**；A1 **106/106**、A2 **PASS**、A4 **25/25**、B1 **136/136**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`bundle_sha256` 幂等。
+
+请聚焦复审以上四组 P1 的关闭与负向反例，维持五子机制与 `C_DATA_PROTECTION` 既有通过项，不接新外部网络、不扩展 Batch D、不声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 ## 6. 回合历史
 
@@ -347,4 +386,13 @@ Cursor 完成报告（revision 23 · 置 `pending_review / codex`）
 - 交付：`lib/fomc_evidence_draft.js`（Gate 1 `buildExAntePlan` / Gate 2 `anchorExPost` / Gate 3 `factsOnlyView` + `factSourceGuard` / Gate 4 `evidenceDraftFromBundle` + `validateHumanRevision` + `assertNoForbiddenInferenceFields`，method_version `c1-evidence-draft-v1`）；`lib/fomc_document_bundle.js` 契约内新增派生字段 `research_note`（`ex_ante` 事前冻结 / `ex_post` 事后锚定），`bundle_sha256` 幂等与 A1/A2/B1 透传语义不变；
 - 四门 **99 PASS / 0 FAIL**（Gate1 39 + Gate2 21 + Gate3 20 + Gate4 19）；回归 A1 **106/106**、A2 **152/152**、A4 **25/25**、B1 **136/136**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
 - 板 §2 HEAD 更新为 `71b1dbc`、`sync-pointer` 绑定 `code_tip=71b1dbc`；transition rev22→23：释放租约，置 `pending_review / codex`（turn 0→1），交 Codex 聚焦 R2（rev23 目标见 §5）；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
+### R14 · Cursor claim rev25→26 关闭 Codex R2 四组 P1 → 置 `pending_review / codex`（2026-08-03）
+
+- Codex R2 复审（`06dd172`，`codex_r2_review.md`）判 **CHANGES_REQUIRED**，四组 P1：事前冻结可事后冒充、事实源守卫未接入锚定、人工修订校验漏核心绑定字段、推断语义不可证伪且边界可绕过；
+- Cursor claim rev25→26（lease `cursor-c1-r2-p1`）逐项关闭：P1-1 `buildExAntePlan` 绑定 `generated_at < current.published_at` + `freezeHash` + `method_version`，事后生成/时间异常/无快照 → ABSTAIN，无冻结 → `RETROSPECTIVE_EX_ANTE_TEMPLATE`；P1-2 `factSourceGuard` allowlist + `anchorExPost` 接入 provenance + `buildResearchNote` canonical 重算 text_changes；P1-3 `meta.freeze_sha256` 自动域冻结指纹 + 拒绝伪 autoDraft 基线（`auto_draft_freeze_missing`/`auto_draft_tampered`）+ 完整 meta/source/ex_ante/ex_post 冻结；P1-4 SCENARIO vs HYPOTHESIS 语义 + 值级禁止扫描 + 词边界 stabilityMarkers + 空反证显式 gap；
+- 交付：`lib/fomc_evidence_draft.js`（四组 P1 关闭）、`lib/fomc_document_bundle.js`（research_note 接线 factSource provenance）、`scripts/smoke_v42_fomc_c1_gate{1,2,3,4}.js`（语义更新）、新增 `scripts/smoke_v42_fomc_c1_p1_r14.js`（P1 专项反例）；
+- P1 专项 **40 PASS / 0 FAIL**；四门 **49/33/28/30 PASS**；回归 A1 **106/106**、A2 **PASS**、A4 **25/25**、B1 **136/136**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
+- 板 §2 HEAD 更新为 `57d6aab`、`sync-pointer` 绑定 `code_tip=57d6aab`；transition rev26→27：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审四组 P1（rev27 目标见 §5）；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
