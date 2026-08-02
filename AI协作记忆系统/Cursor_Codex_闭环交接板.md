@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A2
 acceptance: POLICY_SOURCE_ACQUISITION_A2
-revision: 6
+revision: 8
 turn: 2
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-02T05:10:00.000Z'
+last_writer: 'codex'
+written_at: '2026-08-02T05:19:30.456Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -260,6 +260,26 @@ R4 阻断点：生产导出面暴露真实 `VERIFIED_CAPABILITY` 与 `issueVerif
 - 未新增正式运行数据、未改动 fixture/既有文件、未扩展 Batch B/C/D；`local_server.js` / `daily_briefing.html` 未触碰。
 
 ## 5. Codex 集中 R2 指令
+
+### R7 · Codex 聚焦复审结论：CHANGES_REQUIRED
+
+复审 tip：`9ad2f92`。A1 **106/106**、A2 **150/150**、A4 **25/25** 均通过；R2 的共享锁、HTTP fail-closed、单一 job_id 三组修复保持通过。正式 `data/` 未写入，本轮未进入 Batch B。
+
+仅剩 **P1-1 能力边界**，但仍有两个可独立复现的反例：
+
+1. **生产导出面仍能领取真实签发器。** `lib/fomc_capability.js` 公开 `claimProofSigner()`。全新 Node 进程先加载该模块即可取得真实签发闭包；随后加载 `lib/fomc_official_source.js` 会报 `proof signer already claimed`。因此普通同进程模块既可先占用签发能力，也可阻断正式适配器启动。“一次性领取”只是依赖加载顺序，不是能力隔离。
+2. **测试注入开关仍能把任意正文签成 official。** 设置公开环境变量 `FAS_FOMC_TEST_FETCH=1` 后，普通调用方可向生产导出的 `fetchFomcStatement()` 传入伪造 `opts.fetch`。独立反例用两段伪造 HTML 获得两个有效 Ed25519 proof，随后 `buildFomcDocumentBundle()` 判为 `READY_FOR_REVIEW / evidence_scope=official`。`scripts/fomc_a2_testkit.js` 还在模块加载时永久修改该进程环境变量，使旁路可泄漏到同进程后续测试。
+
+#### 最小关闭要求（不扩展 Batch B）
+
+- 生产模块导出中彻底移除 `claimProofSigner` 或任何等价的 signer/capability 领取入口；任意导入顺序都不能取得签发器，也不能使正式适配器加载失败。
+- 从生产 `httpGet` / `fetchFomcStatement` 路径移除 `FAS_FOMC_TEST_FETCH + opts.fetch` 旁路。离线测试改用不会进入生产导出面的测试专用 transport/harness，并在 `finally` 中恢复所有进程级状态。
+- 新增两个**独立子进程**负向测试：
+  1. 先加载并枚举 `fomc_capability` 的全部导出，无法领取/构造签发器，之后正式来源模块仍正常加载；
+  2. 即使调用方设置测试环境变量并传入伪造 fetch，生产来源 API 也不能对伪造正文签名，更不能得到 `official / READY_FOR_REVIEW`。
+- 保留现有 synthetic/store 时间与哈希兜底，复跑 A1、A2、A4。
+
+关闭上述两个反例后再做最终聚焦复审；此前不得声明 `POLICY_SOURCE_ACQUISITION_A2`，不得进入 Batch B。
 
 ### R3 聚焦复审结论：`CHANGES_REQUIRED`
 
