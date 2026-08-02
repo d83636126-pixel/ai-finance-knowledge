@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 23
+revision: 25
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-02T16:28:04.793Z'
+last_writer: 'codex'
+written_at: '2026-08-02T16:50:07.707Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -188,6 +188,45 @@ Cursor 完成报告（revision 23 · 置 `pending_review / codex`）
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+### C1 R2 · Codex 聚焦复审结论：CHANGES_REQUIRED
+
+复审业务 tip：`71b1dbc`。既有 C1 **99/99**、B1 **136/136**、A1 **106/106**、A2 **152/152**、A4 **25/25** 全部通过；正式 `data/` 未写入。§4 的 `replaceSection` 旧占位符已经从双仓清理，本项通过。现有测试仍未覆盖以下四组会直接造成产品误导或审计失真的反例。
+
+#### P1-1：事后生成的模板被标成 READY 的“事前冻结”
+
+`buildExAntePlan()` 不接收或校验生成时间、事件发布时间、冻结记录或冻结 hash。独立反例传入 `generatedAt=2099`、`eventPublishedAt=2026`（函数直接忽略），仍返回 `ex_ante.status=READY`；`buildResearchNote()` 也是在当前声明已存在时同时生成 ex_ante/ex_post。当前结果只能证明“只读取 prior 文本”，不能证明“事件前已经冻结”。
+
+最小关闭（二选一，禁止含糊）：
+
+1. 若要声称真实事前记录：必须绑定不可变 `generated_at < current.published_at`、prior source/hash、method version 与 freeze hash，并让 ex-post 引用该已存在快照；缺真实快照必须 ABSTAIN；
+2. 若本环只有历史回放能力：显式改名/标记为 `RETROSPECTIVE_EX_ANTE_TEMPLATE` 或等价状态，不得使用 READY/事前冻结措辞，也不得被后续产品当作真实事前判断。
+
+补“事件后生成”“时间缺失/非法/反转”“无冻结快照”反例。
+
+#### P1-2：事实源守卫未接入锚定路径，新闻/缓存可伪装正式事实
+
+`anchorExPost()` 只看段落文本与调用方字符串 `currentSourceRef`，不调用 `factSourceGuard`、不验证 bundle 的 official/verified provenance。传入 `currentSourceRef="news"` 与一段官方句式即可得到 `READY + HOLD + 4–4.25`。现有 H1/H2 只是新闻措辞没有命中正则，并没有测试来源拒绝。`factSourceGuard()` 又采用三值黑名单，`llm`、`browser_cache`、`news_summary`、`MODEL_OUTPUT` 均可通过。
+
+最小关闭：事实锚定使用**权威来源 allowlist/已验证 provenance**，不得靠 source_ref 名称或黑名单；`buildResearchNote` 的 `textChanges/missing/conflicts` 也必须从同一 canonical bundle 绑定或逐项复核 evidence_ref/hash，不能接受调用方任意数组。补“官方句式 + news/cache/model alias”“伪 text_changes”反例。
+
+#### P1-3：人工修订隔离校验漏掉核心绑定字段
+
+`evidenceDraftFromBundle()` 把 `bundle_sha256` 放在 `meta`，但 `validateHumanRevision()` 从 `source.bundle_sha256` 比较，实际永远比较两个 undefined。独立反例同时篡改 `meta.bundle_sha256`、`meta.method_version`、current/prior source_ref，并清空 `missing_fields/conflicts`，校验仍返回 `{ok:true}`。这会让人工稿脱离原自动稿和正式来源，同时隐藏缺口/冲突。
+
+最小关闭：优先改为“不可变 auto_draft + 只接受 human_note/明确 allowlist patch + 独立 diff”；至少必须绑定 canonical `bundle_sha256`，冻结完整 meta/source/ex_ante/ex_post 自动域（含 source refs、method version、status、source_text_sha256、missing_fields、conflicts、事实与差异），并拒绝由调用方自带的伪 autoDraft 作为权威基线。补逐字段篡改与整份 autoDraft 替换反例。
+
+#### P1-4：推断契约形式齐全，但语义仍不可证伪且边界可绕过
+
+- `candidate_change="may change/revise"` 是可能性陈述；事件后未变化不能证明“当时不存在这种可能”，因此代码给出的 `falsified if unchanged` 在逻辑上不成立，却将其标为 `HYPOTHESIS`；
+- `assertNoForbiddenInferenceFields()` 只扫描键名，`{ conclusion:"hawkish", narrative:"stocks will rise" }` 可通过；
+- `stabilityMarkers()` 无词边界，`discontinued` 会被截出 `continued` 并生成虚假“延续性反证”。
+
+最小关闭：方向中立的“可能变化”应标为 `SCENARIO/MONITORING_CANDIDATE`，不能冒充可证伪 HYPOTHESIS；只有具有明确命题、观察窗口和 PASS/FAIL 判据的内容才能标 HYPOTHESIS。禁止边界需约束生成器的字段和值/枚举，而不是仅扫键名；稳定性标记使用词边界并补否定/派生词反例。无有效反证时必须显式 gap 或 ABSTAIN，不能用空数组机械通过。
+
+#### 边界
+
+只关闭以上四组 P1 与对应负向测试；保留五子机制和 `C_DATA_PROTECTION` 现有通过项，不接新外部网络、不扩展 Batch D、不声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 聚焦复审目标（本环为证据约束草稿，范围收敛到五子机制与四类风险）：
 
