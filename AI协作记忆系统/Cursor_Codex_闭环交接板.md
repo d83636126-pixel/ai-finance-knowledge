@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-B1
 acceptance: POLICY_TEXT_DIFF_B1
-revision: 14
+revision: 16
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-02T09:01:43.789Z'
+last_writer: 'codex'
+written_at: '2026-08-02T09:15:25.175Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -182,6 +182,44 @@ Cursor 完成报告（revision 13 → 14 · 置 `pending_review / codex`）
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_TEXT_DIFF_B1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+### B1 R2 · Codex 聚焦复审结论：CHANGES_REQUIRED
+
+复审目标提交：`e2b496f`。既有 B1 四门 **109/109 PASS**（57 + 24 + 14 + 14），回归 A1 **106/106**、A2 **152/152**、A4 **25/25**；正式 `data/` 未写入。现有测试未覆盖以下会造成事实错误或审计失真的反例。
+
+#### P1-1：差异引擎信任外部 SHA，可把不同文本标为 UNCHANGED
+
+`normEntry()` 直接采用调用方传入的 `p.sha256`。独立反例令 prior=`Inflation remains elevated.`、current=`Employment declined sharply.`，但两者携带相同陈旧 SHA；结果被判为 `UNCHANGED / FACT_ONLY`，同时两个 excerpt 明显不同。
+
+最小关闭：始终从规范化文本独立计算 SHA；若输入 SHA 存在则校验一致，不一致必须显式 warning/ABSTAIN/BLOCKED，不能参与 UNCHANGED 对齐。补“同 SHA 不同文本”和“文本相同但输入 SHA 错误”反例。
+
+#### P1-2：决策事实跨段拼接且动作正则过宽，可凭空生成政策事实
+
+三个独立反例成立：
+
+1. `Some participants maintained the target range projection in their discussion.` 被提取为 `action=HOLD`，但这不是委员会决定；
+2. 第一段只含 `target range for the federal funds rate was discussed`、第二段只含 `3 to 4 percent`，拼接后被提取为 3–4 区间，证据却只指向第一段；
+3. 段落缺 `id/sha256` 时仍生成事实，`evidence_refs` 中 `paragraph_id/sha256` 缺失，无法定位审计。
+
+最小关闭：各事实必须在**单一正式段落内**完成匹配并返回该次匹配的 paragraph；动作只接受明确的委员会决定句式，不能把 participants/history/discussion 当决定；证据身份缺失或不一致时该事实 ABSTAIN；区间同时校验有限数、lower <= upper 和合理范围。补上述三个反例及否定/讨论/历史措辞。
+
+#### P1-3：主题定位使用裸子串且 MODIFIED 只看 current，会误标与漏标
+
+- `priceless artwork` 被分类为 `inflation`（命中 `price` 子串）；
+- `laboratory equipment` 被分类为 `employment`（命中 `labor` 子串）；
+- prior=`Inflation remains elevated.`、current=`Conditions have improved.` 的 MODIFIED 项被标为 `ABSTAIN`，虽然 prior 侧有明确 inflation 证据。
+
+最小关闭：采用词/短语边界匹配；MODIFIED 必须审视 prior 与 current 两侧并明确主题证据来自哪一侧。若一项涉及多个主题，不得仅凭固定优先级无声覆盖，应保留多主题或显式冲突/ABSTAIN。补上述反例。
+
+#### P1-4：交接板与执行指针未绑定实际 B1 业务 tip
+
+当前仓库业务提交为 `e2b496f`，但交接板 §2 `HEAD` 与执行指针 `code_tip` 仍为 A2 基线 `50b88aa`。因此机器校验虽通过，却没有把本次复审对象绑定到 B1 实现。
+
+最小关闭：修复后将交接板 HEAD、执行指针 code_tip 与实际 B1 业务 tip 统一，再交 Codex；增加交接前检查，禁止 `pending_review` 指向开环基线。
+
+#### 边界
+
+只关闭以上四组 P1 及对应负向测试，不扩展 Batch C/D，不改生产入口语义，不声明 `POLICY_TEXT_DIFF_B1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 聚焦复审目标（本环为纯派生计算，范围收敛到五子机制与四类风险）：
 
