@@ -3,17 +3,17 @@ type: Cursor_Codex闭环交接板
 schema_version: 2
 tags: [AI协作, Cursor, Codex, V4.2, A2, FOMC]
 created: 2026-08-01
-updated: '2026-08-01'
+updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A2
 acceptance: POLICY_SOURCE_ACQUISITION_A2
-revision: 4
+revision: 6
 turn: 1
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-01T11:36:43.777Z'
+last_writer: 'codex'
+written_at: '2026-08-02T02:47:42.699Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -45,7 +45,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | A1 业务 tip | `b1abce5` |
 | change class | `C2` |
 | review | `R2` |
-| status / next_actor | `pending_review / codex` |
+| status / next_actor | `pending_exec / cursor` |
 | 8013 接线 | Human 已授权 |
 | 外部网络 | Human 已授权，仅 Federal Reserve 官方 HTTPS 只读 |
 | 正式 data 写入 | Human 已授权，仅新增版本化 FOMC 路径 |
@@ -242,6 +242,41 @@ rev2 交付经 R2 `CHANGES_REQUIRED` 后，本环仅关闭四组 P1、补齐对�
 
 ## 5. Codex 集中 R2 指令
 
+### R3 聚焦复审结论：`CHANGES_REQUIRED`
+
+复核目标：`74870c7`（交接 HEAD `de5ed3e`）。本轮严格只复核 R2 四组 P1。
+
+#### 已关闭
+
+- **P1-2 共享锁：PASS**。API、CLI、scheduled 均进入同一刷新核心并共享 owner-token 文件锁；锁持有反例取数计数为 0。
+- **P1-3 HTTP fail-closed：PASS**。超限、读取错误、非法 JSON、`evaluated_at` 注入均在副作用前返回 4xx；合法 force 路径保持可用。
+- **P1-4 单一 job_id：PASS**。成功与异常路径均复用同一 job_id，终态后无遗留 running。
+- 回归：A1 **106/106**、A2 **141/141**、A4 离线 **25/25**；计划任务只读状态 `ABSENT`。
+
+#### 仍阻断：P1-1 capability/proof 仍可由普通生产模块自签
+
+`lib/fomc_capability.js` 把真实 `VERIFIED_CAPABILITY` 和 `issueVerifiedProof()` 同时导出，`lib/fomc_document_bundle.js` 又重新导出真实 capability。它们并非注释所称“模块私有”：任意同进程普通模块都可以 `require()` 取得真实能力对象，并调用公开签发器为任意字段生成有效 proof。
+
+独立反例未修改仓库文件，只使用生产模块公开导出：
+
+1. 读取 A1 的 `is_synthetic:true` fixture；
+2. 把普通 registry 条目的 `synthetic` 改为 `false`；
+3. 从 `fomc_capability` 导入真实 `VERIFIED_CAPABILITY` 传给 bundle builder；
+4. 调用公开 `issueVerifiedProof()` 为 fixture 自签；
+5. 正式 store 返回写入成功。
+
+实测结果：`bundle_status=READY_FOR_REVIEW`、`evidence_scope=official`、`fixture_is_synthetic=true`、`store_write_ok=true`。因此上轮原始反例仍成立，只是从“公开字符串”变成了“公开对象 + 公开签发器”。现有测试只尝试字符串和伪对象，没有尝试模块实际导出的 capability/issuer。
+
+#### 最小修复边界
+
+1. 生产导出面不得暴露真实 capability 或 proof issuer；`fomc_document_bundle.js` 也不得重新导出 capability。
+2. 将正式来源获取、official 提升和 proof 签发收进不可由调用方传 document/registry/proof 的私有运行时边界；对外只保留按 event_id 刷新的高层入口。若选择“同进程所有代码均可信”作为新威胁模型，须由 Human 明确降级原 P1 要求，不能继续宣称模块私有/不可伪造。
+3. store 增加独立兜底：`doc.is_synthetic === true` 必须拒绝；并落实注释已声明的 `published_at <= captured_at <= evaluated_at` 与 `verified_provenance.fetched_at` 绑定。
+4. 新增反例必须直接枚举生产模块 exports，并证明使用所有公开生产 API 仍不能把 A1 fixture 变成 official 或写入；正向测试应经正式来源适配器的受控 fetch 路径产生证据，而不是从 testkit 直接导入生产签发器。
+5. 保持已通过的 P1-2/3/4 与 A1/A2/A4 回归不变，正式 `data/` 零变化。
+
+在 P1-1 真正关闭或 Human 明确调整威胁模型前，不得声明 `POLICY_SOURCE_ACQUISITION_A2`，不得进入 Batch B。
+
 ### R2 结论：`CHANGES_REQUIRED`
 
 复核目标：`8a17bfd`（业务提交 `1dad30c`）。改动范围符合 A2 允许文件面；Federal Reserve 两个正式 URL、任务已移除、正式工作树无运行数据变更均已核对。既有 `smoke:v42-fomc-a1` 为 106/106、`smoke:v42-fomc-a2` 为 108/108，但以下四组未覆盖反例会破坏正式验收语义。
@@ -330,3 +365,9 @@ PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 完成并可进入 V4.2 Batch B；
 - 回归：A1 **106/106**、A2 **141/141**、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`FAS-FOMC-A2-Refresh` 只读核对 `ABSENT`；
 - 释放租约，置 `pending_review / codex`（turn 0→1），交 Codex 聚焦复审；
 - 未声明 `POLICY_SOURCE_ACQUISITION_A2` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+### R4 · Codex 聚焦复审 `CHANGES_REQUIRED`
+
+- P1-2 共享锁、P1-3 HTTP fail-closed、P1-4 单一 job_id 已通过；
+- P1-1 仍阻断：生产模块公开真实 `VERIFIED_CAPABILITY` 与 `issueVerifiedProof()`，A1 synthetic fixture 可被普通模块自签为 official 并成功写入；
+- 板切回 `pending_exec / cursor`；只允许关闭此一项，不扩展 Batch B/C/D。
