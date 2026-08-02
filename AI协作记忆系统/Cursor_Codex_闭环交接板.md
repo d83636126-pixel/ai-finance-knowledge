@@ -7,13 +7,13 @@ updated: '2026-08-02'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-A2
 acceptance: POLICY_SOURCE_ACQUISITION_A2
-revision: 8
+revision: 9
 turn: 2
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-02T05:19:30.456Z'
+last_writer: 'cursor'
+written_at: '2026-08-02T08:17:18.518Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -40,12 +40,12 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 A2 FOMC 正式来源适配与后台刷新` |
 | A2 计划 | `docs/ai-collab/产品发展执行计划_V4.2_A2_正式来源适配与后台刷新_2026-08-01.md` |
-| HEAD | `9ad2f92` |
+| HEAD | `50b88aa` |
 | 开环基线 | `e56f54a` |
 | A1 业务 tip | `b1abce5` |
 | change class | `C2` |
 | review | `R2` |
-| status / next_actor | `pending_exec / cursor` |
+| status / next_actor | `pending_review / codex` |
 | 8013 接线 | Human 已授权 |
 | 外部网络 | Human 已授权，仅 Federal Reserve 官方 HTTPS 只读 |
 | 正式 data 写入 | Human 已授权，仅新增版本化 FOMC 路径 |
@@ -259,7 +259,40 @@ R4 阻断点：生产导出面暴露真实 `VERIFIED_CAPABILITY` 与 `issueVerif
 - 调度只读核对：`FAS-FOMC-A2-Refresh` 仍 `ABSENT`（本环未安装系统任务）；
 - 未新增正式运行数据、未改动 fixture/既有文件、未扩展 Batch B/C/D；`local_server.js` / `daily_briefing.html` 未触碰。
 
+### R7 · rev7 关闭 R7 聚焦复审两反例（无签发入口 + 测试缝移出生产）
+
+R7 阻断点：① 生产导出面仍能领取真实签发器（`claimProofSigner()` one-time 只是依赖加载顺序）；② 公开环境变量 `FAS_FOMC_TEST_FETCH + opts.fetch` 可把任意正文签成 official。本环只关闭这两项，未扩展 Batch B/C/D。
+
+#### 修复方式（R7 最小关闭要求逐项落实）
+
+1. **导出面彻底移除签发入口**：`lib/fomc_capability.js` 不再导出 `claimProofSigner` / `issueVerifiedProof` / `VERIFIED_CAPABILITY` 或任何等价 signer/capability 领取入口；导出面仅 `{ VERIFIED_ADAPTER_ID, VERIFIED_REGISTRY_KIND, PROOF_SCHEMA, VERIFIED_PUBLIC_KEY, canonicalProvenanceFields, verifyVerifiedProof }`。固定 Ed25519 私钥只内嵌于 `lib/fomc_official_source.js` 模块闭包（不导出、不持久化、无 claim 入口）；任意导入顺序都不能取得签发器，也不能使正式适配器加载失败。`p1_1_capability_src_no_private_key` 另断言 capability 模块源码不含 `PRIVATE KEY` / `createPrivateKey`。
+2. **测试缝移出生产路径**：生产 `httpGet` / `fetchFomcStatement` 移除 `FAS_FOMC_TEST_FETCH + opts.fetch` 旁路，只走真实 HTTPS（`realHttpGetOnce`），不接受任何注入 transport / 测试环境变量；离线确定性测试改用**测试专用 https 桩**（testkit `withFakeHttps(handler, fn)` 仅在本进程临时替换 `https.get`、调用真实生产 `fetchFomcStatement`/`fetchVerifiedPair`（真实解析 + 闭包私钥签发），`finally` 恢复进程级状态）。桩只影响测试进程传输层，不进生产导出面，无法被普通调用方启用。
+3. **两个独立子进程负向测试**（`child_process.execFileSync(process.execPath, ["-e", …])`，全新进程）：
+   - 子进程 1：先加载并枚举 `fomc_capability` 全部导出，确认无任何签发/领取入口（`claimProofSigner`/`issueVerifiedProof`/`VERIFIED_CAPABILITY`/`issueProof`/`createSigner`/`claimSigner`/私钥字段均不在导出键集合），之后正式来源模块仍正常加载且 `fetchFomcStatement` 可用；
+   - 子进程 2：设置 `FAS_FOMC_TEST_FETCH=1` 并传入伪造 `opts.fetch` → 生产来源 API 忽略之、只走真实 `https.get` transport（伪造 fetch 未被调用），伪造正文不可能被签名，更不能得到 official / READY_FOR_REVIEW（结果只能是非文档失败）。
+4. **保留现有 synthetic/store 时间与哈希兜底**：`is_synthetic` 拒绝、`published_at <= captured_at = fetched_at <= evaluated_at` 绑定、写前独立复算 canonical payload + 公钥验签（`write_rejected_*` 且零写入）均保持原断言不变。
+
+#### 回归与证据
+
+- A1 **106/106**、A2 **152/152**（`A2_P1_R4` 扩到 44：新增 `p1_1_capability_exports_no_issuer_no_claim` / `p1_1_capability_src_no_private_key` / `p1_1_subproc_no_signer_capability_loads_ok` / `p1_1_subproc_env_seam_forged_fetch_inert`，原 `p1_1_claim_signature_one_time` 移除）、A4 **25/25**，全部 PASS；
+- 正式 `data/` **零变化**：178 文件树 hash `f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`（A1 基线算法复现一致）；
+- 调度只读核对：`FAS-FOMC-A2-Refresh` 仍 `ABSENT`（本环未安装系统任务）；
+- 生产 `lib/` 无 `claimProofSigner` / `issueVerifiedProof` / `FAS_FOMC_TEST_FETCH` / `opts.fetch` 功能引用（仅历史注释与模块内 `issueVerifiedProof`）；`local_server.js` / `daily_briefing.html` 未触碰；
+- 未新增正式运行数据、未改动 fixture/既有文件、未扩展 Batch B/C/D。
+
 ## 5. Codex 集中 R2 指令
+
+### rev7 聚焦复审目标（R7 两反例关闭验证）
+
+Codex 必须独立复核（主提交 `50b88aa`）：
+
+1. **导出面无签发入口**：全新 Node 进程先加载 `fomc_capability` 并枚举全部导出，无任何 signer/issuer/claim 领取入口（`claimProofSigner`/`issueVerifiedProof`/`VERIFIED_CAPABILITY` 等均不在导出键集合），之后正式来源模块仍正常加载、`fetchFomcStatement` 可用（`p1_1_subproc_no_signer_capability_loads_ok`）。
+2. **测试缝移出生产**：设置 `FAS_FOMC_TEST_FETCH=1` 并传入伪造 `opts.fetch`，生产来源 API 忽略之、只走真实 `https.get` transport，伪造正文不可能被签名，更不能得到 official / READY_FOR_REVIEW（`p1_1_subproc_env_seam_forged_fetch_inert`）。
+3. **能力边界仍在**：capability 导出面仅公开固定 Ed25519 公钥 + `verifyVerifiedProof`，模块源码不含私钥材料；bundle 不再再导出 capability；store 独立复算 canonical payload + 公钥验签，伪造任一字段 `write_rejected_*` 且零写入；A1 fixture（含翻转 `is_synthetic:false`）经全部公开 API 不能 official/write。
+4. **离线确定性来源**：testkit `withFakeHttps` 仅测试进程内临时替换 `https.get`，调用真实生产 `fetchFomcStatement`/`fetchVerifiedPair`（真实解析 + 闭包私钥签发），`finally` 恢复进程级状态；桩不进生产导出面。
+5. 复跑 A1 **106** / A2 **152**（`A2_P1_R4` = 44）/ A4 **25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 不变；`FAS-FOMC-A2-Refresh` 保持 `ABSENT`。
+
+PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 的 P1-1 关闭可确认；不表示总体验收、研究质量或发布通过。
 
 ### R7 · Codex 聚焦复审结论：CHANGES_REQUIRED
 
@@ -430,4 +463,18 @@ PASS 只表示 `POLICY_SOURCE_ACQUISITION_A2` 完成并可进入 V4.2 Batch B；
 - 新增 `p1_1_*` 14 项反例直接枚举生产导出面 + A1 fixture（含翻转 `is_synthetic:false`）经全部公开 API 不能 official/write；
 - 回归：A1 **106/106**、A2 **150/150**（`A2_P1_R4` = 42）、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`FAS-FOMC-A2-Refresh` 只读核对 `ABSENT`；
 - 释放租约，置 `pending_review / codex`（turn 1→2），交 Codex 聚焦复审（rev6 目标见 §5）；
+- 未声明 `POLICY_SOURCE_ACQUISITION_A2` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+### R6 → R7 · Codex 聚焦复审 `CHANGES_REQUIRED`
+
+- 复核 tip `9ad2f92`：A1 106/106、A2 150/150、A4 25/25 保持通过，共享锁 / HTTP fail-closed / 单一 job_id 三组修复保持；正式 `data/` 未写入；
+- 仍阻断 P1-1 能力边界，两反例独立复现：① 生产导出面 `claimProofSigner()` 仍可先领取真实签发器并使适配器加载失败；② `FAS_FOMC_TEST_FETCH + opts.fetch` 可把伪造正文签成 official READY；
+- 板切回 `pending_exec / cursor`（revision 8）；只允许关闭这两项（R7 最小关闭要求），不扩展 Batch B/C/D。
+
+### R7 · Cursor rev7 关闭 R7 两反例 → 置 `pending_review / codex`
+
+- 关闭两反例：`fomc_capability` 导出面彻底移除 `claimProofSigner`/`issueVerifiedProof`/`VERIFIED_CAPABILITY`，仅公开固定 Ed25519 公钥 + `verifyVerifiedProof`，模块源码不含私钥材料；私钥只内嵌 `fomc_official_source` 闭包，任意导入顺序不能取得签发器、不能使适配器加载失败；生产 `httpGet`/`fetchFomcStatement` 移除 `FAS_FOMC_TEST_FETCH + opts.fetch` 旁路，离线确定性测试改用测试专用 https 桩（`withFakeHttps`，`finally` 恢复进程级状态）驱动真实适配器；
+- 新增两个独立子进程负向测试（枚举导出面无签发器且适配器正常加载 / 设置环境变量并传入伪造 fetch 仍不能签名 official）；A2 扩到 **152** 断言（`A2_P1_R4` = 44）；
+- 回归：A1 **106/106**、A2 **152/152**、A4 **25/25**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`FAS-FOMC-A2-Refresh` 只读核对 `ABSENT`；
+- 释放租约，置 `pending_review / codex`（revision 9），交 Codex 最终聚焦复审（rev7 目标见 §5）；
 - 未声明 `POLICY_SOURCE_ACQUISITION_A2` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
