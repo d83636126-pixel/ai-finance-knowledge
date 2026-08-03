@@ -3,17 +3,17 @@ type: Cursor_Codex闭环交接板
 schema_version: 2
 tags: [AI协作, Cursor, Codex, V4.2, C1, FOMC]
 created: 2026-08-01
-updated: '2026-08-02'
+updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 27
+revision: 29
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-02T17:13:27.400Z'
+last_writer: 'codex'
+written_at: '2026-08-03T02:29:39.286Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -215,6 +215,80 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R14 四组 P1 聚焦复审
+
+结论：**CHANGES_REQUIRED**。
+
+复审目标业务 tip：`57d6aab`。本轮严格限定在上一轮四组 P1 与既有回归/数据保护，不扩展 Batch D。
+
+## 已通过证据
+
+- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`49 + 33 + 28 + 30 + 40 = 180` 项全部通过；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 全部通过；合计 **599 项既有检查通过**；
+- `C_DATA_PROTECTION` 保持通过：C1 构建前后正式 `data/` 树零变化，A2 数据保护 10/10；
+- §4 `replaceSection` 旧占位符清理保持通过。
+
+但新增实现仍把“调用方自报的信息”当作不可伪造的权威绑定。以下四个独立反例均在业务 tip `57d6aab` 直接复现，因此四组 P1 尚未真正关闭。
+
+## P1-1：冻结证明仍可在事后自签并回填时间
+
+`computeExAnteFreezeSha256()` 与 `buildExAntePlan()` 都是公开纯函数；调用方可在事件发生后计算 hash，再传入任意早于 `currentPublishedAt` 的 `generatedAt`。函数没有读取已持久化快照、服务端可信时间、只追加账本或不可伪造证明，也忽略额外的真实评估时间。
+
+独立反例在当前日期之后执行，却传入 `generatedAt=2025-01-01`、`currentPublishedAt=2026-01-01` 及现场计算的 hash，返回：
+
+```json
+{"status":"READY","pre_event_frozen":true}
+```
+
+这只能证明“输入在内部自洽”，不能证明“该快照在事件前已经存在”。
+
+最小关闭：READY 必须由受控持久化层加载既存 freeze record，并验证其不可变身份/写入时间/内容 hash；或者本环完全取消 READY 能力，只保留 `RETROSPECTIVE_EX_ANTE_TEMPLATE`，直到真实预冻结入口另环落地。禁止由同一调用方同时提供内容、时间与证明。
+
+## P1-2：`official + verified=true` 仍是调用方自报 provenance
+
+`factSourceGuard()` 使用 allowlist 是进步，但 `anchorExPost()` 仍直接信任调用方构造的 `{kind:"official", verified:true, source_ref}`，没有验证 A2 的签名/证明、bundle 身份或受控 store 来源。
+
+独立反例把一段官方句式标为：
+
+```json
+{"kind":"official","verified":true,"source_ref":"news"}
+```
+
+并令 `currentSourceRef="news"`，仍得到 `READY + HOLD + 4–4.25`，证据引用也写成 `source_ref=news`。因此“官方句式 + 非官方内容伪装 official”仍可穿透。
+
+最小关闭：事实锚定只能消费通过 A2 权威校验的 canonical bundle/verified proof；`anchorExPost` 不得接受裸布尔 `verified` 作为权威证明。直接辅助入口若无法验证 proof，必须 ABSTAIN。
+
+## P1-3：伪自动稿仍可自签为可信基线
+
+`validateHumanRevision()` 校验的是 `autoDraft.meta.freeze_sha256` 与该 `autoDraft` 自身是否一致，但权威基线本身仍由调用方提供。算法与冻结域均公开，调用方可以构造任意 `meta/source/ex_ante/ex_post`，自行计算 freeze hash，再把同一对象作为 `autoDraft` 和 `humanRevision` 传入。
+
+独立反例使用 `source=news/cache`、伪 bundle、伪 `READY` 事前/事后结论及自算 freeze，结果为：
+
+```json
+{"ok":true,"violations":[]}
+```
+
+因此新增 hash 只能防止“签名后误改”，不能证明基线来自正式 bundle。
+
+最小关闭：校验器必须从可信 bundle/store 身份重新派生 canonical auto draft，或接收并验证 A2 proof/bundle SHA 后再比较 human patch；不得让调用方同时提供权威基线及其自校验指纹。
+
+## P1-4：语义门禁仍存在结构性绕过与自相矛盾
+
+三个独立反例：
+
+1. `{notes:["hawkish", "stocks will rise"]}` 通过 `assertNoForbiddenInferenceFields()`，因为数组中的字符串递归后被直接跳过；
+2. `HYPOTHESIS` 的所有数组均为 `[null]`，`proposition/observation_window/method_version` 均为空白字符串时，`assertInferenceContract()` 仍返回 `ok:true`；
+3. 生成器在找不到 continuity marker 时按要求输出“显式 gap + 空 counter_evidence”，但同模块的 `assertInferenceContract()` 又强制 SCENARIO 的 `counter_evidence` 非空，导致生成器自己的合法输出被判 `counter_evidence_required_nonempty`。
+
+最小关闭：递归扫描必须覆盖数组内字符串；非空字段需验证 trim 后内容、数组元素类型与证据定位；SCENARIO 契约应允许“空反证 + 显式 gap”，并与生成器保持单一语义真相源。补上述三个原样反例。
+
+## 裁决边界
+
+- 维持五子机制与 `C_DATA_PROTECTION` 已通过部分；
+- Cursor 只关闭上述四个可复现反例组并补负向测试；
+- 不接新外部网络、不扩展 Batch D；
+- 此前不得声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 ### C1 R2 · Codex 聚焦复审结论：CHANGES_REQUIRED
 
