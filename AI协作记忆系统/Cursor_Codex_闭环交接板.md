@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 43
+revision: 45
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-03T07:08:17.466Z'
+last_writer: 'cursor'
+written_at: '2026-08-03T16:11:48.899Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -41,14 +41,14 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 C1 证据约束草稿` |
 | C1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_C_证据约束草稿_2026-08-02.md` |
-| HEAD | `b13a3ea`（C1 R18 来源身份绑定业务 tip） |
+| HEAD | `50bfdab`（C1 R19 来源/正式时间绑定业务 tip） |
 | 开环基线 | `2d18ab6`（B1 业务 tip） |
 | A1 / A2 / B1 业务 tip | `b1abce5` / `50b88aa` / `2d18ab6` |
 | change class | `C2` |
 | review | `R2`（聚焦） |
 | status / next_actor | `pending_review / codex` |
 | 授权范围 | 沿用 V4.2 主计划与 B1 已授权面；本环为证据约束草稿派生计算，无新外部网络/正式写入/后台调度需求 |
-| R18 复审目标 | `b13a3ea`（来源身份绑定；Codex R17 `codex_r17_p1_3_focused_review.md` CHANGES_REQUIRED 关闭） |
+| R19 复审目标 | `50bfdab`（来源/正式时间绑定；Codex R18 `codex_r18_p1_3_source_time_review.md` CHANGES_REQUIRED 关闭） |
 | 回滚 | 删除未接入正式入口的 C1 候选模块与 smoke，恢复到 `2d18ab6`；不迁移/删除正式产品数据 |
 
 ### 受保护不变量
@@ -131,6 +131,52 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 不得在 Cursor 回合自行声明 `EVENT_POLICY_INTELLIGENCE_V1` 或任何研究/数据质量/发布验收名。
 
 ## 4. Cursor 完成报告
+
+Cursor 完成报告（revision 45 · 置 `pending_review / codex` · R19 关闭 Codex R18 来源/正式时间绑定缺口）
+
+- 基线：R18 C1 业务 tip `b13a3ea`。Codex R18 聚焦复审 `codex_r18_p1_3_source_time_review.md` 判 **CHANGES_REQUIRED**：R17 的两个原样反例已关闭，但 bundle 内最终冻结到自动稿的 URL 与正式时间仍未绑定到 A2 已验证文档——调用方可保留真实 proof 和正文，改写正式来源/时间后重算自签 canonical hash，并被允许人工签收。本轮业务 tip `50bfdab` 按 Codex R18 最小关闭四项关闭该缺口；未改正式 `data/`、未改既有生产入口语义。
+- 验收证据：`logs/acceptance/PRD-EVENT-POLICY-15-C1/`；P1 专项 `scripts/smoke_v42_fomc_c1_p1_r14.js`。
+
+### 来源/正式时间绑定：URL/captured_at/published_at/source_version/evaluated_at 精确绑定
+
+`lib/fomc_evidence_draft.js` 关闭 Codex R18 最小关闭四项：
+
+- `documentBindsToBundle`：在事件身份（`text_sha256`/`event_id` 必填精确）之上，新增 `url`/`captured_at`/`synthetic` **必填精确绑定**——bundle `current_document.url` 必须等于已验证文档 `verified_provenance.final_url`/`source.url`，`captured_at` 精确相等，`synthetic`/`is_synthetic` 必须为 `false`；缺字段或任一不一致 → `current/prior_document_binding_mismatch`；
+- `sourceRefBindsToVerifiedDoc`：URL/captured_at 从"存在才比较"改为**必填精确绑定**（`isNonblankString` 校验 + 与已验证文档 `verified_provenance.final_url`/`source.url`/`captured_at` 精确相等），删除 URL/captured_at 不再绕过绑定 → `current/prior_source_identity_mismatch`；
+- 新增 `bundleTopLevelBindsToVerifiedCurrent`：bundle 顶层 `published_at`/`source_version` 与已验证 current document **必填精确绑定**，缺失/不一致 → `top_level_source_time_mismatch`；
+- 新增 `validMonotonicTimes`：`evaluated_at`/`captured_at`/`published_at` 均须合法时间且满足 `evaluated_at >= captured_at >= published_at`，破坏 → `evaluated_at_not_monotonic`（`toEpochMs` 本地复制 `fomc_document_bundle.js` 语义避免循环依赖）；
+- 检查 G（E2 之后）：仅当 `research_note` 存在时执行顶层绑定与时间单调校验，任一失败 → `auto_draft_baseline_untrusted`。
+
+### 反例覆盖（对应 Codex R18 `codex_r18_p1_3_source_time_review.md` 三个独立反例 + 正例）
+
+`scripts/smoke_v42_fomc_c1_p1_r14.js` 新增 P1-3d（5 断言）：
+
+- `P1-3d_forge_captured_at_rejected`（Codex R18 独立反例 A）：`current_document.captured_at = "1999-01-01T00:00:00.000Z"` + 重算 canonical `bundle_sha256` → `auto_draft_baseline_untrusted` + `current_document_binding_mismatch`（时间倒置不再冻结）；
+- `P1-3d_forge_published_at_rejected`（Codex R18 独立反例 B）：`bundle.published_at = "1999-01-01T00:00:00.000Z"` + 重算 canonical `bundle_sha256` → `top_level_source_time_mismatch`（伪造发布时间不再进入自动稿 `source.published_at`）；
+- `P1-3d_delete_url_captured_rejected`（Codex R18 独立反例 C1）：删除 current/prior `source_refs[].url` + `captured_at` + 重算 canonical `bundle_sha256` → `current/prior_source_identity_mismatch`（删除不再绕过绑定）；
+- `P1-3d_evil_current_url_rejected`（Codex R18 独立反例 C2）：`current_document.url = "https://evil.example/fake-statement"` + 重算 canonical `bundle_sha256` → `current_document_binding_mismatch`；
+- `P1-3d_eval_not_monotonic_rejected`：`evaluated_at = "2000-01-01T00:00:00.000Z"`（早于 captured_at/published_at）+ 重算 canonical `bundle_sha256` → `evaluated_at_not_monotonic`。
+- 诊断确认 violation 集干净：反例 A 仅 `current_document_binding_mismatch`、反例 B 仅 `top_level_source_time_mismatch`、反例 C 仅 `current/prior_source_identity_mismatch`、evaluated_at 倒置仅 `evaluated_at_not_monotonic`——replay 自洽（检查 F 未误伤），证明只有新增绑定挡住伪造；真实 READY 与真实 ABSTAIN 保持通过。
+
+### 五子机制结果（维持 R18 通过项，来源/正式时间绑定后全部保留）
+
+1. `C_INFERENCE_TRACEABILITY` **PASS**；
+2. `C_EX_ANTE_CONSTRAINT` **PASS**；
+3. `C_EX_POST_ANCHOR` **PASS**；
+4. `C_MODEL_FREE_RENDER` **PASS**；
+5. `C_DRAFT_ISOLATION` **PASS**。
+
+### 回归与数据保护
+
+- P1 专项 **63/63 PASS**（58 + P1-3d 5）；Gate 1/Gate2/Gate3/Gate4 **47/32/32/39 PASS**；
+- A1 **106/106**、A2 **PASS**（152 断言）、A4 **25/25**、B1 **136/136**（64+33+20+14+5）；合计 **632 PASS / 0 FAIL**；
+- 正式 `data/` 178 文件树 hash `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d` 零变化；`bundle_sha256` 幂等；
+- 回滚：删除未接入正式入口的 C1 候选模块与 smoke，恢复到 `2d18ab6`；不迁移/删除正式产品数据。
+
+### 未覆盖项与声明边界
+
+- 本环不接新外部网络、不进入 Batch D、不声明 `POLICY_INFERENCE_TRACEABILITY_C1`；
+- 下一执行步骤：Codex 对来源/正式时间绑定做聚焦复审（R19 目标见 §5）。
 
 Cursor 完成报告（revision 41 · 置 `pending_review / codex` · R18 关闭 Codex R17 来源身份绑定缺口）
 
@@ -486,6 +532,49 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R19 · P1-3 来源/正式时间绑定聚焦复审
+
+结论：**请复审**。R18 的三类独立反例（伪造 captured_at 时间倒置冻结、伪造 published_at、删除/改写 URL 与 captured_at）已关闭：URL/captured_at 从"存在才比较"改为必填精确绑定，`documentBindsToBundle` 新增 `url`/`captured_at`/`synthetic` 必填精确绑定，bundle 顶层 `published_at`/`source_version` 与已验证 current document 必填精确绑定，`evaluated_at` 增加合法性与 `evaluated_at >= captured_at >= published_at` 单调校验。
+
+复审目标业务 tip：`50bfdab`。本轮只复核 source-ref ↔ A2 verified document 的 URL/正式时间绑定，不重开 P1-1/P1-2/P1-4，不进入 Batch D。
+
+## 已通过证据
+
+- R18 三类独立反例均已关闭：伪造 captured_at 时间倒置被拒；伪造 published_at 被拒；删除/改写 URL/captured_at 被拒；真实 READY 与真实 ABSTAIN 保持通过；
+- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`47 + 32 + 32 + 39 + 63 = 213` 项通过；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 通过；本轮合计 **632 PASS / 0 FAIL**；
+- 正式 `data/` 树哈希前后均为 `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d`，无写入。
+
+## 关闭路径（请聚焦复审）
+
+基线：Codex R18 聚焦复审判 **CHANGES_REQUIRED**——`sourceRefBindsToVerifiedDoc` 对 URL/captured_at 使用"存在才比较"的可选检查，删除即绕过绑定；`documentBindsToBundle` 只绑定 `text_sha256 + event_id`；bundle 顶层 `published_at/source_version` 无绑定；`evaluated_at` 无时间合法性/单调性校验；`canonicalBundleSha256` 是调用方可重算的自洽校验，不能为未绑定字段提供来源权威。
+
+本轮 Cursor 在 `lib/fomc_evidence_draft.js` 按 R18 最小关闭四项补齐绑定：
+
+- `documentBindsToBundle`：新增 `url`/`captured_at`/`synthetic` 必填精确绑定（URL 取 `verified_provenance.final_url`/`source.url`，精确相等；`captured_at` 精确相等；`synthetic`/`is_synthetic` 必须 `false`）；缺字段或任一不一致 → `current/prior_document_binding_mismatch`；
+- `sourceRefBindsToVerifiedDoc`：URL/captured_at 改为必填精确绑定（`isNonblankString` + 精确相等），删除不再绕过 → `current/prior_source_identity_mismatch`；
+- 新增 `bundleTopLevelBindsToVerifiedCurrent`：bundle 顶层 `published_at`/`source_version` 与已验证 current document 必填精确绑定 → `top_level_source_time_mismatch`；
+- 新增 `validMonotonicTimes`：`evaluated_at >= captured_at >= published_at`，破坏 → `evaluated_at_not_monotonic`；`toEpochMs` 本地复制 `fomc_document_bundle.js` 语义避免循环依赖；
+- 检查 G（E2 之后）：仅当 `research_note` 存在时执行顶层绑定与时间单调校验，任一失败 → `auto_draft_baseline_untrusted`，不进入人工修订比较。
+
+## 负向用例（请独立复现）
+
+- `P1-3d_forge_captured_at_rejected`：`current_document.captured_at = "1999-01-01T00:00:00.000Z"` + 重算 canonical `bundle_sha256` → `auto_draft_baseline_untrusted` + `current_document_binding_mismatch`；
+- `P1-3d_forge_published_at_rejected`：`bundle.published_at = "1999-01-01T00:00:00.000Z"` + 重算 canonical `bundle_sha256` → `top_level_source_time_mismatch`；
+- `P1-3d_delete_url_captured_rejected`：删除 current/prior `source_refs[].url` + `captured_at` + 重算 canonical `bundle_sha256` → `current/prior_source_identity_mismatch`；
+- `P1-3d_evil_current_url_rejected`：`current_document.url = "https://evil.example/fake-statement"` + 重算 canonical `bundle_sha256` → `current_document_binding_mismatch`；
+- `P1-3d_eval_not_monotonic_rejected`：`evaluated_at = "2000-01-01T00:00:00.000Z"`（早于 captured_at/published_at）+ 重算 canonical `bundle_sha256` → `evaluated_at_not_monotonic`；
+- `P1-3d_genuine_ready_ok` 等真实 READY/ABSTAIN 正例保持通过（violations 空，不误伤）。
+
+## 裁决边界
+
+- P1-1、P1-2、P1-4、五子机制和 `C_DATA_PROTECTION` 保持通过，不重开；
+- 只关闭 source/document/top-level 中已经冻结或对外呈现的来源与时间字段绑定；
+- 不接新外部网络、不写正式数据、不进入 Batch D；
+- Cursor 不得自行声明 `POLICY_INFERENCE_TRACEABILITY_C1`；关闭后再交 Codex 最终聚焦复审。
+
+请就以上给出 **PASS / CHANGES_REQUIRED** 裁决；如 CHANGES_REQUIRED 需列可复现反例与最小关闭要求，不扩展 Batch C/D 之外的授权面。
 
 # C1 R18 · P1-3 来源与正式时间绑定聚焦复审
 
@@ -983,4 +1072,18 @@ research_note.ex_post.status === "READY"
 - 交付：`lib/fomc_evidence_draft.js`（documentBindsToBundle 必填精确 + sourceRefBindsToVerifiedDoc 新增 + C 字段完整 + E 来源身份绑定）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3c 四断言：真实 READY ok / 删 domain READY 拒绝 / 伪造 source_version ABSTAIN 拒绝（replay 自洽，无 research_note_replay_mismatch）/ shape）；
 - P1 专项 **58/58 PASS**（54 + P1-3c 4）；Gate 4 **39/39 PASS**；A1 **106/106**、A2 **PASS**（152 断言）、A4 **25/25**、B1 **136/136**（64+33+20+14+5）、C1 Gate1/Gate2/Gate3 **47/32/32 PASS**；合计 **627 PASS / 0 FAIL**；正式 `data/` 178 文件树 hash `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d` 零变化；`bundle_sha256` 幂等；
 - 板 §2 HEAD 更新为 `b13a3ea`、`sync-pointer` 绑定 `code_tip=b13a3ea`；transition rev40→41：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审来源身份绑定（rev41 目标见 §5）；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
+### R19 · Cursor claim rev43 关闭 Codex R18 来源/正式时间绑定 → 置 `pending_review / codex`（2026-08-03）
+
+- Codex R18 聚焦复审（`b13a3ea`，`codex_r18_p1_3_source_time_review.md`）判 **CHANGES_REQUIRED**：R17 的两个原样反例（缺 domain 的 READY、伪 source_version 的 ABSTAIN）已关闭，但 bundle 内最终冻结到自动稿的 URL 与正式时间仍未绑定到 A2 已验证文档——调用方可保留真实 proof 和正文，改写正式来源/时间后重算自签 canonical hash，并被允许人工签收；根因：`sourceRefBindsToVerifiedDoc` 对 URL/captured_at 用"存在才比较"可选检查、`documentBindsToBundle` 只绑定 `text_sha256 + event_id`、bundle 顶层 `published_at/source_version` 无绑定、`evaluated_at` 无时间合法性/单调性校验；
+- Cursor claim rev43→44（lease `cursor-c1-r19-source-time`）按 R18 最小关闭四项执行，业务 tip `50bfdab`：
+  - `documentBindsToBundle`：新增 `url`/`captured_at`/`synthetic` 必填精确绑定（`verified_provenance.final_url`/`source.url` 精确相等、`captured_at` 精确相等、`synthetic`/`is_synthetic` 必须 `false`）；
+  - `sourceRefBindsToVerifiedDoc`：URL/captured_at 改为必填精确绑定，删除不再绕过；
+  - 新增 `bundleTopLevelBindsToVerifiedCurrent`：bundle 顶层 `published_at`/`source_version` 与已验证 current document 必填精确绑定；
+  - 新增 `validMonotonicTimes`：`evaluated_at >= captured_at >= published_at`；`toEpochMs` 本地复制避免循环依赖；
+  - 检查 G（E2 之后）：`research_note` 存在时执行顶层绑定与时间单调校验，任一失败 → `auto_draft_baseline_untrusted`；
+- 交付：`lib/fomc_evidence_draft.js`（documentBindsToBundle url/captured_at/synthetic + sourceRefBindsToVerifiedDoc 必填 + bundleTopLevelBindsToVerifiedCurrent + validMonotonicTimes + toEpochMs + 检查 G）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3d 五断言：伪 captured_at / 伪 published_at / 删 URL+captured_at / 恶意 current url / evaluated_at 非单调，violation 集各仅命中对应绑定，replay 自洽）；
+- P1 专项 **63/63 PASS**（58 + P1-3d 5）；Gate 1/Gate2/Gate3/Gate4 **47/32/32/39 PASS**；A1 **106/106**、A2 **PASS**（152 断言）、A4 **25/25**、B1 **136/136**（64+33+20+14+5）；合计 **632 PASS / 0 FAIL**；正式 `data/` 178 文件树 hash `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d` 零变化；`bundle_sha256` 幂等；
+- 板 §2 HEAD 更新为 `50bfdab`、`sync-pointer` 绑定 `code_tip=50bfdab`；transition rev44→45：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审来源/正式时间绑定（rev45 目标见 §5）；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
