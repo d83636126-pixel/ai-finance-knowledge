@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 45
+revision: 47
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'human'
+status: 'done'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-03T16:11:48.899Z'
+last_writer: 'codex'
+written_at: '2026-08-03T08:24:31.046Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -532,6 +532,51 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R19 · 来源/正式时间绑定最终聚焦复审
+
+结论：**PASS**。
+
+复审目标业务 tip：`50bfdab`。本轮只复核 Codex R18 报告中的 source-ref / bundle document / 顶层来源与正式时间绑定，不重开 P1-1/P1-2/P1-4，不进入 Batch D。
+
+## 聚焦裁决
+
+R18 的剩余 P1 已关闭：
+
+1. current/prior source ref 的 `url` 与 `captured_at` 已改为必填，并与对应 A2 verified document 精确一致；删除字段不能再绕过。
+2. current/prior bundle document 的 `event_id`、正文 hash、URL、captured_at、synthetic 已与对应 A2 verified document 精确绑定。
+3. bundle 顶层 `published_at`、`source_version` 已与 verified current document 精确绑定。
+4. `evaluated_at` 必须为合法时间，并满足 `evaluated_at >= captured_at >= published_at`；倒置或非法时间 fail-closed。
+5. 任一绑定失败均进入 `auto_draft_baseline_untrusted`，不会进入人工修订比较。
+
+## 独立反例
+
+使用真实 A2 current/prior 文档、有效 proof 和真实正文，分别只改动一个字段并重算 canonical bundle hash：
+
+- 伪造 `current_document.captured_at` → `current_document_binding_mismatch`；
+- 伪造顶层 `published_at` → `top_level_source_time_mismatch`；
+- 删除 current/prior source ref 的 URL/captured_at → `current_source_identity_mismatch` + `prior_source_identity_mismatch`；
+- 把 current document URL 改为外站 → `current_document_binding_mismatch`；
+- `evaluated_at` 早于 captured_at → `evaluated_at_not_monotonic`；
+- 伪造顶层 `source_version` → `top_level_source_time_mismatch`；
+- 伪造 prior document captured_at → `prior_document_binding_mismatch`；
+- 未修改的真实 bundle → trust 与 human revision 均正常通过。
+
+上述反例均已独立复现，未依赖测试脚本自身的预期布尔值。
+
+## 回归与数据保护
+
+- C1 Gate1/Gate2/Gate3/Gate4/P1：`47 + 32 + 32 + 39 + 63 = 213 PASS`；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136`；
+- 合计 **632 PASS / 0 FAIL**；
+- 正式 `data/` 树哈希前后均为 `25d90020a2e68b80782be302d0d8a0c27968181c63dc3fe7170675f4c415e4fb`，无写入。
+
+## 边界
+
+- 本结论只表示 C1 工程门槛与本轮 P1 已通过 Codex 聚焦复审；
+- Codex 不代替 Human 声明 `POLICY_INFERENCE_TRACEABILITY_C1`；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`；
+- 未进入 Batch D。下一步交 Human 决定是否正式确认 C1，以及是否另行授权后续 Batch。
 
 # C1 R19 · P1-3 来源/正式时间绑定聚焦复审
 
