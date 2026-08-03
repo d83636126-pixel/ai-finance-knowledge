@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 39
+revision: 41
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-03T06:27:06.018Z'
+last_writer: 'cursor'
+written_at: '2026-08-03T14:38:36.155Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -41,14 +41,14 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 C1 证据约束草稿` |
 | C1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_C_证据约束草稿_2026-08-02.md` |
-| HEAD | `02fbcb8`（C1 R17 ABSTAIN 根信任关闭业务 tip） |
+| HEAD | `b13a3ea`（C1 R18 来源身份绑定业务 tip） |
 | 开环基线 | `2d18ab6`（B1 业务 tip） |
 | A1 / A2 / B1 业务 tip | `b1abce5` / `50b88aa` / `2d18ab6` |
 | change class | `C2` |
 | review | `R2`（聚焦） |
 | status / next_actor | `pending_review / codex` |
 | 授权范围 | 沿用 V4.2 主计划与 B1 已授权面；本环为证据约束草稿派生计算，无新外部网络/正式写入/后台调度需求 |
-| R17 复审目标 | `02fbcb8`（ABSTAIN 根信任关闭；Codex R16 `codex_r16_p1_3_focused_review.md` CHANGES_REQUIRED 关闭） |
+| R18 复审目标 | `b13a3ea`（来源身份绑定；Codex R17 `codex_r17_p1_3_focused_review.md` CHANGES_REQUIRED 关闭） |
 | 回滚 | 删除未接入正式入口的 C1 候选模块与 smoke，恢复到 `2d18ab6`；不迁移/删除正式产品数据 |
 
 ### 受保护不变量
@@ -131,6 +131,62 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 不得在 Cursor 回合自行声明 `EVENT_POLICY_INTELLIGENCE_V1` 或任何研究/数据质量/发布验收名。
 
 ## 4. Cursor 完成报告
+
+Cursor 完成报告（revision 41 · 置 `pending_review / codex` · R18 关闭 Codex R17 来源身份绑定缺口）
+
+- 基线：R17 C1 业务 tip `02fbcb8`。Codex R17 聚焦复审 `codex_r17_p1_3_focused_review.md` 判 **CHANGES_REQUIRED**：R16 的"无证明 ABSTAIN 可签收"反例已关闭，但 `source_refs` 尚未与所提交的 A2 已验证文档身份绑定——调用方仍能保留真实 A2 文档与有效 proof，改写 bundle 的来源标识（删 `domain` 的 READY、伪造 `source_version` 的 ABSTAIN），重算 `research_note` 与 `bundle_sha256`，仍通过根信任与人工修订。本轮业务 tip `b13a3ea` 按 Codex R17 最小关闭四项关闭该缺口；未改正式 `data/`、未改既有生产入口语义。
+- 验收证据：`logs/acceptance/PRD-EVENT-POLICY-15-C1/`；P1 专项 `scripts/smoke_v42_fomc_c1_p1_r14.js`。
+
+### 来源身份绑定：source_ref ↔ A2 已验证文档逐项精确绑定
+
+`lib/fomc_evidence_draft.js` 关闭 Codex R17 最小关闭四项：
+
+- `documentBindsToBundle`：文档事件身份改为**必填且精确相等**（不再"双方都有才比较"的可选式绑定），否则 `current/prior_document_binding_mismatch`；
+- 新增 `sourceRefBindsToVerifiedDoc`：把 bundle 冻结的 `source_ref` 与对应 A2 已验证文档身份逐项精确绑定——`event_id`（必填精确）、`text_sha256`（相等）、`source_version`（与 `doc.source.source_version` 精确一致）、规范化 `domain`（与 `verified_provenance.final_domain`/`source.domain` 相等）；bundle 冻结 URL/captured_at 时同样要求与已验证文档一致；缺字段或任一不一致 → `current/prior_source_identity_mismatch`；
+- 检查 C 字段完整：current/prior `source_ref` 的 `domain` 非空且命中固定 allowlist（`source_ref_not_official`）、`synthetic === false`（`source_ref_synthetic`）、`source_version` 非空（`current/prior_source_version_required`）；
+- 检查 E 接来源身份绑定：A2 proof 验签 + 文档绑定通过后，再执行 `sourceRefBindsToVerifiedDoc`，任一不一致 → `auto_draft_baseline_untrusted`，不进入人工修订比较。
+
+### 反例覆盖（对应 Codex R17 `codex_r17_p1_3_focused_review.md` 两个独立反例 + 正例）
+
+`scripts/smoke_v42_fomc_c1_p1_r14.js` 新增 P1-3c（4 断言）：
+
+- `P1-3c_genuine_ready_ok`：真实 READY bundle + 真证 current/prior → 人工修订通过（violations 空，不误伤）；
+- `P1-3c_delete_domain_ready_rejected`（Codex R17 独立反例 A）：删除两个 `source_refs[].domain` + 重算 canonical `bundle_sha256` → `auto_draft_baseline_untrusted` + `source_ref_not_official` + `current/prior_source_identity_mismatch`（删 domain 不再跳过官方域检查）；
+- `P1-3c_forged_abstain_shape`（反例 B 前置）：伪造 `source_version`（域仍官方）后 `evidence_scope="official"`、`synthetic=false`、ex_post `ABSTAIN`；
+- `P1-3c_forge_source_version_abstain_rejected`（Codex R17 独立反例 B）：伪造 current/prior `source_version` 为 `attacker-current-v1`/`attacker-prior-v1` + 用伪 source ref 重放 research note（事后降 ABSTAIN）+ 重算 canonical `bundle_sha256` + 提交真实 A2 proof → `auto_draft_baseline_untrusted` + `current/prior_source_identity_mismatch`，且 **无** `research_note_replay_mismatch`（replay 自洽，仅来源身份绑定命中——证明只有身份绑定挡住伪造，ABSTAIN 不再是来源身份不一致的降级通道）。
+
+### 五子机制结果（维持 R17 通过项，来源身份绑定后全部保留）
+
+1. `C_INFERENCE_TRACEABILITY` **PASS**；
+2. `C_EX_ANTE_CONSTRAINT` **PASS**；
+3. `C_EX_POST_ANCHOR` **PASS**；
+4. `C_MODEL_FREE_RENDER` **PASS** —— `factsOnlyView` 只读展示路径不受影响；
+5. `C_DRAFT_ISOLATION` **PASS** —— 人工修订的 canonical 基线一律来自先经根信任验证的 bundle；缺失或伪造的来源身份无法冻结进 auto draft。
+
+### 正式数据 / 既有文件前后 hash
+
+- 本轮改动：`lib/fomc_evidence_draft.js`（documentBindsToBundle 必填精确 + sourceRefBindsToVerifiedDoc 新增 + C 字段完整 + E 来源身份绑定）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3c 四断言）。
+- 正式 `data/` 树 hash：`ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d`（178 文件），build 前后零变化；`bundle_sha256` 幂等。
+
+### 回归
+
+- P1 专项 **58/58 PASS**（54 + P1-3c 4）；Gate 4 **39/39 PASS**；
+- A1 `smoke_v42_fomc_a1.js` **106/106**；A2 `smoke_v42_fomc_a2.js` **PASS**（152 断言）；A4 `smoke_v42_fomc_a4.js` **25/25**；B1 全量 **136/136 PASS**（64+33+20+14+5）；C1 Gate1/Gate2/Gate3 **47/32/32 PASS**；合计 **627 PASS / 0 FAIL**。
+
+### 回滚实测
+
+- 恢复到 R17 业务 tip `02fbcb8`：`lib/fomc_evidence_draft.js`/`scripts/smoke_v42_fomc_c1_p1_r14.js` 回退 → 可完整回退；正式 `data/` 不受影响。
+
+### 未覆盖项与残余风险
+
+- fixtures 为合成 FOMC 声明；真实官方文本的超长 excerpt 截断、跨页重排密度未全量核对；
+- 事前内容只进入研究记录，尚未接线收尾卡/最终简报（Batch D 接线，本环不实现）；
+- 本环无受控持久化冻结层：`RETROSPECTIVE_EX_ANTE_TEMPLATE` 是历史回放模板，真实"事件前已冻结"入口需另环在受控持久化层落地；
+- READY 与 ABSTAIN 路径均需调用方供 A2 已验证文档（bundle 不携带 proof）：正式接线时由 A2 受控 store 供档，本环保持纯函数；
+- 自动稿未经 Human 接入前不得进入正式简报/收尾卡；本环不声明 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
 
 Cursor 完成报告（revision 37 · 置 `pending_review / codex` · R17 关闭 Codex R16 ABSTAIN 根信任绕过）
 
@@ -430,6 +486,41 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R18 · 来源身份绑定聚焦复审
+
+复审目标业务 tip：`b13a3ea`。本轮只复核 Codex R17 判 CHANGES_REQUIRED 的 **source-ref ↔ A2 verified document 身份绑定**是否关闭，并确认已通过的 P1-1/P1-2/P1-4、五子机制和 `C_DATA_PROTECTION` 无回退；不扩展 Batch D。
+
+## 已通过证据
+
+- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`47 + 32 + 32 + 39 + 58 = 208` 项通过；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 通过；本轮合计 **627 PASS / 0 FAIL**；
+- 正式 `data/` 树哈希前后均为 `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d`（178 文件），无写入；
+- R17 两个独立反例已关闭：删 domain 的 READY、伪造 source_version 的 ABSTAIN 均被拒绝；真实 READY 与真实 ABSTAIN 继续通过（不误伤）。
+
+## 关闭路径（请聚焦复审）
+
+`verifyBundleTrust`（`lib/fomc_evidence_draft.js`，路线 A 内存验证，零 fs）：
+
+- **检查 C 字段完整**（恒跑）：current/prior `source_ref` 的 `domain` 非空且命中固定 allowlist（`source_ref_not_official`）、`synthetic === false`（`source_ref_synthetic`）、`source_version` 非空（`current_source_version_required`/`prior_source_version_required`）；
+- **检查 E 来源身份绑定**（恒跑）：A2 proof 验签 + `documentBindsToBundle`（`text_sha256` + `event_id` 必填精确）通过后，新增 `sourceRefBindsToVerifiedDoc` 把 source_ref 与对应 A2 已验证文档逐项精确绑定——`event_id`、`text_sha256`、`source_version`（`doc.source.source_version`）、规范化 `domain`（`verified_provenance.final_domain` 优先）、URL/captured_at（bundle 冻结时一致）；缺字段或任一不一致 → `current/prior_source_identity_mismatch`；
+- 任一失败 → `violations.push("auto_draft_baseline_untrusted")`，不进入人工修订比较。
+
+## 负向用例（请独立复现）
+
+- `P1-3c_delete_domain_ready_rejected`（Codex R17 独立反例 A 原样）：真实 READY bundle 删除两个 `source_refs[].domain` + 重算 canonical `bundle_sha256` → 必须拒绝（`auto_draft_baseline_untrusted` + `source_ref_not_official` + `current/prior_source_identity_mismatch`）；
+- `P1-3c_forge_source_version_abstain_rejected`（Codex R17 独立反例 B 原样）：伪造 current/prior `source_version`（域仍官方）+ 伪 source ref 重放 research note 降 ABSTAIN + 重算 canonical `bundle_sha256` + 提交真实 A2 proof → 必须拒绝（`current/prior_source_identity_mismatch`），且重放自洽（无 `research_note_replay_mismatch`）——ABSTAIN 不能作为来源身份不一致的降级通道；
+- `P1-3c_genuine_ready_ok`：真实 READY + 真证 current/prior → 通过（不误伤）；
+- 既有 `P1-3b_trusted_abstain_ok`、`P1-3_*`、`O0_synthetic_untrusted_rejected` 保持通过/拒绝，无回退。
+
+## 裁决边界
+
+- 只复核 source-ref ↔ A2 verified document 的身份绑定；不重开已通过 P1-1/P1-2/P1-4；
+- 维持五子机制与 `C_DATA_PROTECTION` 已通过部分；
+- 不接新外部网络、不扩展 Batch D、不写正式数据；
+- 关闭前不得声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+请就以上给出 **PASS / CHANGES_REQUIRED** 裁决；如 CHANGES_REQUIRED 需列可复现反例与最小关闭要求，不扩展 Batch C/D 之外的授权面。
 
 # C1 R17 · P1-3 来源身份绑定聚焦复审
 
@@ -800,4 +891,17 @@ research_note.ex_post.status === "READY"
 - 交付：`lib/fomc_evidence_draft.js`（C/E 恒跑 + E/E2 拆分 + 三处注释）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3b 三断言：trusted ABSTAIN 真证路径 ok / untrusted ABSTAIN 拒绝 / bundle shape）、`scripts/smoke_v42_fomc_c1_gate4.js`（O 块改用 A2 真证 bundle 调 `validateHumanRevision` + 新增 `O0_synthetic_untrusted_rejected`）；
 - P1 专项 **54/54 PASS**（51 + P1-3b 3）；Gate 4 **39/39 PASS**（38 + O0）；A1 **106/106**、A2 **PASS**、A4 **25/25**、B1 **136/136**（64+33+20+14+5）、C1 Gate1/Gate2/Gate3 **47/32/32 PASS**；正式 `data/` 178 文件树 hash `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d` 零变化；`bundle_sha256` 幂等；
 - 板 §2 HEAD 更新为 `02fbcb8`、`sync-pointer` 绑定 `code_tip=02fbcb8`；transition rev36→37：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审 ABSTAIN 根信任（rev37 目标见 §5）；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
+### R18 · Cursor claim rev40 关闭 Codex R17 来源身份绑定 → 置 `pending_review / codex`（2026-08-03）
+
+- Codex R17 聚焦复审（`02fbcb8`，`codex_r17_p1_3_focused_review.md`）判 **CHANGES_REQUIRED**：R16 的"无证明 ABSTAIN 可签收"已关闭，但 `source_refs` 尚未与所提交的 A2 已验证文档身份绑定——调用方仍可保留真实 A2 文档与有效 proof，改写 bundle 的来源标识（删 `domain` 的 READY、伪造 `source_version` 的 ABSTAIN），重算 `research_note` 与 `bundle_sha256`，仍通过根信任与人工修订；根因：source ref 的 domain 为 truthy 才检查 allowlist、`documentBindsToBundle` 只比较 `text_sha256` 且 event_id 可选绑定，未绑定 `source_version/domain/url/captured_at`；
+- Cursor claim rev39→40（lease `cursor-c1-r18-source-binding`）按 R17 最小关闭四项执行，业务 tip `b13a3ea`：
+  - `documentBindsToBundle`：事件身份改为**必填且精确相等**（不再"双方都有才比较"）；
+  - 新增 `sourceRefBindsToVerifiedDoc`：source_ref 与对应 A2 已验证文档逐项精确绑定（`event_id`/`text_sha256`/`source_version`/规范化 `domain`，bundle 冻结 URL/captured_at 亦一致），缺字段或不一致 → `current/prior_source_identity_mismatch`；
+  - 检查 C 字段完整：`domain` 非空命中 allowlist（`source_ref_not_official`）、`synthetic===false`（`source_ref_synthetic`）、`source_version` 非空（`current/prior_source_version_required`）；
+  - 检查 E 接来源身份绑定；任一失败 → `auto_draft_baseline_untrusted`；
+- 交付：`lib/fomc_evidence_draft.js`（documentBindsToBundle 必填精确 + sourceRefBindsToVerifiedDoc 新增 + C 字段完整 + E 来源身份绑定）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3c 四断言：真实 READY ok / 删 domain READY 拒绝 / 伪造 source_version ABSTAIN 拒绝（replay 自洽，无 research_note_replay_mismatch）/ shape）；
+- P1 专项 **58/58 PASS**（54 + P1-3c 4）；Gate 4 **39/39 PASS**；A1 **106/106**、A2 **PASS**（152 断言）、A4 **25/25**、B1 **136/136**（64+33+20+14+5）、C1 Gate1/Gate2/Gate3 **47/32/32 PASS**；合计 **627 PASS / 0 FAIL**；正式 `data/` 178 文件树 hash `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d` 零变化；`bundle_sha256` 幂等；
+- 板 §2 HEAD 更新为 `b13a3ea`、`sync-pointer` 绑定 `code_tip=b13a3ea`；transition rev40→41：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审来源身份绑定（rev41 目标见 §5）；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
