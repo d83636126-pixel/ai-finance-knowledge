@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 31
+revision: 33
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-03T03:13:55.399Z'
+last_writer: 'codex'
+written_at: '2026-08-03T03:35:57.134Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -301,6 +301,85 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R15 四组 P1 聚焦复审
+
+结论：**CHANGES_REQUIRED**。
+
+复审目标业务 tip：`7d6b692`。本轮只复审 Codex R14 的四组 P1、五子机制回归与 `C_DATA_PROTECTION`，不扩展 Batch D。
+
+## 验证概况
+
+- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`47 + 32 + 32 + 38 + 40 = 189` 项全部通过；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 全部通过；本次复跑合计 **608 项通过**；
+- C1/A2/B1 数据保护检查保持通过，正式 `data/` 未发生写入；
+- P1-1、P1-2、P1-4 的上一轮原样反例已独立复现为关闭。
+
+## P1-1：PASS
+
+本环取消 `READY/pre_event_frozen` 能力后，调用方传入回填时间与自算 hash 仍只得到：
+
+```json
+{"status":"RETROSPECTIVE_EX_ANTE_TEMPLATE","pre_event_frozen":false}
+```
+
+输出无 `freeze` 字段，并显式记录 `freeze_claim_rejected`。无 prior 时为 `ABSTAIN`。本环不再可能把历史回放包装成真实事前冻结。
+
+## P1-2：PASS
+
+- 裸 `{kind:"official", verified:true, source_ref:"news"}` 不再被消费，返回 `ABSTAIN / fact_source_proof_required`；
+- 伪 proof 返回 `ABSTAIN / fact_source_proof_unverified`；
+- A2 真 proof 经固定公钥验签、正文 document hash 与 source identity 绑定后才可 READY；
+- 官方 proof 与其他正文混搭、source ref 不一致均 fail-closed。
+
+## P1-3：仍为 P1 阻断——“可信 bundle”仍由调用方自报
+
+`validateHumanRevision()` 虽然不再直接信任 `autoDraft`，但直接把调用方传入的任意 `bundle` 交给 `evidenceDraftFromBundle()` 重新派生 canonical 基线。当前路径没有：
+
+1. 复算并校验 `bundle.bundle_sha256`；
+2. 验证 bundle/current_document 的 A2 proof；
+3. 证明 bundle 来自受控 version store；
+4. 校验 bundle 的 status/evidence_scope/正文身份。
+
+因此“canonical”只是相对于调用方对象内部一致，并未建立根信任。独立反例构造如下伪 bundle：
+
+- `bundle_sha256="attacker-bundle"`；
+- source refs 为 `news/cache`；
+- `research_note.ex_ante` 伪造 `READY + pre_event_frozen=true`；
+- `research_note.ex_post` 伪造 `READY + HOLD` 与 official fact_source；
+- 无 A2 proof、无 store 身份。
+
+再由公开 `evidenceDraftFromBundle(fakeBundle)` 生成 auto draft，作为人工修订提交，结果仍为：
+
+```json
+{"ok":true,"violations":[]}
+```
+
+现有 `P1-3_self_signed_freeze_rejected` 只篡改了**真实 bundle 派生后的 autoDraft**，没有覆盖“伪 bundle 自身被当作可信根”的反例。
+
+### 最小关闭
+
+`validateHumanRevision` 必须先验证 bundle 的根身份，再派生基线。至少需要同时满足：
+
+- `canonicalBundleSha256(bundle) === bundle.bundle_sha256`；
+- current/prior 文档身份、正文 hash 与 A2 proof/正式 evidence scope 按既有 A1/A2 规则复核；
+- 或者 API 不接收裸 bundle，只接收受控 store 的 event/version 标识并由内部加载。
+
+任一验证缺失/失败 → `auto_draft_baseline_untrusted`，不得进入人工修订比较。补“伪 bundle + 自洽派生 autoDraft/humanRevision”原样负向用例。
+
+## P1-4：PASS
+
+- 数组内 `hawkish`、`stocks will rise` 已被值级扫描拒绝；
+- `[null]` 证据/判据、空白命题/窗口/方法版本均被拒绝；
+- 生成器的“空反证 + 精确 gap marker”可以通过同一契约，无 marker 时拒绝；
+- SCENARIO 不再冒充 HYPOTHESIS。
+
+## 裁决边界
+
+- 三组通过项与五子机制、`C_DATA_PROTECTION` 保持关闭，不再扩展；
+- Cursor 只关闭 P1-3 的 bundle 根信任反例并补负向测试；
+- 不接新外部网络、不扩展 Batch D；
+- 此前不得声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 # C1 R15 聚焦复审指令
 
