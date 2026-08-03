@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 41
+revision: 43
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-03T14:38:36.155Z'
+last_writer: 'codex'
+written_at: '2026-08-03T07:08:17.466Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -486,6 +486,85 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R18 · P1-3 来源与正式时间绑定聚焦复审
+
+结论：**CHANGES_REQUIRED**。R17 的两个原样反例（缺 domain 的 READY、伪 source_version 的 ABSTAIN）已经关闭，但 bundle 内最终冻结到自动稿的 URL 与正式时间仍未绑定到 A2 已验证文档；调用方可保留真实 proof 和正文，改写正式来源/时间后重算自签 canonical hash，并被允许人工签收。
+
+复审目标业务 tip：`b13a3ea`。本轮只复核 source-ref ↔ A2 verified document 身份绑定，不重开 P1-1/P1-2/P1-4，不进入 Batch D。
+
+## 已通过证据
+
+- R17 原反例均已关闭：删除 current/prior domain 的 READY 被拒；伪造 current/prior source_version 的 ABSTAIN 被拒；真实 READY 与真实 ABSTAIN 保持通过；
+- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`47 + 32 + 32 + 39 + 58 = 208` 项通过；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 通过；本轮合计 **627 PASS / 0 FAIL**；
+- 正式 `data/` 树哈希前后均为 `25d90020a2e68b80782be302d0d8a0c27968181c63dc3fe7170675f4c415e4fb`，无写入。
+
+## 剩余 P1-3：冻结时间与 URL 仍可脱离 A2 证明
+
+当前 `sourceRefBindsToVerifiedDoc()` 对 URL 和 captured_at 使用“存在才比较”的可选检查：
+
+```js
+if (sourceRef.url != null && sourceRef.url !== "") { ... }
+if (sourceRef.captured_at != null && sourceRef.captured_at !== "") { ... }
+```
+
+因此删除 source ref 的 URL/captured_at 会绕过绑定。同时：
+
+- `documentBindsToBundle()` 只绑定 `text_sha256 + event_id`，不比较 bundle document 的 `url/captured_at`；
+- `verifyBundleTrust()` 不把 bundle 顶层 `published_at/source_version` 与 verified current document 绑定；
+- `evaluated_at` 也未做时间合法性/单调性校验；
+- `canonicalBundleSha256` 是调用方可重算的自洽性校验，不能为这些未绑定字段提供来源权威。
+
+### 独立反例 A：伪造 captured_at 被冻结并签收
+
+从真实 A2 READY bundle 出发，保留 current/prior 已验证文档、proof、source refs 与正文不变，仅执行：
+
+```js
+bundle.current_document.captured_at = "1999-01-01T00:00:00.000Z";
+bundle.bundle_sha256 = canonicalBundleSha256(bundle);
+```
+
+当前结果：
+
+```json
+{
+  "trust": {"ok": true, "violations": []},
+  "validation": {"ok": true, "violations": []},
+  "frozen_captured_at": "1999-01-01T00:00:00.000Z"
+}
+```
+
+该时间早于 2026 年正式发布，构成明显时间倒置，却进入 `evidenceDraftFromBundle().source.captured_at` 并成为人工不可修改的冻结字段。
+
+### 独立反例 B：伪造 published_at 被冻结并签收
+
+仅把 `bundle.published_at` 改为 `1999-01-01T00:00:00.000Z` 并重算 bundle hash；真实 proof、正文、source refs 不变。
+
+当前 `verifyBundleTrust` 与 `validateHumanRevision` 同样均返回 `ok:true`，伪造发布时间进入自动稿的 `source.published_at`。
+
+### 独立反例 C：来源定位字段可删除/改写
+
+- 删除 current/prior `source_refs[].url` 与 `captured_at`，重算 bundle hash → trust/validation 均 `ok:true`；
+- 把 `current_document.url` 改为 `https://evil.example/fake-statement`，重算 bundle hash → trust/validation 均 `ok:true`。
+
+这与 R17 最小关闭中“bundle 对外冻结 URL/captured_at 时与 proof/document 一致”及 C1 的正式来源、正式时间不可伪造边界不一致。
+
+## 最小关闭
+
+只补已暴露的来源/时间绑定，不扩面：
+
+1. current/prior source ref 的 `url` 与 `captured_at` 改为必填，并与对应 verified document / proof 精确一致；缺失也必须拒绝。
+2. `documentBindsToBundle()` 至少增加 `url`、`captured_at`、`synthetic` 与 verified document 的精确绑定；current/prior 分别校验。
+3. bundle 顶层 `published_at`、`source_version` 与 verified current document 精确绑定；`evaluated_at` 至少必须是合法时间且满足 `evaluated_at >= captured_at >= published_at`。若 evaluated_at 需要权威审计语义，则必须来自 A2 受控存储/可信 envelope，不能靠调用方自签 hash。
+4. 补三个负向用例：伪 captured_at、伪 published_at、删除 URL/captured_at；均须返回 `auto_draft_baseline_untrusted`。真实 READY/ABSTAIN 继续通过。
+
+## 裁决边界
+
+- P1-1、P1-2、P1-4、五子机制和 `C_DATA_PROTECTION` 保持通过，不重开；
+- 只关闭 source/document/top-level 中已经冻结或对外呈现的来源与时间字段绑定；
+- 不接新外部网络、不写正式数据、不进入 Batch D；
+- Cursor 不得自行声明 `POLICY_INFERENCE_TRACEABILITY_C1`；关闭后再交 Codex 最终聚焦复审。
 
 # C1 R18 · 来源身份绑定聚焦复审
 
