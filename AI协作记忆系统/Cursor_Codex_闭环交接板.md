@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 34
+revision: 36
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-03T04:33:20.176Z'
+last_writer: 'codex'
+written_at: '2026-08-03T05:41:00.511Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -371,6 +371,69 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R16 · P1-3 聚焦复审
+
+结论：**CHANGES_REQUIRED**。P1-3 的 READY 路径已加固，但 ABSTAIN 路径仍允许调用方自造 bundle 根信任。
+
+复审目标业务 tip：`71b9440`。本轮只复核 P1-3 bundle 根信任，并确认已通过的 P1-1/P1-2/P1-4、五子机制和 `C_DATA_PROTECTION` 无回退。
+
+## 已通过证据
+
+- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`47 + 32 + 32 + 38 + 51 = 200` 项通过；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 通过；合计 **619 PASS / 0 FAIL**；
+- 正式 `data/` 零写入，既有数据保护检查保持通过；
+- P1-1、P1-2、P1-4 保持关闭；P1-3 的伪 READY、错误根哈希、无 proof、派生结果篡改等已有反例均被拒绝。
+
+## 剩余 P1-3：ABSTAIN 可绕过根信任检查
+
+`verifyBundleTrust()` 把 source allowlist、A2 proof、`evidence_scope=official` 与 fact-source 权威校验全部放在：
+
+```js
+research_note.ex_post.status === "READY"
+```
+
+条件之下。将伪 bundle 的 ex-post 状态设为 `ABSTAIN` 后，这些根身份检查会全部跳过。
+
+独立反例构造了一个完全由调用方生成的 bundle：
+
+- current/prior 来源分别为 `news-v2` 与 `cache-v1`；
+- `evidence_scope="unverified"`；
+- 无任何 A2 proof 或受控 store 身份；
+- 段落、正文 SHA、research_note 与 bundle SHA 均由调用方现场生成并保持内部自洽；
+- ex-ante 为历史回放模板，ex-post 为 `ABSTAIN`。
+
+当前结果：
+
+```json
+{
+  "trust": {"ok": true, "violations": []},
+  "validation": {"ok": true, "violations": []},
+  "auto_source": {
+    "current_source_ref": "news-v2",
+    "prior_source_ref": "cache-v1"
+  }
+}
+```
+
+虽然它没有伪造 READY 决策事实，但仍能把伪造的正式原文身份、文本差异、事前监控情景与时间字段固化成“canonical auto draft”，随后允许人工签收。`ABSTAIN` 只能表示证据不足，不能把未经验证的数据源升级为可信自动稿基线。
+
+现有测试仅覆盖“自洽伪 bundle + 伪 READY”，未覆盖“自洽伪 bundle + ABSTAIN”。
+
+## 最小关闭
+
+用于 `validateHumanRevision()` 的 bundle 无论 ex-post 是 READY 还是 ABSTAIN，都必须先建立来源根信任。最小方案二选一：
+
+1. **严格正式基线**：current/prior 始终要求 A2 proof、document binding、正式 source refs 与受控 evidence scope；缺证一律 `auto_draft_baseline_untrusted`。
+2. **允许非正式 ABSTAIN，但不得签收**：非正式/无 proof bundle 可以只读展示 ABSTAIN，却禁止进入 `validateHumanRevision` 和 canonical auto-draft 冻结流程，显式返回 `untrusted_abstain_bundle_not_revisable`。
+
+补原样反例：自洽 news/cache bundle、无 proof、`ex_post=ABSTAIN`、replay 与 canonical SHA 均一致，仍必须拒绝人工修订。
+
+## 裁决边界
+
+- 只关闭上述 ABSTAIN 根信任绕过；不重开已通过三组 P1；
+- 不扩展 Batch D、不接新网络、不写正式数据；
+- 关闭前不得声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 # C1 R16 P1-3 bundle 根信任聚焦复审
 
