@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 33
+revision: 34
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-03T03:35:57.134Z'
+last_writer: 'cursor'
+written_at: '2026-08-03T04:33:20.176Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -41,7 +41,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 C1 证据约束草稿` |
 | C1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_C_证据约束草稿_2026-08-02.md` |
-| HEAD | `7d6b692`（C1 R15 P1 关闭业务 tip） |
+| HEAD | `71b9440`（C1 R16 P1-3 关闭业务 tip） |
 | 开环基线 | `2d18ab6`（B1 业务 tip） |
 | A1 / A2 / B1 业务 tip | `b1abce5` / `50b88aa` / `2d18ab6` |
 | change class | `C2` |
@@ -130,6 +130,76 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 不得在 Cursor 回合自行声明 `EVENT_POLICY_INTELLIGENCE_V1` 或任何研究/数据质量/发布验收名。
 
 ## 4. Cursor 完成报告
+
+Cursor 完成报告（revision 34 · 置 `pending_review / codex` · R16 关闭 Codex R15 P1-3 bundle 根信任）
+
+- 基线：R15 C1 业务 tip `7d6b692`（Codex R15 聚焦复审目标 `d510636`，`codex_r15_p1_3_focused_review.md` 判 **P1-3 STILL BLOCKED**：`validateHumanRevision` 把调用方传入的任意 `bundle` 交给 `evidenceDraftFromBundle` 重新派生 canonical 基线，未建立根信任）。本轮业务 tip `71b9440` 仅关闭 P1-3；未改正式 `data/`、未改既有生产入口语义。
+- 验收证据：`logs/acceptance/PRD-EVENT-POLICY-15-C1/`；P1 专项 `scripts/smoke_v42_fomc_c1_p1_r14.js`。
+
+### P1-3 根信任：派生基线前先验证 bundle 根身份（verifyBundleTrust）
+
+`validateHumanRevision` 在调用 `evidenceDraftFromBundle` 派生 canonical 自动稿前，先执行 `verifyBundleTrust(bundle, opts)` 六组检查（路线 A：内存验证，零 fs；不走“从受控 store 内部加载”路线 B，保持 `fomc_evidence_draft.js` 纯函数、bundle 契约与 data/ 零变化）：
+
+- 检查 A 根哈希：`canonicalBundleSha256(bundle) === bundle.bundle_sha256`（删除 bundle_sha256 后稳定序列化重算），不一致 → `bundle_root_hash_mismatch`；
+- 检查 B 文档身份+正文 hash：current/prior `text_sha256` 与段落重新派生正文 hash 一致；current event_id 绑定 bundle event_id（prior 是上一场会议，按设计不同）；缺失 → `current_document_required`/`prior_document_required`，篡改 → `current_document_hash_tampered`/`prior_document_hash_tampered`/`current_document_wrong_event`；
+- 检查 C（仅 `research_note.ex_post.status === READY` 时）：current/prior `source_ref` 必须存在且为官方域（`isTrustedOfficialDomain` allowlist，`federalreserve.gov` 固定镜像），否则 `current_source_ref_missing`/`prior_source_ref_missing`/`source_ref_not_official`；
+- 检查 D：事前冻结声明不可信（本环无受控持久化冻结层，`ex_ante_freeze_claim_untrusted`），与 P1-1 取消 READY 一致；
+- 检查 E（仅 ex_post READY 时）：`evidence_scope === "official"`、current/prior 文档必须携带 A2 `verified_provenance + proof` 且经固定 Ed25519 公钥验签（`verifyVerifiedProof(documentProvenanceFields(doc), proof)`）+ 绑定 `text_sha256`/`event_id`，否则 `evidence_scope_not_official`/`current_a2_proof_required`/`prior_a2_proof_required`/`current_document_binding_mismatch`/`prior_document_binding_mismatch`/`fact_source_not_official`；
+- 检查 F research_note replay：从 bundle 自身段落/source_refs/text_changes/missing_fields/conflicts 重新派生 `buildResearchNote`，必须与存储的 `research_note` 字节一致（`stableStringify` 比较），不一致 → `research_note_replay_mismatch`——关闭“自洽伪造 bundle + 重算 bundle_sha256”漏洞（无 A2 私钥的攻击者无法伪造与真实段落一致的 READY research_note）；
+- 任一验证缺失/失败 → `violations.push("auto_draft_baseline_untrusted")` + 具体违规码，不进入人工修订比较。
+
+新增导出：`verifyBundleTrust`、`canonicalBundleSha256`。循环依赖约束下 `fomc_evidence_draft.js` 不 require `fomc_document_bundle.js`，本地镜像 `FIXED_OFFICIAL_DOMAINS`/`normalizeDomain`/`isTrustedOfficialDomain`/`canonicalBundleSha256`/`localDocIsVerified`（基于 `documentProvenanceFields` + `verifyVerifiedProof` + `VERIFIED_ADAPTER_ID`）。
+
+反例（Codex R15 P1-3 原样复现 + 加固，`scripts/smoke_v42_fomc_c1_p1_r14.js` 新增 11 断言）：
+
+- `P1-3_fake_bundle_root_untrusted`（`bundle_sha256="attacker-bundle"` + news/cache source refs + 伪造 ex_ante READY/pre_event_frozen + 伪造 ex_post READY/HOLD official fact_source + 无 A2 proof）→ `auto_draft_baseline_untrusted` + `bundle_root_hash_mismatch` + `source_ref_not_official` + `ex_ante_freeze_claim_untrusted` + `current_a2_proof_required` + `research_note_replay_mismatch`；
+- `P1-3_self_consistent_fake_still_rejected`（克隆真实 bundle、仅伪造 ex_post READY、重算 bundle_sha256、无 proofs）→ `current_a2_proof_required`（检查 A/F 自洽也过不了检查 E）；
+- `P1-3_genuine_requires_proof`（真实 bundle 但调用方不提供已验证文档）→ fail-closed `current_a2_proof_required`；
+- `P1-3_replay_tampered_rejected`（真实 bundle + 已验证文档 + 篡改 decision_facts + 重算 bundle_sha256）→ `research_note_replay_mismatch`；
+- `P1-3_trusted_bundle_compliant_ok`（A2 testkit `makeGenuineBundle` 真证路径 → ok）。
+
+**MEDIUM 耦合说明（有意选择）**：READY 路径要求调用方提供 A2 签名文档（`verifiedCurrent`/`verifiedPrior`），这些文档**无法从 bundle 本身恢复**（bundle 文档不携带 `verified_provenance/proof`）。这是预期的 fail-closed 设计——对应 Codex R15 裁决“从受控 store 内部加载”的路线 A 内存等价：真正根信任仍在 A1/A2 store 校验，`validateHumanRevision` 只接受调用方把已验证文档与 bundle 一并呈交，缺证 → 拒。正式入口接线时由 A2 受控 store 供档，不暴露裸 bundle 路径。
+
+### 五子机制结果（维持 R15 通过项，P1-3 关闭后全部保留）
+
+1. `C_INFERENCE_TRACEABILITY` **PASS** —— 全量遍历研究记录：每项推断带 `support[]`/`counter_evidence[]`/`gaps[]`/`monitoring_conditions[]`/`method_version`；SCENARIO 契约经 `assertInferenceContract` 强制；HYPOTHESIS `[null]`/空白拒绝；数组字符串值级扫描。
+2. `C_EX_ANTE_CONSTRAINT` **PASS** —— 事前只派生自 prior；缺证据 → ABSTAIN；无受控冻结 → 一律历史回放模板（pre_event_frozen 恒 false），自报冻结拒绝（freeze_claim_rejected）。
+3. `C_EX_POST_ANCHOR` **PASS** —— 实际决定/逐项文本变化/来源与数据缺口仅来自正式文本 + A2 proof 验签；无 proof → ABSTAIN；决策事实纯文本派生，可定位 `source_ref + paragraph_id`。
+4. `C_MODEL_FREE_RENDER` **PASS** —— `factsOnlyView` 无模型直接渲染事实与差异；视图无模型输出键；allowlist 拒绝 model/news/cache 别名。
+5. `C_DRAFT_ISOLATION` **PASS** —— 自动稿与人工修订分域；校验器从可信 bundle（先经 verifyBundleTrust 根信任验证）重新派生 canonical 基线；伪 autoDraft/自签冻结/伪 bundle 拒绝；人工仅 `human_*` 命名空间。
+
+### 反例覆盖（对应 Codex R15 `codex_r15_p1_3_focused_review.md` P1-3）
+
+- 伪 bundle（`bundle_sha256` 不符 + news/cache source refs + 伪造 READY 事前/事后 + official fact_source + 无 A2 proof）→ `auto_draft_baseline_untrusted`；
+- 自洽伪造 bundle（重算 bundle_sha256 也无法通过 A2 证据身份检查）→ `current_a2_proof_required`；
+- 真 bundle 但缺已验证文档 → fail-closed；
+- 真 bundle + 已验证文档 + 篡改派生字段 + 重算 bundle_sha256 → `research_note_replay_mismatch`；
+- 真证路径 → ok（不误伤）。
+
+### 正式数据 / 既有文件前后 hash
+
+- 本轮改动：`lib/fomc_evidence_draft.js`（verifyBundleTrust 六组检查 + validateHumanRevision 0a 接入 + 导出）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3 负向测试扩展）。
+- 正式 `data/` 树 hash：`f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`，build 前后零变化；`bundle_sha256` 幂等（含 research_note / A2 proof 路径）。
+
+### 回归
+
+- C1 四门 + P1 专项：**47/32/32/38 + 51 = 200 PASS**；
+- A1 `smoke_v42_fomc_a1.js` **106/106**；A2 `smoke_v42_fomc_a2.js` **PASS**（152 断言） + walkthrough **37 PASS**；A4 `smoke_v42_fomc_a4.js` **25/25**；B1 全量 **136/136 PASS**（64+33+20+14+5）；合计 **619 PASS / 0 FAIL**。
+
+### 回滚实测
+
+- 恢复到 R15 业务 tip `7d6b692`：`lib/fomc_evidence_draft.js`/`scripts/smoke_v42_fomc_c1_p1_r14.js` 回退 → 可完整回退；正式 `data/` 不受影响。
+
+### 未覆盖项与残余风险
+
+- fixtures 为合成 FOMC 声明；真实官方文本的超长 excerpt 截断、跨页重排密度未全量核对；
+- 事前内容只进入研究记录，尚未接线收尾卡/最终简报（Batch D 接线，本环不实现）；
+- 本环无受控持久化冻结层：`RETROSPECTIVE_EX_ANTE_TEMPLATE` 是历史回放模板，真实“事件前已冻结”入口需另环在受控持久化层落地；
+- READY 路径需调用方供 A2 已验证文档（bundle 不携带 proof）：正式接线时由 A2 受控 store 供档，本环保持纯函数；
+- 自动稿未经 Human 接入前不得进入正式简报/收尾卡；本环不声明 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
 
 Cursor 完成报告（revision 31 · 置 `pending_review / codex` · R15 关闭 Codex R14 四组 P1）
 
@@ -302,137 +372,45 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 
 ## 5. Codex 集中 R2 指令
 
-# C1 R15 四组 P1 聚焦复审
+# C1 R16 P1-3 bundle 根信任聚焦复审
 
-结论：**CHANGES_REQUIRED**。
-
-复审目标业务 tip：`7d6b692`。本轮只复审 Codex R14 的四组 P1、五子机制回归与 `C_DATA_PROTECTION`，不扩展 Batch D。
+复审目标业务 tip：`71b9440`。本轮只复审 Codex R15 的 P1-3（bundle 根信任）关闭、五子机制回归与 `C_DATA_PROTECTION`，不扩展 Batch D。
 
 ## 验证概况
 
-- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`47 + 32 + 32 + 38 + 40 = 189` 项全部通过；
-- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 全部通过；本次复跑合计 **608 项通过**；
-- C1/A2/B1 数据保护检查保持通过，正式 `data/` 未发生写入；
-- P1-1、P1-2、P1-4 的上一轮原样反例已独立复现为关闭。
+- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`47 + 32 + 32 + 38 + 51 = 200` 项全部通过；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 全部通过；本次复跑合计 **619 项通过**；
+- C1/A2/B1 数据保护检查保持通过，正式 `data/` 未发生写入。
 
-## P1-1：PASS
+## P1-3 关闭路径（请聚焦复审）
 
-本环取消 `READY/pre_event_frozen` 能力后，调用方传入回填时间与自算 hash 仍只得到：
+基线：Codex R15 聚焦复审判 **P1-3 STILL BLOCKED**——`validateHumanRevision()` 把调用方传入的任意 `bundle` 交给 `evidenceDraftFromBundle()` 重新派生 canonical 基线，未建立根信任（未复算 `bundle_sha256`、未验 A2 proof、未证明来自受控 store、未校验 status/evidence_scope/正文身份）。
 
-```json
-{"status":"RETROSPECTIVE_EX_ANTE_TEMPLATE","pre_event_frozen":false}
-```
+本轮 Cursor 在派生基线前新增 `verifyBundleTrust(bundle, opts)` 六组检查（路线 A：内存验证，零 fs；不走"从受控 store 内部加载"路线 B，保持 `fomc_evidence_draft.js` 纯函数、bundle 契约与 data/ 零变化）：
 
-输出无 `freeze` 字段，并显式记录 `freeze_claim_rejected`。无 prior 时为 `ABSTAIN`。本环不再可能把历史回放包装成真实事前冻结。
+- **检查 A 根哈希**：`canonicalBundleSha256(bundle) === bundle.bundle_sha256`，不一致 → `bundle_root_hash_mismatch`；
+- **检查 B 文档身份+正文 hash**：current/prior `text_sha256` 与段落重新派生正文 hash 一致；current event_id 绑定 bundle event_id（prior 是上一场会议，按设计不同）；缺失/篡改 → `current_document_required`/`prior_document_required`/`current_document_hash_tampered`/`prior_document_hash_tampered`/`current_document_wrong_event`；
+- **检查 C（仅 ex_post READY）**：current/prior `source_ref` 必须存在且为官方域（`isTrustedOfficialDomain` allowlist），否则 `current_source_ref_missing`/`prior_source_ref_missing`/`source_ref_not_official`；
+- **检查 D**：事前冻结声明不可信（本环无受控持久化冻结层），`ex_ante_freeze_claim_untrusted`；
+- **检查 E（仅 ex_post READY）**：`evidence_scope === "official"`，current/prior 文档必须携带 A2 `verified_provenance + proof` 且经固定 Ed25519 公钥验签 + 绑定 `text_sha256`/`event_id`，否则 `evidence_scope_not_official`/`current_a2_proof_required`/`prior_a2_proof_required`/`current_document_binding_mismatch`/`prior_document_binding_mismatch`/`fact_source_not_official`；
+- **检查 F research_note replay**：从 bundle 自身段落/source_refs/text_changes/missing_fields/conflicts 重新派生 `buildResearchNote`，必须与存储 `research_note` 字节一致（`stableStringify` 比较），不一致 → `research_note_replay_mismatch`——关闭"自洽伪造 bundle + 重算 bundle_sha256"漏洞（无 A2 私钥的攻击者无法伪造与真实段落一致的 READY research_note）；
+- 任一验证缺失/失败 → `auto_draft_baseline_untrusted`，不进入人工修订比较。
 
-## P1-2：PASS
+新增导出：`verifyBundleTrust`、`canonicalBundleSha256`。循环依赖约束下 `fomc_evidence_draft.js` 不 require `fomc_document_bundle.js`，本地镜像 `FIXED_OFFICIAL_DOMAINS`/`normalizeDomain`/`isTrustedOfficialDomain`/`canonicalBundleSha256`/`localDocIsVerified`（基于 `documentProvenanceFields` + `verifyVerifiedProof` + `VERIFIED_ADAPTER_ID`）。
 
-- 裸 `{kind:"official", verified:true, source_ref:"news"}` 不再被消费，返回 `ABSTAIN / fact_source_proof_required`；
-- 伪 proof 返回 `ABSTAIN / fact_source_proof_unverified`；
-- A2 真 proof 经固定公钥验签、正文 document hash 与 source identity 绑定后才可 READY；
-- 官方 proof 与其他正文混搭、source ref 不一致均 fail-closed。
+## 负向用例（请独立复现）
 
-## P1-3：仍为 P1 阻断——“可信 bundle”仍由调用方自报
-
-`validateHumanRevision()` 虽然不再直接信任 `autoDraft`，但直接把调用方传入的任意 `bundle` 交给 `evidenceDraftFromBundle()` 重新派生 canonical 基线。当前路径没有：
-
-1. 复算并校验 `bundle.bundle_sha256`；
-2. 验证 bundle/current_document 的 A2 proof；
-3. 证明 bundle 来自受控 version store；
-4. 校验 bundle 的 status/evidence_scope/正文身份。
-
-因此“canonical”只是相对于调用方对象内部一致，并未建立根信任。独立反例构造如下伪 bundle：
-
-- `bundle_sha256="attacker-bundle"`；
-- source refs 为 `news/cache`；
-- `research_note.ex_ante` 伪造 `READY + pre_event_frozen=true`；
-- `research_note.ex_post` 伪造 `READY + HOLD` 与 official fact_source；
-- 无 A2 proof、无 store 身份。
-
-再由公开 `evidenceDraftFromBundle(fakeBundle)` 生成 auto draft，作为人工修订提交，结果仍为：
-
-```json
-{"ok":true,"violations":[]}
-```
-
-现有 `P1-3_self_signed_freeze_rejected` 只篡改了**真实 bundle 派生后的 autoDraft**，没有覆盖“伪 bundle 自身被当作可信根”的反例。
-
-### 最小关闭
-
-`validateHumanRevision` 必须先验证 bundle 的根身份，再派生基线。至少需要同时满足：
-
-- `canonicalBundleSha256(bundle) === bundle.bundle_sha256`；
-- current/prior 文档身份、正文 hash 与 A2 proof/正式 evidence scope 按既有 A1/A2 规则复核；
-- 或者 API 不接收裸 bundle，只接收受控 store 的 event/version 标识并由内部加载。
-
-任一验证缺失/失败 → `auto_draft_baseline_untrusted`，不得进入人工修订比较。补“伪 bundle + 自洽派生 autoDraft/humanRevision”原样负向用例。
-
-## P1-4：PASS
-
-- 数组内 `hawkish`、`stocks will rise` 已被值级扫描拒绝；
-- `[null]` 证据/判据、空白命题/窗口/方法版本均被拒绝；
-- 生成器的“空反证 + 精确 gap marker”可以通过同一契约，无 marker 时拒绝；
-- SCENARIO 不再冒充 HYPOTHESIS。
+- `P1-3_fake_bundle_root_untrusted`：`bundle_sha256="attacker-bundle"` + news/cache source refs + 伪造 ex_ante READY/pre_event_frozen + 伪造 ex_post READY/HOLD official fact_source + 无 A2 proof → `auto_draft_baseline_untrusted` + `bundle_root_hash_mismatch` + `source_ref_not_official` + `ex_ante_freeze_claim_untrusted` + `current_a2_proof_required` + `research_note_replay_mismatch`；
+- `P1-3_self_consistent_fake_still_rejected`：克隆真实 bundle、仅伪造 ex_post READY、重算 bundle_sha256、无 proofs → `current_a2_proof_required`（检查 A/F 自洽也过不了检查 E）；
+- `P1-3_genuine_requires_proof`：真实 bundle 但调用方不提供已验证文档 → fail-closed `current_a2_proof_required`；
+- `P1-3_replay_tampered_rejected`：真实 bundle + 已验证文档 + 篡改 decision_facts + 重算 bundle_sha256 → `research_note_replay_mismatch`；
+- `P1-3_trusted_bundle_compliant_ok`：A2 testkit `makeGenuineBundle` 真证路径 → ok。
 
 ## 裁决边界
 
-- 三组通过项与五子机制、`C_DATA_PROTECTION` 保持关闭，不再扩展；
-- Cursor 只关闭 P1-3 的 bundle 根信任反例并补负向测试；
-- 不接新外部网络、不扩展 Batch D；
-- 此前不得声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
-
-# C1 R15 聚焦复审指令
-
-复审目标业务 tip：`7d6b692`。
-
-基线：Codex R14 聚焦复审（`codex_r14_p1_focused_review.md`，复审提交 `dec1be9`）判 **CHANGES_REQUIRED**：四组 P1 均根因于“调用方自报信息被当作不可伪造权威绑定”。本轮 Cursor 按 R14 最小关闭要求逐项关闭并补可复现反例（`scripts/smoke_v42_fomc_c1_p1_r14.js`），未改正式 `data/`、未改既有生产入口语义。
-
-### 请聚焦复审以下四组 P1 关闭
-
-### P1-1 事前冻结：取消 READY，自报冻结不再有权威
-
-- `buildExAntePlan` 完全取消 READY / pre_event_frozen 能力（R14 最小关闭路线二）：本环无受控持久化冻结层，不再接收/信任调用方自报的 `freezeHash`/`generatedAt`/`currentPublishedAt`；
-- 有 prior → 一律 `RETROSPECTIVE_EX_ANTE_TEMPLATE`（`pre_event_frozen` 恒 false）；无 prior → `ABSTAIN`；
-- 调用方若仍传入 `generatedAt`/`freezeHash`（声称“事件前已冻结”）→ 该声称无法验证，显式记入 `abstain_conditions.freeze_claim_rejected`，绝不产出 READY；
-- 已移除 `EX_ANTE_READY` 常量、`computeExAnteFreezeSha256` 与 `freeze` 字段；`ex_ante_reference` 恒 null（事后永不引用不存在的冻结快照）。
-
-反例（R14 P1-1 原样复现）：`P1-1_posthoc_never_ready`、`P1-1_any_claim_rejected`、`P1-1_no_freeze_field`、`P1-1_no_prior_abstain`。
-
-### P1-2 事实源权威：只消费 A2 proof，自报 {kind,verified,source_ref} 不再是权威
-
-- `anchorExPost` 不再接受调用方自报的事实源（R14 最小关闭）：`verifiedProofAuthority` 只消费 A2 受控来源适配器产出的 `verifiedDocument`（携带 `verified_provenance + proof`），`verifyVerifiedProof` 固定公钥验签；
-- 验签之外必须把当前段落内容绑定到 proof 的 `document_hash`（官方证明 + 非官方内容混搭 → `fact_source_proof_document_mismatch` ABSTAIN）；
-- `source_ref` 派生自证明身份（`source_version || final_url`），不允许调用方自报；调用方提供的 `currentSourceRef` 必须与证明身份一致（不一致 → `fact_source_ref_mismatch` ABSTAIN）；
-- 直接辅助入口无有效 proof → `fact_source_proof_required` ABSTAIN；`decision_facts` 纯文本派生，绝不继承输入透传值。
-
-反例（R14 P1-2 原样复现）：`P1-2_news_cannot_self_attest`、`P1-2_content_proof_mismatch`、`P1-2_ref_mismatch_abstain`、`P1-2_tampered_proof_abstain`；真证路径 `P1-2_genuine_ready`（A2 验签 → READY + HOLD 4–4.25，fact_source 派生自证明身份，adapter=fomc_official_source_a2）。
-
-### P1-3 人工修订隔离：校验器从可信 bundle 重新派生 canonical 基线
-
-- `validateHumanRevision` 不再接受调用方自带的权威基线（R14 最小关闭）：必须接收可信 `bundle`（缺 → `auto_draft_baseline_required`），并经 `evidenceDraftFromBundle` 重新派生 canonical auto draft（`meta.freeze_sha256` 绑定 bundle_sha256 + source + ex_ante + ex_post）；
-- 调用方若同时传入 `autoDraft`，必须与 canonical `stableStringify` 完全一致，否则 `auto_draft_baseline_mismatch`（即使指纹自洽）；真正的根信任在 A1/A2 store 的 bundle 校验；
-- 自动域（meta/source/ex_ante/ex_post）完整冻结：人工不得改 bundle_sha256/method_version/source refs/正式时间/正式 hash/status/missing_fields/conflicts/决策事实/逐项文本变化；人工仅 `human_*` 顶层键。
-
-反例（R14 P1-3 原样复现）：`P1-3_self_signed_freeze_rejected`、`P1-3_omit_auto_draft_still_rejects`、`P1-3_bundle_required`、`P1-3_*_bound`（逐字段篡改检出）、`P1-3_compliant_revision_ok`。
-
-### P1-4 推断语义：数组内字符串扫描 + trim/元素类型 + SCENARIO 空反证单一语义真相源
-
-- `assertNoForbiddenInferenceFields` 递归扫描覆盖数组内字符串元素（`{notes:["hawkish","stocks will rise"]}` → 拒绝），不再跳过；
-- `assertInferenceContract` 校验 trim 后非空与元素类型/证据定位：HYPOTHESIS 的 `[null]` 数组 + 空白命题/窗口/判据 → `proposition_required`/`observation_window_required`/`*_element_not_locatable`/`*_element_invalid`/`method_version_required`；
-- SCENARIO 契约允许“空反证 + 显式 gap”：`counter_evidence` 可为空仅当 `gaps` 显式携带 `EMPTY_COUNTER_EVIDENCE_GAP_MARKER`（生成器 `buildExAnteContent` 与校验器 `assertInferenceContract` 共用同一常量，单一语义真相源），否则 `counter_evidence_required_nonempty`；
-- SCENARIO 不得携带 `falsifiable_conditions`/`proposition`（`scenario_must_not_claim_*`）；方向中立“可能变化”不冒充可证伪 HYPOTHESIS。
-
-反例（R14 P1-4 三组原样复现）：`P1-4_array_string_hawkish_rejected`、`P1-4_array_string_market_rejected`、`P1-4_array_clean_passes`、`P1-4_null_blank_hypothesis_rejected`、`P1-4_scenario_empty_counter_explicit_gap`、`P1-4_scenario_empty_counter_no_gap_rejected`、`P1-4_generator_empty_counter_marker`、`P1-4_generator_empty_counter_passes_contract`。
-
-### 回归与数据保护
-
-- C1 四门 + P1 专项：**47/32/32/38 + 40 = 189 PASS**；A1 `smoke_v42_fomc_a1.js` **106/106**；A2 `smoke_v42_fomc_a2.js` **PASS**（121 断言）+ walkthrough **37 PASS**；A4 `smoke_v42_fomc_a4.js` **25/25**；B1 全量 **136/136 PASS**（64+33+20+14+5）；
-- 正式 `data/` 178 文件树 hash `f055a2db145d567f0d3b0f8d031c7ce340f8bbcf05586fc84542f20dc61fe104`，build 前后零变化；`bundle_sha256` 幂等（含 research_note / A2 proof 路径）。
-
-### 裁决边界
-
+- **MEDIUM 耦合说明（有意选择）**：READY 路径要求调用方提供 A2 签名文档（`verifiedCurrent`/`verifiedPrior`），这些文档**无法从 bundle 本身恢复**（bundle 文档不携带 `verified_provenance/proof`）。这是预期的 fail-closed 设计——对应 Codex R15 裁决"从受控 store 内部加载"的路线 A 内存等价：真正根信任仍在 A1/A2 store 校验，`validateHumanRevision` 只接受调用方把已验证文档与 bundle 一并呈交，缺证 → 拒。正式接线时由 A2 受控 store 供档，不暴露裸 bundle 路径。
 - 维持五子机制与 `C_DATA_PROTECTION` 已通过部分；
-- Cursor 只关闭上述四个可复现反例组并补负向测试；
+- Cursor 只关闭 P1-3 的 bundle 根信任反例并补负向测试；
 - 不接新外部网络、不扩展 Batch D；
 - 此前不得声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
 
@@ -565,4 +543,13 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 - 交付：`lib/fomc_evidence_draft.js`（四组 P1 关闭）、`lib/fomc_document_bundle.js`（`buildResearchNote` 接线 `verifiedDocument: verified ? current : null`）、`scripts/smoke_v42_fomc_c1_gate{1,2,3,4}.js`（语义更新）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1 专项反例重写）；
 - C1 四门 + P1 专项 **47/32/32/38 + 40 = 189 PASS**；A1 **106/106**、A2 **PASS**（121 断言）+ walkthrough **37**、A4 **25/25**、B1 **136/136**（64+33+20+14+5）；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`bundle_sha256` 幂等；
 - 板 §2 HEAD 更新为 `7d6b692`、`sync-pointer` 绑定 `code_tip=7d6b692`；transition rev30→31：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审四组 P1（rev31 目标见 §5）；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
+### R16 · Cursor claim rev33 关闭 Codex R15 P1-3 → 置 `pending_review / codex`（2026-08-03）
+
+- Codex R15 聚焦复审（`d510636`，`codex_r15_p1_3_focused_review.md`）判 **P1-3 STILL BLOCKED**：`validateHumanRevision` 把调用方传入的任意 `bundle` 交给 `evidenceDraftFromBundle` 重新派生 canonical 基线，未建立根信任（未复算 `bundle_sha256`、未验 A2 proof、未证明来自受控 store、未校验 status/evidence_scope/正文身份）；
+- Cursor claim rev32→33（lease `cursor-c1-r2-p1`）按 R15 最小关闭要求关闭 P1-3：派生基线前先执行 `verifyBundleTrust(bundle, opts)` 六组检查（路线 A 内存验证，零 fs）——检查 A 根哈希 `canonicalBundleSha256(bundle) === bundle.bundle_sha256`（`bundle_root_hash_mismatch`）；检查 B 文档身份+正文 hash + current event_id 绑定（`*_document_required`/`*_document_hash_tampered`/`current_document_wrong_event`）；检查 C 仅 ex_post READY 时 current/prior source_ref 必须官方域（`source_ref_not_official`）；检查 D 事前冻结声明不可信（`ex_ante_freeze_claim_untrusted`）；检查 E 仅 ex_post READY 时 A2 proof 验签 + document binding（`current_a2_proof_required`/`prior_a2_proof_required`/`*_document_binding_mismatch`/`fact_source_not_official`/`evidence_scope_not_official`）；检查 F research_note replay（`research_note_replay_mismatch`）关闭“自洽伪造 bundle + 重算 bundle_sha256”漏洞；任一失败 → `auto_draft_baseline_untrusted`；
+- 交付：`lib/fomc_evidence_draft.js`（verifyBundleTrust 六组检查 + validateHumanRevision 0a 接入 + 导出 `verifyBundleTrust`/`canonicalBundleSha256`；循环依赖约束下本地镜像 `FIXED_OFFICIAL_DOMAINS`/`normalizeDomain`/`isTrustedOfficialDomain`/`canonicalBundleSha256`/`localDocIsVerified`）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3 负向测试扩展 11 断言）；
+- C1 四门 + P1 专项 **47/32/32/38 + 51 = 200 PASS**；A1 **106/106**、A2 **PASS**（152 断言）+ walkthrough **37**、A4 **25/25**、B1 **136/136**（64+33+20+14+5）；合计 **619 PASS / 0 FAIL**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`bundle_sha256` 幂等；
+- 板 §2 HEAD 更新为 `71b9440`、`sync-pointer` 绑定 `code_tip=71b9440`；transition rev33→34：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审 P1-3（rev34 目标见 §5）；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
