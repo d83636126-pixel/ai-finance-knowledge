@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 47
+revision: 48
 turn: 0
 next_actor: 'human'
 status: 'done'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-03T08:24:31.046Z'
+last_writer: 'human'
+written_at: '2026-08-03T09:03:58.912Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,7 +24,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.2 Batch C
 
-> 当前口令：**执行Cursor_Codex闭环交接板当前指令 · V4.2 C1 证据约束草稿**
+> 当前口令：**V4.2 C1 已验收归档 · 无活动环 · Batch D 未开启**
 
 ## 1. 当前裁决
 
@@ -32,7 +32,8 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - Human（2026-08-02）正式确认 **`POLICY_SOURCE_ACQUISITION_A2`** 完成并验收，并授权另开 **Batch B 新环**（确定性文本差异与政策事实）。
 - **B1 环已关闭**：Codex R2 聚焦复审 **PASS**（`codex_r2_final_review.md`，复审 tip `2d18ab6`），交接板转 `done / human`（revision 20）；Human（2026-08-02）正式确认 **`POLICY_TEXT_DIFF_B1`** 完成并验收。
 - Human（2026-08-02）授权另开 **Batch C 新环 `PRD-EVENT-POLICY-15-C1`**（证据约束草稿），验收名 **`POLICY_INFERENCE_TRACEABILITY_C1`**。
-- 当前执行者：Cursor；完成 C1 交付后交 Codex 做一次聚焦 R2。
+- Codex R19 最终聚焦复审 **PASS**（业务 tip `50bfdab`，`codex_r19_final_focused_review.md`）；Human（2026-08-03）正式确认 **`POLICY_INFERENCE_TRACEABILITY_C1`** 完成并验收，C1 已归档。
+- 当前无活动执行环；Batch D 未开启，后续能力须 Human 另行授权。
 - 本环不做自动鹰鸽结论、不把文本变化直接压成市场因果、不接新外部网络、不改既有生产入口语义；不声明 `EVENT_POLICY_INTELLIGENCE_V1`。
 
 ## 2. 基线、授权与边界
@@ -46,7 +47,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | A1 / A2 / B1 业务 tip | `b1abce5` / `50b88aa` / `2d18ab6` |
 | change class | `C2` |
 | review | `R2`（聚焦） |
-| status / next_actor | `pending_review / codex` |
+| status / next_actor | `done / human` |
 | 授权范围 | 沿用 V4.2 主计划与 B1 已授权面；本环为证据约束草稿派生计算，无新外部网络/正式写入/后台调度需求 |
 | R19 复审目标 | `50bfdab`（来源/正式时间绑定；Codex R18 `codex_r18_p1_3_source_time_review.md` CHANGES_REQUIRED 关闭） |
 | 回滚 | 删除未接入正式入口的 C1 候选模块与 smoke，恢复到 `2d18ab6`；不迁移/删除正式产品数据 |
@@ -1068,6 +1069,14 @@ research_note.ex_post.status === "READY"
 - 四门 **99 PASS / 0 FAIL**（Gate1 39 + Gate2 21 + Gate3 20 + Gate4 19）；回归 A1 **106/106**、A2 **152/152**、A4 **25/25**、B1 **136/136**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；
 - 板 §2 HEAD 更新为 `71b1dbc`、`sync-pointer` 绑定 `code_tip=71b1dbc`；transition rev22→23：释放租约，置 `pending_review / codex`（turn 0→1），交 Codex 聚焦 R2（rev23 目标见 §5）；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
+### R20 · Codex R19 PASS + Human 正式确认 C1 + 归档（2026-08-03）
+
+- Codex R19 最终聚焦复审 **PASS**（`codex_r19_final_focused_review.md`，业务 tip `50bfdab`）：R18 的来源 URL、正式时间和时间单调性 P1 已关闭；独立反例与真实正例均符合 fail-closed 预期；
+- C1 Gate1/Gate2/Gate3/Gate4/P1 **213 PASS / 0 FAIL**；A1/A2/A4/B1 回归 **419 PASS / 0 FAIL**；合计 **632 PASS / 0 FAIL**；正式 `data/` 178 文件树哈希前后一致；
+- Human（2026-08-03）正式确认 **`POLICY_INFERENCE_TRACEABILITY_C1`** 完成并验收；计划置 `accepted` / `acceptance_declared: true`，验收报告置 `accepted_human`；
+- C1 归档 `docs/ai-collab/闭环归档/V4.2_C1_证据约束草稿_PASS_2026-08-03.md`；
+- 声明边界：未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`；Batch D **未开启**，后续须 Human 另行授权并新开环。
 
 ### R14 · Cursor claim rev25→26 关闭 Codex R2 四组 P1 → 置 `pending_review / codex`（2026-08-03）
 
