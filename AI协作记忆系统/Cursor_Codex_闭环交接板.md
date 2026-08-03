@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 36
+revision: 37
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'codex'
-written_at: '2026-08-03T05:41:00.511Z'
+last_writer: 'cursor'
+written_at: '2026-08-03T06:02:14.548Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -41,13 +41,14 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 C1 证据约束草稿` |
 | C1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_C_证据约束草稿_2026-08-02.md` |
-| HEAD | `71b9440`（C1 R16 P1-3 关闭业务 tip） |
+| HEAD | `02fbcb8`（C1 R17 ABSTAIN 根信任关闭业务 tip） |
 | 开环基线 | `2d18ab6`（B1 业务 tip） |
 | A1 / A2 / B1 业务 tip | `b1abce5` / `50b88aa` / `2d18ab6` |
 | change class | `C2` |
 | review | `R2`（聚焦） |
 | status / next_actor | `pending_review / codex` |
 | 授权范围 | 沿用 V4.2 主计划与 B1 已授权面；本环为证据约束草稿派生计算，无新外部网络/正式写入/后台调度需求 |
+| R17 复审目标 | `02fbcb8`（ABSTAIN 根信任关闭；Codex R16 `codex_r16_p1_3_focused_review.md` CHANGES_REQUIRED 关闭） |
 | 回滚 | 删除未接入正式入口的 C1 候选模块与 smoke，恢复到 `2d18ab6`；不迁移/删除正式产品数据 |
 
 ### 受保护不变量
@@ -130,6 +131,64 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 不得在 Cursor 回合自行声明 `EVENT_POLICY_INTELLIGENCE_V1` 或任何研究/数据质量/发布验收名。
 
 ## 4. Cursor 完成报告
+
+Cursor 完成报告（revision 37 · 置 `pending_review / codex` · R17 关闭 Codex R16 ABSTAIN 根信任绕过）
+
+- 基线：R16 C1 业务 tip `71b9440`。Codex R16 聚焦复审 `codex_r16_p1_3_focused_review.md` 判 **CHANGES_REQUIRED**：P1-3 的 READY 路径已加固，但 ABSTAIN 路径仍允许调用方自造 bundle 根信任（`verifyBundleTrust` 把 source allowlist、A2 proof、`evidence_scope=official` 与 fact-source 权威校验全部放在 `ex_post.status === "READY"` 条件之下）。本轮业务 tip `02fbcb8` 按 Codex 最小关闭**方案 1（严格正式基线）** + Human（2026-08-03）确认指令"一律要求可信来源（推荐）"关闭该绕过；未改正式 `data/`、未改既有生产入口语义。
+- Human（2026-08-03）指令：**无论 READY 还是 ABSTAIN，进入人工修订前都必须有可信来源证明；或者允许不可信 ABSTAIN 只读展示，但禁止签收和冻结**。经确认选定 **一律要求可信来源**：READY 与 ABSTAIN 进入人工修订前都必须有可信来源证明（A2 验签 + official scope）；未验证 bundle → `validateHumanRevision` 一律 `auto_draft_baseline_untrusted`；`factsOnlyView` 只读展示仍可用（Gate 3 不受影响）；Gate4 人工修订用例改用 A2 真证 bundle。
+- 验收证据：`logs/acceptance/PRD-EVENT-POLICY-15-C1/`；P1 专项 `scripts/smoke_v42_fomc_c1_p1_r14.js`。
+
+### ABSTAIN 根信任关闭：verifyBundleTrust C/E 组恒跑
+
+`lib/fomc_evidence_draft.js` 的 `verifyBundleTrust` 调整（维持路线 A：内存验证，零 fs；不 require `fomc_document_bundle.js`，本地镜像不变）：
+
+- **检查 C 恒跑**（原仅 READY）：current/prior `source_ref` 必须存在且为官方域（`isTrustedOfficialDomain` allowlist），否则 `current_source_ref_missing`/`prior_source_ref_missing`/`source_ref_not_official`；
+- **检查 E 恒跑**（原仅 READY）：`evidence_scope === "official"`、current/prior 文档必须携带 A2 `verified_provenance + proof` 且经固定 Ed25519 公钥验签 + 绑定 `text_sha256`/`event_id`，否则 `evidence_scope_not_official`/`current_a2_proof_required`/`prior_a2_proof_required`/`current_document_binding_mismatch`/`prior_document_binding_mismatch`；
+- **检查 E2（仅 READY 声称时）**：`fact_source` 权威校验（`kind=official` + `verified:true`）拆出独立分组——ABSTAIN 无决定句式，`fact_source` 不承载权威声称，仅 READY 时要求 `fact_source_not_official`；
+- 检查 A（根哈希）/ B（文档身份+正文 hash + event_id 绑定）/ D（事前冻结声明不可信）/ F（research_note replay）保持恒跑，任一失败 → `violations.push("auto_draft_baseline_untrusted")`，不进入人工修订比较。
+
+### 反例覆盖（对应 Codex R16 最小关闭 + Human 指令）
+
+`scripts/smoke_v42_fomc_c1_p1_r14.js` 新增 P1-3b（3 断言）：用 A2 testkit `makeGenuineBundle` 构造 **trusted ABSTAIN**——官方语句含 "target range for the federal funds rate" 段（过官方解析器）但无 "X to Y percent" 区间、无委员会决定句式、无投票计数 → `fomc_decision_facts.extractDecisionFacts` 返回 null → ex_post `ABSTAIN`，同时官方解析器恒附 truthy `decision_facts` → `evidence_scope="official"`：
+
+- `P1-3b_abstain_bundle_shape`：真证 ABSTAIN bundle `evidence_scope="official"`、`synthetic=false`、ex_post `ABSTAIN`；
+- `P1-3b_untrusted_abstain_rejected`：同一 bundle 但调用方不提供已验证文档 → `auto_draft_baseline_untrusted` + `current_a2_proof_required` + `prior_a2_proof_required`（Codex R16 要求的原样反例：自洽 news/cache bundle、无 proof、`ex_post=ABSTAIN`、replay 与 canonical SHA 均一致，仍必须拒绝人工修订）；
+- `P1-3b_trusted_abstain_ok`：提供 `verifiedCurrent`/`verifiedPrior`（A2 验签）+ `evidence_scope=official` → 人工修订通过，violations 为空（不误伤 trusted ABSTAIN 只读/人工记录）。
+
+`scripts/smoke_v42_fomc_c1_gate4.js` O 块改用 A2 真证 bundle 调 `validateHumanRevision`（`verifiedCurrent`/`verifiedPrior`），新增 `O0_synthetic_untrusted_rejected`：合成 bundle（无 A2 proof / `evidence_scope="unverified"`）→ `auto_draft_baseline_untrusted` + `evidence_scope_not_official`，只读展示仍可用但不可签收。
+
+### 五子机制结果（维持 R16 通过项，ABSTAIN 根信任关闭后全部保留）
+
+1. `C_INFERENCE_TRACEABILITY` **PASS**；
+2. `C_EX_ANTE_CONSTRAINT` **PASS**；
+3. `C_EX_POST_ANCHOR` **PASS**；
+4. `C_MODEL_FREE_RENDER` **PASS** —— `factsOnlyView` 只读展示路径不受 verifyBundleTrust 影响（合成 bundle 仍可只读渲染事实与差异）；
+5. `C_DRAFT_ISOLATION` **PASS** —— 自动稿与人工修订分域；人工修订的 canonical 基线一律来自先经根信任验证的 bundle（READY 与 ABSTAIN 同等要求）。
+
+### 正式数据 / 既有文件前后 hash
+
+- 本轮改动：`lib/fomc_evidence_draft.js`（C/E 恒跑 + E/E2 拆分 + 三处注释）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3b 三断言）、`scripts/smoke_v42_fomc_c1_gate4.js`（O 块真证 bundle + O0）。
+- 正式 `data/` 树 hash：`ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d`（178 文件），build 前后零变化；`bundle_sha256` 幂等。
+
+### 回归
+
+- P1 专项 **54/54 PASS**（51 + P1-3b 3）；Gate 4 **39/39 PASS**（38 + O0）；
+- A1 `smoke_v42_fomc_a1.js` **106/106**；A2 `smoke_v42_fomc_a2.js` **PASS**；A4 `smoke_v42_fomc_a4.js` **25/25**；B1 全量 **136/136 PASS**（64+33+20+14+5）；C1 Gate1/Gate2/Gate3 **47/32/32 PASS**。
+
+### 回滚实测
+
+- 恢复到 R16 业务 tip `71b9440`：`lib/fomc_evidence_draft.js`/`scripts/smoke_v42_fomc_c1_p1_r14.js`/`scripts/smoke_v42_fomc_c1_gate4.js` 回退 → 可完整回退；正式 `data/` 不受影响。
+
+### 未覆盖项与残余风险
+
+- fixtures 为合成 FOMC 声明；真实官方文本的超长 excerpt 截断、跨页重排密度未全量核对；
+- 事前内容只进入研究记录，尚未接线收尾卡/最终简报（Batch D 接线，本环不实现）；
+- 本环无受控持久化冻结层：`RETROSPECTIVE_EX_ANTE_TEMPLATE` 是历史回放模板，真实"事件前已冻结"入口需另环在受控持久化层落地；
+- READY 与 ABSTAIN 路径均需调用方供 A2 已验证文档（bundle 不携带 proof）：正式接线时由 A2 受控 store 供档，本环保持纯函数；
+- 自动稿未经 Human 接入前不得进入正式简报/收尾卡；本环不声明 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
 
 Cursor 完成报告（revision 34 · 置 `pending_review / codex` · R16 关闭 Codex R15 P1-3 bundle 根信任）
 
@@ -371,6 +430,41 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R17 · ABSTAIN 根信任聚焦复审
+
+复审目标业务 tip：`02fbcb8`。本轮只复核 Codex R16 判 CHANGES_REQUIRED 的 **ABSTAIN 根信任绕过**是否关闭，并确认已通过的 P1-1/P1-2/P1-4、五子机制和 `C_DATA_PROTECTION` 无回退；不扩展 Batch D。
+
+## Human 指令（2026-08-03）
+
+> 无论 READY 还是 ABSTAIN，进入人工修订前都必须有可信来源证明；或者允许不可信 ABSTAIN 只读展示，但禁止签收和冻结。
+
+经确认选定 **一律要求可信来源**（Codex R16 最小关闭方案 1 · 严格正式基线）：READY 与 ABSTAIN 进入人工修订前都必须有可信来源证明（A2 验签 + official scope）；未验证 bundle → `validateHumanRevision` 一律 `auto_draft_baseline_untrusted`；`factsOnlyView` 只读展示仍可用（Gate 3 不受影响）；Gate4 人工修订用例改用 A2 真证 bundle。
+
+## 关闭路径（请聚焦复审）
+
+`verifyBundleTrust` 调整（`lib/fomc_evidence_draft.js`，路线 A 内存验证，零 fs）：
+
+- **检查 C 恒跑**（原仅 READY）：current/prior `source_ref` 必须存在且为官方域，否则 `current_source_ref_missing`/`prior_source_ref_missing`/`source_ref_not_official`；
+- **检查 E 恒跑**（原仅 READY）：`evidence_scope === "official"`、current/prior 文档必须携带 A2 `verified_provenance + proof` 且经固定 Ed25519 公钥验签 + 绑定 `text_sha256`/`event_id`，否则 `evidence_scope_not_official`/`current_a2_proof_required`/`prior_a2_proof_required`/`*_document_binding_mismatch`；
+- **检查 E2（仅 READY 声称时）**：`fact_source` 权威校验（`kind=official` + `verified:true`）拆出独立分组——ABSTAIN 无决定句式，`fact_source` 不承载权威声称，仅 READY 时要求 `fact_source_not_official`；
+- 检查 A（根哈希）/ B（文档身份+正文 hash + event_id 绑定）/ D（事前冻结声明不可信）/ F（research_note replay）保持恒跑；任一失败 → `auto_draft_baseline_untrusted`。
+
+## 负向用例（请独立复现）
+
+- `P1-3b_untrusted_abstain_rejected`（Codex R16 原样反例）：自洽 news/cache bundle、无 A2 proof、`ex_post=ABSTAIN`、replay 与 canonical SHA 均一致 → 仍必须拒绝人工修订（`auto_draft_baseline_untrusted` + `current_a2_proof_required` + `prior_a2_proof_required`）；
+- `O0_synthetic_untrusted_rejected`：合成 bundle（无 proof / `evidence_scope="unverified"`）→ `auto_draft_baseline_untrusted` + `evidence_scope_not_official`，只读展示可用但不可签收；
+- `P1-3b_trusted_abstain_ok`：trusted ABSTAIN（A2 验签 + `evidence_scope="official"`，官方语句含 "target range..." 段但无区间/决定/投票 → ex_post ABSTAIN）→ 人工修订通过（violations 空），不误伤只读/人工记录；
+- 既有 `P1-3_*` 11 项（伪 READY、错误根哈希、无 proof、派生篡改、真证路径）保持拒绝/通过，无回退。
+
+## 裁决边界
+
+- 只复核 ABSTAIN 根信任关闭；不重开已通过三组 P1；
+- 维持五子机制与 `C_DATA_PROTECTION` 已通过部分；
+- 不接新外部网络、不扩展 Batch D、不写正式数据；
+- 关闭前不得声明 `POLICY_INFERENCE_TRACEABILITY_C1` 或 `EVENT_POLICY_INTELLIGENCE_V1`。
+
+请就以上给出 **PASS / CHANGES_REQUIRED** 裁决；如 CHANGES_REQUIRED 需列可复现反例与最小关闭要求，不扩展 Batch C/D 之外的授权面。
 
 # C1 R16 · P1-3 聚焦复审
 
@@ -615,4 +709,14 @@ research_note.ex_post.status === "READY"
 - 交付：`lib/fomc_evidence_draft.js`（verifyBundleTrust 六组检查 + validateHumanRevision 0a 接入 + 导出 `verifyBundleTrust`/`canonicalBundleSha256`；循环依赖约束下本地镜像 `FIXED_OFFICIAL_DOMAINS`/`normalizeDomain`/`isTrustedOfficialDomain`/`canonicalBundleSha256`/`localDocIsVerified`）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3 负向测试扩展 11 断言）；
 - C1 四门 + P1 专项 **47/32/32/38 + 51 = 200 PASS**；A1 **106/106**、A2 **PASS**（152 断言）+ walkthrough **37**、A4 **25/25**、B1 **136/136**（64+33+20+14+5）；合计 **619 PASS / 0 FAIL**；正式 `data/` 178 文件树 hash `f055a2db…fe104` 零变化；`bundle_sha256` 幂等；
 - 板 §2 HEAD 更新为 `71b9440`、`sync-pointer` 绑定 `code_tip=71b9440`；transition rev33→34：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审 P1-3（rev34 目标见 §5）；
+- 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
+### R17 · Cursor 关闭 Codex R16 ABSTAIN 根信任绕过 → 置 `pending_review / codex`（2026-08-03）
+
+- Codex R16 聚焦复审（`71b9440`，`codex_r16_p1_3_focused_review.md`）判 **CHANGES_REQUIRED**：P1-3 的 READY 路径已加固，但 ABSTAIN 路径仍允许调用方自造 bundle 根信任——`verifyBundleTrust` 把 source allowlist、A2 proof、`evidence_scope=official` 与 fact-source 权威校验全部放在 `ex_post.status === "READY"` 条件之下，伪 bundle 设 ABSTAIN 后根身份检查全部跳过，仍可固化 canonical auto draft 并允许人工签收；
+- Human（2026-08-03）指令：**无论 READY 还是 ABSTAIN，进入人工修订前都必须有可信来源证明；或者允许不可信 ABSTAIN 只读展示，但禁止签收和冻结**。经确认选定 **一律要求可信来源**（Codex R16 最小关闭方案 1 · 严格正式基线）；
+- Cursor 按最小关闭面执行，业务 tip `02fbcb8`：`verifyBundleTrust` 检查 C（source_refs 官方非合成）与检查 E（`evidence_scope=official` + A2 proof 验签 + document binding）改为**恒跑**；`fact_source` 权威校验拆为检查 E2，仅 READY 声称时要求（ABSTAIN 无决定句式，fact_source 不承载权威）；检查 A/B/D/F 保持恒跑；未验证 bundle → `validateHumanRevision` 一律 `auto_draft_baseline_untrusted`；`factsOnlyView` 只读展示仍可用（Gate 3 不受影响）；
+- 交付：`lib/fomc_evidence_draft.js`（C/E 恒跑 + E/E2 拆分 + 三处注释）、`scripts/smoke_v42_fomc_c1_p1_r14.js`（P1-3b 三断言：trusted ABSTAIN 真证路径 ok / untrusted ABSTAIN 拒绝 / bundle shape）、`scripts/smoke_v42_fomc_c1_gate4.js`（O 块改用 A2 真证 bundle 调 `validateHumanRevision` + 新增 `O0_synthetic_untrusted_rejected`）；
+- P1 专项 **54/54 PASS**（51 + P1-3b 3）；Gate 4 **39/39 PASS**（38 + O0）；A1 **106/106**、A2 **PASS**、A4 **25/25**、B1 **136/136**（64+33+20+14+5）、C1 Gate1/Gate2/Gate3 **47/32/32 PASS**；正式 `data/` 178 文件树 hash `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d` 零变化；`bundle_sha256` 幂等；
+- 板 §2 HEAD 更新为 `02fbcb8`、`sync-pointer` 绑定 `code_tip=02fbcb8`；transition rev36→37：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审 ABSTAIN 根信任（rev37 目标见 §5）；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
