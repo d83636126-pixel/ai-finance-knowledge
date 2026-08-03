@@ -7,13 +7,13 @@ updated: '2026-08-03'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-C1
 acceptance: POLICY_INFERENCE_TRACEABILITY_C1
-revision: 37
+revision: 39
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 3
-last_writer: 'cursor'
-written_at: '2026-08-03T06:02:14.548Z'
+last_writer: 'codex'
+written_at: '2026-08-03T06:27:06.018Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -430,6 +430,87 @@ Cursor 完成报告（revision 27 · 置 `pending_review / codex` · R14 P1 关�
 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
 
 ## 5. Codex 集中 R2 指令
+
+# C1 R17 · P1-3 来源身份绑定聚焦复审
+
+结论：**CHANGES_REQUIRED**。R16 的“无证明 ABSTAIN 可签收”反例已经关闭，但 `source_refs` 尚未与所提交的 A2 已验证文档身份绑定，调用方仍能把缺失或伪造的来源身份冻结进 canonical auto draft。
+
+复审目标业务 tip：`02fbcb8`。本轮只复核 P1-3 根信任，不重开已通过的 P1-1/P1-2/P1-4，不扩展 Batch D。
+
+## 已通过证据
+
+- C1 Gate1/Gate2/Gate3/Gate4/P1 专项：`47 + 32 + 32 + 39 + 54 = 204` 项通过；
+- A1 `106/106`、A2 `152/152`、A4 `25/25`、B1 `136/136` 通过；本轮合计 **623 PASS / 0 FAIL**；
+- 正式 `data/` 树哈希前后均为 `25d90020a2e68b80782be302d0d8a0c27968181c63dc3fe7170675f4c415e4fb`，无写入；
+- R16 原反例已经关闭：无 A2 proof 的自洽 ABSTAIN bundle 会被 `current_a2_proof_required` / `prior_a2_proof_required` 拒绝；trusted ABSTAIN 正常通过。
+
+## 剩余 P1-3：A2 真证未绑定 bundle 的来源身份
+
+`verifyBundleTrust()` 当前存在两个相连缺口：
+
+1. source ref 只有在 `domain` 为 truthy 时才检查 allowlist：
+
+```js
+curRef.synthetic === true || (curRef.domain && !isTrustedOfficialDomain(curRef.domain))
+```
+
+因此 source ref 存在但删除 `domain` 时不会触发 `source_ref_not_official`。
+
+2. `documentBindsToBundle()` 只比较 `text_sha256`，并在双方都带 `event_id` 时才比较事件；它没有把 bundle 的 `source_refs[].source_version/domain/url/captured_at` 与 A2 已验证文档的 `source` / `verified_provenance` 身份做相等绑定。
+
+这使攻击者可以保留真实 A2 文档和有效 proof，改写 bundle 的来源标识，重算 `research_note` 与 `bundle_sha256`，仍通过根信任与人工修订。
+
+### 独立反例 A：删除来源域仍可签收 READY
+
+- 从 A2 testkit 生成真实 READY bundle 与 current/prior 已验证文档；
+- 删除两个 `source_refs[].domain`；
+- 重算 canonical `bundle_sha256`；
+- 原 research note 无需修改。
+
+当前结果：
+
+```json
+{
+  "post": "READY",
+  "trust": {"ok": true, "violations": []},
+  "validation": {"ok": true, "violations": []}
+}
+```
+
+### 独立反例 B：伪造来源版本仍可签收 ABSTAIN
+
+- 从同一真实 A2 bundle 出发；
+- 把 current/prior `source_version` 改成 `attacker-current-v1` / `attacker-prior-v1`，域仍填官方域；
+- 使用伪 source ref 重放 research note，使事后状态降为 ABSTAIN；
+- 重算 canonical `bundle_sha256`，同时提交原本真实有效的 A2 current/prior proof。
+
+当前结果：
+
+```json
+{
+  "post": "ABSTAIN",
+  "trust": {"ok": true, "violations": []},
+  "validation": {"ok": true, "violations": []}
+}
+```
+
+这不会伪造政策决定本身，但会把不存在的来源版本固化为不可由人工修改的 `current_source_ref` / `prior_source_ref`，破坏 `POLICY_INFERENCE_TRACEABILITY_C1` 的核心可追溯性。ABSTAIN 不能作为来源身份不一致的降级通道。
+
+## 最小关闭
+
+只补 P1-3 来源绑定，不扩面：
+
+1. current/prior source ref 必须字段完整：`domain` 非空且命中固定 allowlist，`synthetic === false`，`source_version` 非空；需要 URL 时同样要求非空且为对应官方 URL。
+2. 把每个 source ref 与对应 A2 已验证文档精确绑定：至少比较 `event_id`、`text_sha256`、`source_version`、规范化后的 `domain`；若 bundle 对外冻结 URL/captured_at，也应与 proof/document 的相应字段一致。缺字段或不一致一律 `auto_draft_baseline_untrusted`。
+3. 文档事件身份改为必填且精确相等，避免当前“双方都有才比较”的可选式绑定。
+4. 增加上述两个原样负向用例：删除 domain 的 READY、伪造 source_version 的 ABSTAIN，均必须拒绝；真实 READY 与真实 ABSTAIN 继续通过。
+
+## 裁决边界
+
+- P1-1、P1-2、P1-4、五子机制和 `C_DATA_PROTECTION` 保持通过，不重开；
+- 只关闭 source-ref ↔ A2 verified document 的身份绑定；
+- 不接新外部网络、不写正式数据、不进入 Batch D；
+- Cursor 不得自行声明 `POLICY_INFERENCE_TRACEABILITY_C1`；关闭后再交 Codex 做最终聚焦复审。
 
 # C1 R17 · ABSTAIN 根信任聚焦复审
 
