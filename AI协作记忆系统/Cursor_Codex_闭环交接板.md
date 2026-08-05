@@ -7,13 +7,13 @@ updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 59
+revision: 61
 turn: 1
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'human'
+status: 'blocked'
 max_turns: 2
-last_writer: 'cursor'
-written_at: '2026-08-05T05:59:35.707Z'
+last_writer: 'codex'
+written_at: '2026-08-05T06:12:57.798Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -135,6 +135,53 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - 受保护不变量（A1/A2/B1/C1 可溯语义、阶段隔离、自动/人工隔离、fail-visible）均未改变。
 
 ## 5. Codex 最终聚焦复审指令（rev59）
+
+最终聚焦复审结论：**CHANGES_REQUIRED · HUMAN_DECISION**。
+
+这是 D1 本环唯一一次最终 Codex 复审。流程状态转为 `blocked / human`，不再自动开启 Cursor 修复轮。
+
+复审目标：`9db74dd`。规定测试独立复跑：D1 smoke **97/97 PASS**，浏览器走查 **35/35 PASS**；测试后无业务文件或正式数据污染。
+
+### P1-1 · 官方域 host 判定：PASS
+
+- URL 已通过 `new URL(...).hostname` 解析，并按固定 Fed 官方 host 精确匹配。
+- path/query/伪子域反例均不再获得 FOMC 身份；真实根域与 www 域保持通过。
+
+### P1-2 · A2 错误分类 fail-closed：PASS
+
+- 仅明确的无文档错误进入普通 ABSTAIN。
+- `corrupt_json`、store unavailable、悬空指针和读验签失败均保留原始错误并返回非 2xx，不再伪装成“没有正式文档”。
+
+### P1-3 · 正式 store 读取重新验签：CHANGES_REQUIRED
+
+读路径已经验证 proof、canonical bundle hash、官方来源、时间序、manifest 与 document/bundle 的内部绑定；但仍未把**调用方请求的 event_id / 存储目录 event_id**绑定到已验签文档身份：
+
+- `verifyStoredRead(eventId, loaded, currentPointer)` 接收 `eventId`，但没有比较 `eventId === document.event_id`；
+- `currentPointer.event_id` 未与请求 event_id / document.event_id 比较；
+- `manifest.event_id` 仅在字段存在时与 document 比较，缺失不会阻断。
+
+独立反例使用现有已验签 fixture，不改其文档、proof、bundle 或 manifest 内容，只把整个 `fomc_2026_07` 版本目录复制到临时 store 的 `fomc_2099_99` 目录：
+
+```text
+requested_store_id = fomc_2099_99
+stored_document_event_id = fomc_2026_07
+store_ok = true
+read_verified = true
+resolved_verified = true
+official_facts = target_range 3.75%-4%, action HOLD
+```
+
+临时目录已在同一进程完整清理。该反例意味着一条合法已验签事件的事实可在错误事件 ID 下被展示为正式事实，属于既定 P1-3 的事件身份错误，不是新增审核范围。
+
+### Human 决策
+
+按 2026-08-05 审核预算规则，Codex 不再自动要求下一技术循环。请 Human 从以下路径中决策：
+
+1. 授权一次极小修复：强制请求/store event_id、current pointer、manifest、document 与 bundle 事件身份一致；
+2. 接受本地数据目录被篡改时的跨事件重放风险，并以明确技术债关闭 D1（不得声称该边界已通过）；
+3. 缩小或停止 V4.2 D1 扩展。
+
+无论选择哪条，本次不得自动声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
 
 本环唯一一次最终聚焦复审。复审目标：`9db74dd`。只裁决 revision 57 三个事实安全反例是否已关闭；不因命名、样式、更多负向测试、性能、覆盖率、内部结构、文档或交接板问题延长技术循环（登记技术债）。Codex 独立复跑 `scripts/smoke_v42_fomc_d1.js`（PASS 97 / FAIL 0）与浏览器走查（PASS 35 / FAIL 0），并针对以下三项给出 **PASS / CHANGES_REQUIRED** 最终裁决；若仍存在同级事实安全问题，记录证据后直接交 Human（不再自动循环）。
 
