@@ -3,17 +3,17 @@ type: Cursor_Codex闭环交接板
 schema_version: 2
 tags: [AI协作, Cursor, Codex, V4.2, D1, FOMC]
 created: 2026-08-01
-updated: '2026-08-04'
+updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 50
+revision: 51
 turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 2
-last_writer: 'human'
-written_at: '2026-08-04T08:43:41.886Z'
+last_writer: 'cursor'
+written_at: '2026-08-05T03:09:04.813Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -30,7 +30,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 - A1、A2、B1、C1 均已完成 Codex 复审、Human 验收并归档，不在 D1 重开。
 - Human（2026-08-04）授权新环 `PRD-EVENT-POLICY-15-D1`，验收名 `POLICY_REAL_USE_D1`。
-- 当前状态为 `pending_exec / cursor`；只做简报接线、阶段路由、新证据重开和一次真实使用。
+- 当前状态为 `pending_review / codex`；D1 五项产品机制已接线并完成自检与真实走查，交由 Codex 集中产品 R1。
 - D1 完成后只做一次集中产品 R1；非阻断问题登记技术债。
 - 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`.
 
@@ -86,7 +86,57 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 4. Cursor 完成报告
 
-尚未执行。Cursor 完成 D1 后在此填写五项产品机制、自检、真实走查、数据保护和回滚证据。
+**D1 最小产品接线完成：五项产品机制全部实现，smoke 自检 PASS 31 / FAIL 0，8013 真实浏览器走查通过。已切换 `pending_review / codex`。**
+
+### 4.1 五项产品机制
+
+1. **D_TOP3_REASON（Top 3 入选理由）**
+   - `lib/briefing_intelligence_v4.js` 新增 `isFomcEvent` / `fomcBriefingSignals`；`enrichBriefingItem` 将阶段（已发生/未发生）+ 证据状态（证据不足→弃权）推导为真实理由，unshift 进 reasons。
+   - 真实走查：`fed_fomc_2026_07` 入选 Top 3（pending_review），理由为「FOMC 决议已发生（2026-07-29），进入事后复盘 · 证据不足，系统对 FOMC 结论弃权（缺正式事实/声明）」。不含鹰鸽/看涨/看跌/市场将等市场因果结论；ABSTAIN 时不宣称「已就绪」。
+
+2. **D_STAGE_ROUTING（阶段路由）**
+   - 新增 `enforceStageLink`：post（已发生）→ `event_research_result_v3.html`（收尾卡）；pre（未发生）→ `event_research_record.html`（研究记录）；阶段确定时不跨页。
+   - 真实走查：`fed_fomc_2026_07` 的 `action_url` = `event_research_result_v3.html?event_id=fed_fomc_2026_07`。
+
+3. **D_EVIDENCE_RENDER（证据呈现）**
+   - 新增只读端点 `GET /api/research/v3/evidence/:id` → `buildV42EvidenceView(bundle)` 视图。
+   - `lib/v42_evidence_view.js` 纯函数派生视图；`static/v42_evidence_panel.js`（UMD）渲染：状态 chip、正式来源/版本、政策事实、ex_ante/ex_post、缺口、冲突；不可用/FAIL fail-loud（`v42-fail-loud` / `v42-blocking`）；缺 C1 草稿显式提示 `v42-no-research-note`。
+   - `event_research_record.html` 与 `event_research_result_v3.html` 均接线面板（CSS/JS include + 渲染区）。
+
+4. **D_NEW_EVIDENCE_REOPEN（新证据重开）**
+   - 复用既有 `isCompletionStale` / `markNewEvidence`：`bundle_sha256` 或 `source_version` 变化 → 完成项重开 + `NEW_EVIDENCE`（+180）标记。
+   - `daily_briefing.html` 新增 `hasNewEvidence`，Top 3 与分类卡片渲染红色「新证据」徽标。
+
+5. **D_REAL_USE_WALKTHROUGH（真实走查）**
+   - 真实事件 `fed_fomc_2026_07`（FOMC Meeting July 2026，central_bank，federalreserve.gov，2026-07-29 已发生，证据包 ABSTAIN）。已在 8013 完成端到端浏览器走查。
+
+### 4.2 自检与真实走查证据
+
+- Smoke：`scripts/smoke_v42_fomc_d1.js` → **PASS 31 / FAIL 0**（A/B/C/D/E 五组断言全过）。
+- 浏览器走查（Playwright headless，8013）：
+  - 今日简报 Top 3 出现 FOMC 卡片，理由含「FOMC 决议已发生」与「证据不足，系统对 FOMC 结论弃权」；主行动链接指向 `event_research_result_v3.html`。
+  - `event_research_result_v3.html?event_id=fed_fomc_2026_07` 渲染 V4.2 证据状态卡片：状态「证据不足，弃权」、来源版本 `auto_generic_20260730`、`bundle_sha256 67282d…`、缺口（forecast/actual）与「无 C1 证据草稿」诚实提示。
+  - API `GET /api/research/v3/evidence/fed_fomc_2026_07` → `ok:true`，status `ABSTAIN`，missing `[forecast, actual]`，research_note `null`。
+  - 走查中 404 仅来自既有「无数据」路径（C1 草稿 / 未来事件记录），与 D1 接线无关。
+
+### 4.3 页面入口
+
+| 页面 | 入口 | 说明 |
+|---|---|---|
+| 今日简报 | `/daily_briefing.html` | Top 3 理由 + 阶段路由 + 新证据徽标 |
+| 研究记录（pre） | `/event_research_record.html?event_id=…` | V4.2 证据只读面板 |
+| 收尾卡（post） | `/event_research_result_v3.html?event_id=…` | V4.2 证据只读面板 |
+
+### 4.4 证据状态与人工动作
+
+- 真实 FOMC 证据包 `fed_fomc_2026_07` 为 ABSTAIN：缺少正式 target_range / forecast / actual 事实，系统对 FOMC 结论弃权，未伪造 READY。证据视图只读，不写入、不覆盖任何正式数据或人工修订。
+- 无人工动作被改动；自动稿与人工修订隔离不变量未触碰。
+
+### 4.5 数据保护与回滚
+
+- D1 为只读接线：新增 `buildV42EvidenceView`（纯函数）、`renderEvidencePanelHtml`（UMD）、只读 API、页面渲染区；无正式数据写入。
+- 回滚：关闭 D1 接线（页面 v42 区块、只读端点）即恢复 `66614ed` 产品路径；不删除任何正式事件数据。
+- 受保护不变量（A1/A2/B1/C1 可溯语义、阶段隔离、自动/人工隔离、fail-visible）均未改变。
 
 ## 5. Codex 集中 R2 指令
 
