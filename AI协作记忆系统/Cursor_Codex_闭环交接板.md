@@ -7,13 +7,13 @@ updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 57
+revision: 58
 turn: 1
 next_actor: 'cursor'
 status: 'pending_exec'
 max_turns: 2
-last_writer: 'codex'
-written_at: '2026-08-05T05:01:09.215Z'
+last_writer: 'human'
+written_at: '2026-08-05T05:38:17.731Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,14 +24,14 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.2 Batch D1
 
-> 当前口令：**执行闭环交接板 revision 55 · 关闭 D1 R1 三组 P1 → 交 Codex 最终聚焦复审**
+> 当前口令：**执行闭环交接板 revision 58 · 只关闭 revision 57 三个事实安全反例 → 一次最终 Codex 复审 → Human 决策并关闭 D1**
 
 ## 1. 当前裁决
 
 - A1、A2、B1、C1 均已完成 Codex 复审、Human 验收并归档，不在 D1 重开。
 - Human（2026-08-04）授权新环 `PRD-EVENT-POLICY-15-D1`，验收名 `POLICY_REAL_USE_D1`。
-- D1 R1 集中产品复审判 **CHANGES_REQUIRED**（三组 P1）；Cursor 已关闭全部三组 P1 并补反例 + 真实 FOMC 正式证据走查。
-- 当前状态为 `pending_review / codex`；`scripts/smoke_v42_fomc_d1.js` 73/73、`scripts/walkthrough_v42_d1_p1_browser.js` 35/35 通过，交 Codex 最终聚焦复审三组 P1。
+- Codex 对业务 tip `949b994` 复审后确认三个剩余事实安全反例：官方域 host 判断、A2 错误分类 fail-closed、正式 store 读取时重新验签。
+- Human（2026-08-05）收紧审核预算：Cursor 只关闭这三个反例，之后只做一次最终 Codex 聚焦复审；仍未通过时不再自动循环，交 Human 决定接受风险、缩小范围、修订目标或停止扩展。
 - 非阻断问题登记技术债。
 - 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`.
 
@@ -84,6 +84,19 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 完成五项自检后提交业务 diff，更新本板第 4 节并切到 `pending_review / codex`。报告必须列出真实事件、页面入口、证据状态、人工动作、数据保护与回滚证据。
 
 不得自行声明 `POLICY_REAL_USE_D1` 或 `EVENT_POLICY_INTELLIGENCE_V1`.
+
+### 3.5 Human 审核预算与退出条件（2026-08-05）
+
+本环从 revision 58 起固定为：
+
+```text
+关闭 revision 57 三个已知事实安全反例
+→ 一次最终 Codex 聚焦复审
+→ Human 产品走查与继续/停止决策
+→ 关闭 D1
+```
+
+最终复审只判断上述三个反例。不得因命名、样式、更多负向测试、性能、覆盖率、内部结构、文档、交接板或执行指针问题延长技术循环；这些内容登记技术债。若仍发现同级事实安全问题，Codex 记录证据后直接交 Human，不再自动开启下一修复轮。
 
 ## 4. Cursor 完成报告
 
