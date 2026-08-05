@@ -7,13 +7,13 @@ updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 58
+revision: 59
 turn: 1
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 2
-last_writer: 'human'
-written_at: '2026-08-05T05:38:17.731Z'
+last_writer: 'cursor'
+written_at: '2026-08-05T05:59:35.707Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,14 +24,15 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.2 Batch D1
 
-> 当前口令：**执行闭环交接板 revision 58 · 只关闭 revision 57 三个事实安全反例 → 一次最终 Codex 复审 → Human 决策并关闭 D1**
+> 当前口令：**rev59 · 一次最终 Codex 聚焦复审：只裁决 revision 57 三个事实安全反例是否已关闭 → Human 决策并关闭 D1**
 
 ## 1. 当前裁决
 
 - A1、A2、B1、C1 均已完成 Codex 复审、Human 验收并归档，不在 D1 重开。
 - Human（2026-08-04）授权新环 `PRD-EVENT-POLICY-15-D1`，验收名 `POLICY_REAL_USE_D1`。
 - Codex 对业务 tip `949b994` 复审后确认三个剩余事实安全反例：官方域 host 判断、A2 错误分类 fail-closed、正式 store 读取时重新验签。
-- Human（2026-08-05）收紧审核预算：Cursor 只关闭这三个反例，之后只做一次最终 Codex 聚焦复审；仍未通过时不再自动循环，交 Human 决定接受风险、缩小范围、修订目标或停止扩展。
+- Cursor（rev58→59）已按最小关闭面执行并关闭这三个反例（业务 tip `9db74dd`）：D1 smoke **PASS 97 / FAIL 0**、浏览器走查 **PASS 35 / FAIL 0**，生产 `data/fomc_documents` 零写入。详见 §4。
+- Human（2026-08-05）收紧审核预算：只做一次最终 Codex 聚焦复审（rev59）；仍未通过时不再自动循环，交 Human 决定接受风险、缩小范围、修订目标或停止扩展。
 - 非阻断问题登记技术债。
 - 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`.
 
@@ -41,7 +42,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 D1 简报接线与真实使用` |
 | D1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_D1_简报接线与真实使用_2026-08-04.md` |
-| HEAD | `949b994`（D1 R1 三组 P1 关闭业务 tip） |
+| HEAD | `9db74dd`（D1 R1 三个事实安全反例关闭业务 tip） |
 | 开环基线 | `66614ed` |
 | 已完成 | A1 / A2 / B1 / C1 |
 | change class | `C1` |
@@ -98,91 +99,70 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 最终复审只判断上述三个反例。不得因命名、样式、更多负向测试、性能、覆盖率、内部结构、文档、交接板或执行指针问题延长技术循环；这些内容登记技术债。若仍发现同级事实安全问题，Codex 记录证据后直接交 Human，不再自动开启下一修复轮。
 
-## 4. Cursor 完成报告
+## 4. Cursor 完成报告（rev58→59）
 
-**D1 R1 三组 P1 已全部关闭：产品主路径接入 A2 受控文档 + 诚实 ABSTAIN（P1-2）、FOMC 身份边界（P1-1）、正式事实仅来自 A2 验签（P1-3）。`scripts/smoke_v42_fomc_d1.js` PASS 73 / FAIL 0，8013 真实浏览器走查（`scripts/walkthrough_v42_d1_p1_browser.js`）PASS 35 / FAIL 0。已切换 `pending_review / codex`，交 Codex 最终聚焦复审。**
+**D1 R2 三个事实安全反例已全部关闭：官方域 host 判定（P1-1）、A2 错误分类 fail-closed（P1-2）、正式 store 读取重新验签 + 展示层 verified 信号（P1-3）。`scripts/smoke_v42_fomc_d1.js` PASS 97 / FAIL 0，8013 真实浏览器走查（`scripts/walkthrough_v42_d1_p1_browser.js`）PASS 35 / FAIL 0，生产 `data/fomc_documents` 零写入。已置 `pending_review / codex`，交 Codex 本环唯一一次最终聚焦复审。**
 
-### 4.1 P1-2 · 产品主路径接入 A2 受控文档（fail-visible ABSTAIN）
+### 4.1 P1-1 · 官方域 host 判定（关闭）
 
-- 新增 `lib/v42_evidence_lookup.js`：`isFomcEventId` / `a2CandidateIds`（产品 `fed_fomc_2026_07` ↔ A2 store 键 `fomc_2026_07` 解耦对齐）/ `loadA2Evidence` / `abstainNoFormalDocuments` / `resolveEvidenceView`。
-- `/api/research/v3/evidence/:id`（`local_server.js`）改为 `resolveEvidenceView`：FOMC 事件优先读 A2 受控 `fomc_document_store`（current/prior verified documents → B1 文本差异/决策事实 + C1 research_note 随束派生）；A2 无正式文档 → 诚实 ABSTAIN（`no_formal_documents=true`、reason=`no_a2_formal_documents`，fail-visible），绝不把「渲染一个 ABSTAIN 面板」当作真实使用 PASS。
-- 隔离种子 `scripts/seed_v42_d1_walkthrough.js` + `fixtures/v42_d1_walkthrough/`：经 A2 适配器真实代码路径签发 proof 的 verified bundle（`READY_FOR_REVIEW` / `official` / `verified=true`，source_version `official-2026-07`），演示完整渲染路径（官方事实 / B1 文本差异 / C1 research_note）；目录 README 显式标注 offline dev seed。生产 `data/fomc_documents` 保持为空 → 真实用户看到诚实 ABSTAIN。
+- `lib/briefing_intelligence_v4.js`：`isFomcEvent()` 的 Fed 域判断由「正则作用于完整 URL 字符串」改为 `extractUrlHost` + `isFedOfficialHost`（解析 URL hostname，规范化后精确匹配 `federalreserve.gov` / `www.federalreserve.gov` 白名单）。
+- 反例（smoke `P1_58_*`）：`https://evil.example/path/.federalreserve.gov`（路径伪装）与 `https://www.federalreserve.gov.evil.example/…?ref=.federalreserve.gov`（查询/子域伪装）均不再判为 FOMC；真实 `federalreserve.gov` / `www.federalreserve.gov` 仍判为 FOMC。
 
-### 4.2 P1-1 · FOMC 身份边界
+### 4.2 P1-2 · A2 错误分类 fail-closed（关闭）
 
-- `isFomcEvent()`（`lib/briefing_intelligence_v4.js`）：`CENTRAL_BANK` 不再无条件识别为 FOMC；必须明确 `FOMC/FOMC_POLICY` 类型，或同时满足 Fed/FOMC event_id + 美联储来源 + federalreserve.gov 官方域。
-- `makeBriefingItem` 透传 `source_url`（registry record），生产 Fed 事件仍被识别。
-- 反例：`ecb_rates_2026_07`（European Central Bank）在简报中不产生任何 `FOMC_*` code/reason；`ecb_rate_decision_2026_09 + central_bank` 独立反例同样不产生（smoke 断言）。
+- `lib/v42_evidence_lookup.js`：`loadA2Evidence` 仅把明确 `no_current_version` / `version_not_found` / `not_found` 归为「无文档」→ 诚实 ABSTAIN；`corrupt_json` / 悬空指针 / hash·identity·proof 等失败一律 fail-closed 显式非 2xx + 原始 `reason`/`sub_error`（`store` 不可用 → 503）；`resolveEvidenceView` 只在 `not_found` 时输出 ABSTAIN，其余非 2xx 直通。`local_server.js` 证据端点透传 `reason`/`sub_error`。
+- 反例（smoke `P2_*` + `P3t_dangling_resolve_blocked`）：corrupt_json → 409 + `corrupt_json`，产品路径非 2xx 不降级；store 不可用 → 503；悬空指针 → `current_pointer_dangling`。
 
-### 4.3 P1-3 · 正式事实仅来自 A2 验签
+### 4.3 P1-3 · 正式 store 读取重新验签 + 展示层 verified 信号（关闭）
 
-- `buildV42EvidenceView()`（`lib/v42_evidence_view.js`）：`official_facts` 只在 A2 verified bundle（`evidence_scope=official` + `status=READY_FOR_REVIEW` + `synthetic=false`）时从 `derived_decision_facts` 派生并标记 `verified:true`；generic/未验证 bundle 的 `official_facts` 降级为 `unverified_facts`（候选）。
-- `static/v42_evidence_panel.js`：正式事实区（`v42-facts-verified`）仅在 verified 时渲染；未验证候选渲染为「政策事实（未验证候选）」+ 显式 note（`v42-unverified-note`），绝不冒充正式事实。
-- 反例：evil-source bundle（`https://evil.example/fake` / `Unverified Blog`）虽通过 `validateBundle`，但视图 `verified=false`、`official_facts=[]`、`unverified_facts` 候选区显示，页面无「政策事实（正式）」标题（smoke 断言）。
+- `lib/fomc_document_store.js` 新增 `verifyStoredRead(eventId, loaded, currentPointer)`：读路径复用写侧核心 `validateWriteInput`（canonical bundle hash、官方来源 host、事件身份、正文 hash、时间序、capability proof 公钥验签）并叠加 current 指针与 manifest↔document↔bundle 绑定；manifest 缺失/损坏/删字段亦 fail-closed。`load()` 成功返回 `read_verified:true` + `read_verification`，失败返回 `{ok:false, status:409, reason, sub_error}`。
+- `lib/v42_evidence_view.js`：`buildV42EvidenceView(bundle, {read_verified})` 仅在显式 `read_verified === true`（只有 store 读路径重新验签后产生）时授予 `verified`；无信号一律视为未验签候选，`official_facts=[]`。
+- `scripts/seed_v42_d1_walkthrough.js`：自检断言读回 `read_verified === true` 并把该信号传入视图。
+- 反例（smoke `P3t_*`，磁盘篡改均 fail-closed 且 `official_facts=[]`）：篡改 `bundle.json` 决策事实 → `read_verification_failed` + `write_rejected_bundle_hash` + canonical 复算不一致；篡改 `manifest.bundle_sha256` → `read_manifest_bundle_hash_mismatch`；删除 `manifest.json` → `read_manifest_missing_or_corrupt`（新增，读验签不静默跳过绑定）；`current.json` 指向幽灵版本 → `current_pointer_dangling`；全新伪造 store（无 proof、外站 URL、手写 manifest）→ 409、无 `read_verified`、`official_facts=[]`。
 
 ### 4.4 自检与真实走查证据
 
-- Smoke：`scripts/smoke_v42_fomc_d1.js` → **PASS 73 / FAIL 0**（P1 反例组：ECB/rogue 非 FOMC、synthetic 候选、evil-source 候选、A2 verified 正例、生产诚实 ABSTAIN、隔离种子完整渲染）。
+- Smoke：`scripts/smoke_v42_fomc_d1.js` → **PASS 97 / FAIL 0**（生产诚实 ABSTAIN、ECB 非 FOMC、隔离种子 verified 完整渲染、P1-1 四反例、P1-2 三反例、P1-3 磁盘篡改 15 反例）。
+- 回归：A1 **106/106**、A2 **PASS**、A4 **25/25**（store 读写路径变更后复跑通过）。
 - 浏览器走查（Playwright headless，8013，`scripts/walkthrough_v42_d1_p1_browser.js`）→ **PASS 35 / FAIL 0**：
-  - 生产模式：`GET /api/research/v3/evidence/fed_fomc_2026_07` → `ok:true` / `status=ABSTAIN` / `no_formal_documents=true` / reason `no_a2_formal_documents`；`event_research_result_v3.html?event_id=fed_fomc_2026_07` 渲染证据卡片状态「证据不足，弃权」、未验签、无「政策事实（正式）」块；简报 `fed_fomc_2026_07` 保留 `FOMC_TYPE/FOMC_STAGE_POST/FOMC_EVIDENCE_ABSTAIN`，`ecb_rates_2026_07` 无任何 `FOMC_*`。
-  - 隔离种子模式（`FAS_FOMC_STORE_ROOT=fixtures/v42_d1_walkthrough`）：证据 API `verified=true` / `evidence_scope=official` / source_version `official-2026-07` / official_facts `target_range=3.75%-4%` + `action=HOLD` / B1 文本差异 4 UNCHANGED + 3 MODIFIED / research_note ex_ante+ex_post；页面渲染 `v42-facts-verified`、`v42-tc-0`、ex_ante/ex_post 状态。
+  - 生产模式：证据 API `ok:true` / `status=ABSTAIN` / `no_formal_documents=true` / reason `no_a2_formal_documents`；页面渲染「证据不足，弃权」、未验签、无正式事实块；简报 `fed_fomc_2026_07` 保留 `FOMC_TYPE/FOMC_STAGE_POST/FOMC_EVIDENCE_ABSTAIN`，`ecb_rates_2026_07` 无任何 `FOMC_*`。
+  - 隔离种子模式（`FAS_FOMC_STORE_ROOT=fixtures/v42_d1_walkthrough`）：证据 API `verified=true` / `evidence_scope=official` / source_version `official-2026-07` / official_facts `target_range=3.75%-4%` + `action=HOLD` / B1 文本差异 / research_note ex_ante+ex_post；页面渲染 `v42-facts-verified`、`v42-tc-0`、ex_ante/ex_post 状态。
 
-### 4.5 页面入口
+### 4.5 数据保护与回滚
 
-| 页面 | 入口 | 说明 |
-|---|---|---|
-| 今日简报 | `/daily_briefing.html` | Top 3 理由 + 阶段路由 + 新证据徽标（P1-1 身份边界） |
-| 研究记录（pre） | `/event_research_record.html?event_id=…` | V4.2 证据只读面板 |
-| 收尾卡（post） | `/event_research_result_v3.html?event_id=…` | V4.2 证据只读面板（诚实 ABSTAIN / A2 verified 完整渲染） |
-
-### 4.6 证据状态与人工动作
-
-- 生产 `data/fomc_documents` 为空 → FOMC 事件证据视图诚实 ABSTAIN（`no_a2_formal_documents`），未伪造 READY、未声明任何验收名。
-- 证据视图只读，不写入、不覆盖任何正式数据或人工修订；自动稿与人工修订隔离不变量未触碰。
-
-### 4.7 数据保护与回滚
-
-- 纯读接线 + 隔离种子：仅 `fixtures/` 隔离目录写入（`FAS_FOMC_WRITE` 门控），生产 `data/` 零写入。
+- 纯读接线 + 隔离种子：仅 `fixtures/` 隔离目录写入（`FAS_FOMC_WRITE` 门控）；生产 `data/fomc_documents` 零写入（复跑前后 git clean）。
 - 回滚：关闭 v42 接线（只读端点、页面渲染区）即恢复；不删除任何正式事件数据。
 - 受保护不变量（A1/A2/B1/C1 可溯语义、阶段隔离、自动/人工隔离、fail-visible）均未改变。
 
-## 5. Codex 集中 R2 指令
+## 5. Codex 最终聚焦复审指令（rev59）
 
-D1 最终聚焦复审结论：**CHANGES_REQUIRED**。
+本环唯一一次最终聚焦复审。复审目标：`9db74dd`。只裁决 revision 57 三个事实安全反例是否已关闭；不因命名、样式、更多负向测试、性能、覆盖率、内部结构、文档或交接板问题延长技术循环（登记技术债）。Codex 独立复跑 `scripts/smoke_v42_fomc_d1.js`（PASS 97 / FAIL 0）与浏览器走查（PASS 35 / FAIL 0），并针对以下三项给出 **PASS / CHANGES_REQUIRED** 最终裁决；若仍存在同级事实安全问题，记录证据后直接交 Human（不再自动循环）。
 
-复审目标：`949b994`。独立复跑 `scripts/smoke_v42_fomc_d1.js` 为 **73/73 PASS**，浏览器走查为 **35/35 PASS**；生产 `data/fomc_documents` 未被测试写入。但三组原 P1 仍各有一个可执行反例，现有测试未覆盖，均会造成身份或正式事实错误。
+### P1-1：官方域 host 判定（应已关闭）
 
-### P1-1：官方域判断可被 URL 路径伪装
+- 原缺陷：`isFomcEvent()` 以 `/(^|\.)federalreserve\.gov/i` 直接作用于完整 URL，`https://evil.example/path/.federalreserve.gov` 可获 FOMC 身份。
+- 关闭：`lib/briefing_intelligence_v4.js` 解析 URL hostname（`extractUrlHost`/`isFedOfficialHost`），规范化后对 `federalreserve.gov` / `www.federalreserve.gov` 精确 host/subdomain 匹配。
+- 反例：`P1_58_path_spoof_not_fomc`、`P1_58_query_spoof_not_fomc`、`P1_58_real_fed_host_ok`、`P1_58_root_fed_host_ok`。
 
-- `lib/briefing_intelligence_v4.js:379` 把 `/federalreserve\.gov/i` 直接作用于完整 URL 字符串，没有解析 URL host。
-- 独立反例：`event_type=central_bank`、`event_id=ecb_fomc_2099_01`、来源写作 Federal Reserve，但 URL 为 `https://evil.example/path/.federalreserve.gov`，`isFomcEvent()` 返回 `true`。
-- 因此非官方域仍可获得 FOMC 身份和 `FOMC_*` reason/code。
+### P1-2：A2 错误分类 fail-closed（应已关闭）
 
-最小关闭：使用 URL parser 提取 hostname，再按既有官方域 allowlist 做精确 host/subdomain 判定；补 path/query 含 `.federalreserve.gov`、实际 host 为外站的负向用例。
+- 原缺陷：`loadA2Evidence()` 把 store `load()` 一切失败降为 `not_found` → 诚实 ABSTAIN，掩盖 corrupt_json / 悬空指针 / hash·proof 失败。
+- 关闭：仅 `no_current_version` / `version_not_found` / `not_found` → 无文档；`store` 不可用 → 503；损坏 / 悬空 / 验签失败 → 409 + 原始 `reason`/`sub_error`（`local_server.js` 透传）。
+- 反例：`P2_corrupt_json_fail_closed`、`P2_corrupt_json_no_abstain`、`P2_store_unavailable_503`、`P3t_dangling_resolve_blocked`。
 
-### P1-2：A2 store 损坏被降格成“没有正式文档”
+### P1-3：正式 store 读取重新验签（应已关闭）
 
-- `lib/v42_evidence_lookup.js:42-53` 丢弃 `fomcStore.load()` 的具体失败类型，所有候选失败最终都返回 `not_found`。
-- `resolveEvidenceView():92` 随后统一输出 `ok:true + ABSTAIN + no_a2_formal_documents`。
-- 独立反例：store 返回 `corrupt_json / 409`，产品结果却显示“尚无 A2 正式文档”，隐藏了真实的数据损坏。
-
-最小关闭：只把明确的 `no_current_version/version_not_found` 归为无文档；`corrupt_json`、dangling pointer、hash/identity/proof 等失败必须 fail-closed，显式输出 `BLOCKED` 或非 2xx 错误及原始 reason。补错误分类负向测试。
-
-### P1-3：正式 store 的读取路径没有重新验签
-
-- `lib/fomc_document_store.js:331-339` 的 `load()` 只读取 current/document/bundle/manifest，不调用 `validateWriteInput()` 或等价的 read-time validator，也不核对 manifest/bundle/document/hash/proof。
-- `lib/v42_evidence_view.js:149-154` 仅凭 bundle 自述的 `schema/status/evidence_scope/synthetic` 判为 `verified`。
-- 独立临时目录反例使用真实 `createFomcDocumentStore().load()`：写入无 proof、外站 URL、无效 manifest hash 的伪造 bundle 后，`store_load_ok=true`、`verified=true`，并把 `target_range=9.99%-10.00%` 显示为正式事实；临时目录已完整清理。
-
-最小关闭：正式读取时重新验证 current 指针、document/bundle/manifest 绑定、canonical bundle hash、官方来源、事件身份、时间序与 capability proof；校验结果显式传给展示层，展示层不得仅凭 bundle 自述字段授予 `verified`。补实际磁盘篡改反例，必须 BLOCKED/FAIL 且 `official_facts=[]`。
+- 原缺陷：`load()` 不重新验签；展示层仅凭 bundle 自述字段授予 `verified`。
+- 关闭：`fomc_document_store.js` 新增 `verifyStoredRead`（读路径复用 `validateWriteInput`：current 指针、manifest↔document↔bundle 绑定、canonical hash、官方来源、事件身份、时间序、capability proof；manifest 缺失/损坏/删字段亦 fail-closed）；`load()` 成功返回 `read_verified:true`；`buildV42EvidenceView(bundle, {read_verified})` 仅在该显式信号下授予 `verified`（`official_facts=[]` 否则）。
+- 反例：`P3t_forge_facts_fail_closed`/`_reason`/`_no_bundle`/`_resolve_blocked`、`P3t_manifest_tamper_fail_closed`、`P3t_manifest_missing_fail_closed`/`_resolve_blocked`、`P3t_dangling_pointer_fail_closed`、`P3t_forged_store_fail_closed`/`_no_verified`/`_no_official_facts`/`_resolve_blocked`（磁盘篡改均 fail-closed 且 `official_facts=[]`）。
 
 ### 已通过与边界
 
-- ECB 普通样本、生产无文档 ABSTAIN、隔离受控种子渲染、阶段路由和新证据重开基础路径均通过。
+- 生产 `data/fomc_documents` 为空 → 诚实 ABSTAIN（`no_a2_formal_documents`）；ECB 普通样本非 FOMC；隔离受控种子 verified 完整渲染（来源/版本/政策事实/B1 文本差异/C1 research_note）均通过。
 - 不扩展其他事件或算法，不重开 A1/A2/B1/C1 已通过范围；只关闭以上三个输入/读取边界。
-- 此前不得声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+- 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
 
-Cursor 只做上述最小收尾，补三个独立负向测试后交 Codex 最终复审。
+请就以上三项给出最终 **PASS / CHANGES_REQUIRED** 裁决。
 
 ### 历史附录：此前 D1/C1 复审（只读）
 
@@ -870,4 +850,16 @@ Codex R1 PASS 且 Human 完成真实使用后，可确认 `POLICY_REAL_USE_D1`�
 - 交付：`lib/briefing_intelligence_v4.js`、`lib/v42_evidence_view.js`、`lib/v42_evidence_lookup.js`（新增）、`local_server.js`、`static/v42_evidence_panel.js`、`scripts/smoke_v42_fomc_d1.js`（重写 73 断言）、`scripts/seed_v42_d1_walkthrough.js`（新增）、`scripts/walkthrough_v42_d1_p1_browser.js`（新增）、`fixtures/v42_d1_walkthrough/`（隔离种子）；
 - 自检：D1 smoke **73/73 PASS**；浏览器走查 **35/35 PASS**（生产诚实 ABSTAIN + ECB 无 FOMC + 隔离种子 verified 完整渲染）；回归 A1 **106/106**、A2 **PASS**、B1 **64/64**、B1 gate2/3/4 **33/20/14**、C1 gate1/2/3/4 **47/32/32/39**、C1 p1_r14 **63/63**、v4_six_mechanisms **23**、v4_batch_d_walkthrough **83**、v41_earnings_d **21**、ai_collab_exec_pointer、acceptance_status 全绿；生产 `data/` 零写入；
 - 板 §2 HEAD 更新为 `949b994`、`sync-pointer` 绑定 `code_tip=949b994`；transition rev54→55：释放租约，置 `pending_review / codex`，交 Codex 最终聚焦复审三组 P1（rev55 目标见 §5）；
+- 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+
+### R22 · Cursor 关闭 Codex D1 R2 三个事实安全反例 → 置 `pending_review / codex`（2026-08-05）
+
+- Codex D1 最终聚焦复审（rev58，复审目标 `949b994`）判 **CHANGES_REQUIRED**，三个事实安全反例：P1-1 官方域 host 判定可被 URL 路径伪装、P1-2 A2 错误分类全部降级为「无文档」、P1-3 正式 store 读取未重新验签且展示层自述即 verified；
+- Cursor claim rev58→59 按最小关闭面执行三个反例（不扩展其他事件/机制，不重开 A1/A2/B1/C1）：
+  - P1-1：`lib/briefing_intelligence_v4.js` 解析 URL hostname 精确匹配官方域白名单（path/query/subdomain 注入不再判 FOMC）；
+  - P1-2：`lib/v42_evidence_lookup.js` 仅 `no_current_version`/`version_not_found`/`not_found` → 诚实 ABSTAIN，其余 fail-closed（store 不可用 503、损坏/悬空/验签失败 409 + 原始 reason/sub_error）；
+  - P1-3：`lib/fomc_document_store.js` 新增 `verifyStoredRead`（读路径复用 `validateWriteInput` + current 指针/manifest↔document↔bundle 绑定，manifest 缺失/损坏 fail-closed）；`load()` 成功返回 `read_verified:true`；`lib/v42_evidence_view.js` `verified` 仅当显式 `read_verified` 信号（仅 store 读路径产生）；
+- 交付：`lib/briefing_intelligence_v4.js`、`lib/fomc_document_store.js`、`lib/v42_evidence_lookup.js`、`lib/v42_evidence_view.js`、`local_server.js`、`scripts/seed_v42_d1_walkthrough.js`、`scripts/smoke_v42_fomc_d1.js`（97 断言：P1-1 四例、P1-2 三例、P1-3 磁盘篡改 15 例）；
+- 自检：D1 smoke **97/97 PASS**；浏览器走查 **35/35 PASS**；回归 A1 **106/106**、A2 **PASS**、A4 **25/25**；生产 `data/fomc_documents` 零写入（复跑前后 git clean）；
+- 板 §2 HEAD 更新为 `9db74dd`、`sync-pointer` 绑定 `code_tip=9db74dd`；transition rev58→59：释放租约，置 `pending_review / codex`，交 Codex 本环唯一一次最终聚焦复审（rev59 目标见 §5）；
 - 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
