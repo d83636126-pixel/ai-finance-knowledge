@@ -7,13 +7,13 @@ updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 61
+revision: 62
 turn: 1
 next_actor: 'human'
 status: 'blocked'
 max_turns: 2
-last_writer: 'codex'
-written_at: '2026-08-05T06:12:57.798Z'
+last_writer: 'cursor'
+written_at: '2026-08-05T06:50:36.778Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,7 +24,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.2 Batch D1
 
-> 当前口令：**rev59 · 一次最终 Codex 聚焦复审：只裁决 revision 57 三个事实安全反例是否已关闭 → Human 决策并关闭 D1**
+> 当前口令：**rev62 · Codex 最终复审 P1-3（跨目录重放事件身份）已按 Human 授权极小修复关闭 → 直接交 Human 走查并关闭 D1（不再开启新 Codex 复审轮）**
 
 ## 1. 当前裁决
 
@@ -42,12 +42,12 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 D1 简报接线与真实使用` |
 | D1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_D1_简报接线与真实使用_2026-08-04.md` |
-| HEAD | `9db74dd`（D1 R1 三个事实安全反例关闭业务 tip） |
+| HEAD | `9d226a6`（D1 R1 三个事实安全反例 + rev62 跨目录重放 event_id 一致性业务 tip） |
 | 开环基线 | `66614ed` |
 | 已完成 | A1 / A2 / B1 / C1 |
 | change class | `C1` |
 | review | `R1_PRODUCT_ONCE` |
-| status / next_actor | `pending_review / codex` |
+| status / next_actor | `blocked / human` |
 | 授权范围 | 现有 8013、每日简报、研究记录、收尾卡的最小接线与真实走查 |
 | 回滚 | 关闭 D1 接线并恢复 `66614ed` 的产品路径；不删除正式事件数据 |
 
@@ -134,13 +134,20 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - 回滚：关闭 v42 接线（只读端点、页面渲染区）即恢复；不删除任何正式事件数据。
 - 受保护不变量（A1/A2/B1/C1 可溯语义、阶段隔离、自动/人工隔离、fail-visible）均未改变。
 
-## 5. Codex 最终聚焦复审指令（rev59）
+## 5. Codex 最终聚焦复审结论与 rev62 极小修复（P1-3 已关闭）
 
 最终聚焦复审结论：**CHANGES_REQUIRED · HUMAN_DECISION**。
 
 这是 D1 本环唯一一次最终 Codex 复审。流程状态转为 `blocked / human`，不再自动开启 Cursor 修复轮。
 
 复审目标：`9db74dd`。规定测试独立复跑：D1 smoke **97/97 PASS**，浏览器走查 **35/35 PASS**；测试后无业务文件或正式数据污染。
+
+**rev62 关闭（Human 授权路径 1 · 极小修复，2026-08-05）**：Human 授权一次极小修复——只增加请求/store/current/manifest/document 的 event_id 一致性检查和一个跨目录重放反例，修完运行定向测试后**直接交 Human 关闭 D1，不再进行新一轮 Codex 复审**。Cursor 在业务 tip `9d226a6` 完成：
+
+- `lib/fomc_document_store.js` `verifyStoredRead` 补齐事件身份绑定：请求/store 目录 event_id 与 document.event_id 不一致 → 409 `read_event_id_mismatch`；current 指针 event_id 必需且与 document 一致 → `read_current_pointer_event_mismatch`；`manifest.event_id` 由「仅存在时比对」改为「必需且比对」→ `read_manifest_binding_field_missing` / `read_manifest_event_mismatch`。`loadA2Evidence`/`resolveEvidenceView` 无需改动：store.load 409 沿 fail-closed 传播。
+- 反例（smoke `P3t_replay_*`，篡改 6：跨目录重放）：把已验证 `fomc_2026_07` 版本目录 + current 指针整体复制到 `fomc_2099_99` 事件目录（文件自洽、hash/proof 全真实）→ `store.load("fomc_2099_99")` = 409 `read_event_id_mismatch`、不授予 `read_verified`、产品路径非 2xx 阻断、不暴露 `official_facts`。
+- 定向测试：D1 smoke **102/102 PASS**（97 + 5 重放断言）；回归 A1 **106/106**、A2 **PASS**（121）、A4 **25/25**；committed seed store 读路径回归 `read_verified=true`（合法 verified 读取不受影响）；生产 `data/fomc_documents` 零写入。
+- 板 revision 61→62，`last_writer=cursor`，status 保持 `blocked`，`next_actor=human` —— **直接交 Human 走查并关闭 D1，不再开启新 Codex 复审轮**。
 
 ### P1-1 · 官方域 host 判定：PASS
 
@@ -152,7 +159,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - 仅明确的无文档错误进入普通 ABSTAIN。
 - `corrupt_json`、store unavailable、悬空指针和读验签失败均保留原始错误并返回非 2xx，不再伪装成“没有正式文档”。
 
-### P1-3 · 正式 store 读取重新验签：CHANGES_REQUIRED
+### P1-3 · 正式 store 读取重新验签：CHANGES_REQUIRED（rev62 已关闭）
 
 读路径已经验证 proof、canonical bundle hash、官方来源、时间序、manifest 与 document/bundle 的内部绑定；但仍未把**调用方请求的 event_id / 存储目录 event_id**绑定到已验签文档身份：
 
@@ -173,15 +180,17 @@ official_facts = target_range 3.75%-4%, action HOLD
 
 临时目录已在同一进程完整清理。该反例意味着一条合法已验签事件的事实可在错误事件 ID 下被展示为正式事实，属于既定 P1-3 的事件身份错误，不是新增审核范围。
 
+**rev62 关闭（2026-08-05）**：Human 授权路径 1 后，Cursor 在 `verifyStoredRead` 补齐三处事件身份绑定（请求/store event_id ↔ document、current 指针 event_id、manifest.event_id 必需且比对），并新增「篡改 6：跨目录重放」反例（`P3t_replay_*` 5 断言）。上述反例复现后 `store_ok=false` / `status=409` / `error=read_event_id_mismatch` / 不授予 `read_verified` / 产品路径非 2xx 阻断 / `official_facts=[]`。详见 §5 rev62 关闭块与 R24。
+
 ### Human 决策
 
-按 2026-08-05 审核预算规则，Codex 不再自动要求下一技术循环。请 Human 从以下路径中决策：
+按 2026-08-05 审核预算规则，Codex 不再自动要求下一技术循环。**Human 已选择路径 1（授权一次极小修复）并由 Cursor rev62 执行完毕**；另两条路径（接受风险登记技术债 / 缩小或停止）未被选择：
 
-1. 授权一次极小修复：强制请求/store event_id、current pointer、manifest、document 与 bundle 事件身份一致；
+1. ~~授权一次极小修复：强制请求/store event_id、current pointer、manifest、document 与 bundle 事件身份一致~~（**已选并执行，rev62 关闭**）；
 2. 接受本地数据目录被篡改时的跨事件重放风险，并以明确技术债关闭 D1（不得声称该边界已通过）；
 3. 缩小或停止 V4.2 D1 扩展。
 
-无论选择哪条，本次不得自动声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+P1-1 / P1-2 / P1-3 三组事实安全反例现已全部关闭。下一步**直接交 Human 走查并关闭 D1**（不再开启新 Codex 复审轮）。无论选择哪条，本次不得自动声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
 
 本环唯一一次最终聚焦复审。复审目标：`9db74dd`。只裁决 revision 57 三个事实安全反例是否已关闭；不因命名、样式、更多负向测试、性能、覆盖率、内部结构、文档或交接板问题延长技术循环（登记技术债）。Codex 独立复跑 `scripts/smoke_v42_fomc_d1.js`（PASS 97 / FAIL 0）与浏览器走查（PASS 35 / FAIL 0），并针对以下三项给出 **PASS / CHANGES_REQUIRED** 最终裁决；若仍存在同级事实安全问题，记录证据后直接交 Human（不再自动循环）。
 
@@ -909,4 +918,20 @@ Codex R1 PASS 且 Human 完成真实使用后，可确认 `POLICY_REAL_USE_D1`�
 - 交付：`lib/briefing_intelligence_v4.js`、`lib/fomc_document_store.js`、`lib/v42_evidence_lookup.js`、`lib/v42_evidence_view.js`、`local_server.js`、`scripts/seed_v42_d1_walkthrough.js`、`scripts/smoke_v42_fomc_d1.js`（97 断言：P1-1 四例、P1-2 三例、P1-3 磁盘篡改 15 例）；
 - 自检：D1 smoke **97/97 PASS**；浏览器走查 **35/35 PASS**；回归 A1 **106/106**、A2 **PASS**、A4 **25/25**；生产 `data/fomc_documents` 零写入（复跑前后 git clean）；
 - 板 §2 HEAD 更新为 `9db74dd`、`sync-pointer` 绑定 `code_tip=9db74dd`；transition rev58→59：释放租约，置 `pending_review / codex`，交 Codex 本环唯一一次最终聚焦复审（rev59 目标见 §5）；
+- 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+
+### R23 · Codex 最终聚焦复审 `CHANGES_REQUIRED · HUMAN_DECISION`（2026-08-05，rev61）
+
+- Codex 最终聚焦复审（rev59 目标 `9db74dd`）独立复跑：D1 smoke **97/97 PASS**、浏览器走查 **35/35 PASS**；P1-1 官方域 host 判定 **PASS**、P1-2 A2 错误分类 fail-closed **PASS**。
+- P1-3 正式 store 读取重新验签 **CHANGES_REQUIRED**：`verifyStoredRead` 未把调用方请求/存储目录的 event_id 绑定到已验签文档身份——`eventId !== document.event_id` 未比较、`currentPointer.event_id` 未比较、`manifest.event_id` 仅存在才比较（缺失不阻断）。
+- 独立反例：把已验证 `fomc_2026_07` 版本目录 + current 指针整体复制到临时 store 的 `fomc_2099_99` 目录（不改文档/proof/bundle/manifest 内容）→ `store_ok=true` / `read_verified=true` / `resolved_verified=true` / `official_facts=target_range 3.75%-4%, action HOLD`；一条合法已验签事件的事实可在错误事件 ID 下被展示为正式事实。
+- 按 2026-08-05 审核预算，Codex 不再自动开技术循环，直接交 Human 决策（授权极小修复 / 接受风险登记技术债 / 缩小或停止）。
+
+### R24 · Cursor rev62 极小修复关闭 P1-3 跨目录重放 → 直接交 Human 关闭 D1（2026-08-05）
+
+- Human 授权路径 1（极小修复）：只增加请求/store/current/manifest/document 的 event_id 一致性检查 + 一个跨目录重放反例；修完运行定向测试后**直接交 Human 关闭 D1，不再进行新一轮 Codex 复审**。
+- 修复（业务 tip `9d226a6`）：`lib/fomc_document_store.js` `verifyStoredRead` 补齐事件身份绑定——请求/store 目录 event_id 与 document.event_id 不一致 → 409 `read_event_id_mismatch`；current 指针 event_id 必需且与 document 一致 → `read_current_pointer_event_mismatch`；`manifest.event_id` 由「仅存在时比对」改为「必需且比对」→ `read_manifest_binding_field_missing` / `read_manifest_event_mismatch`。`loadA2Evidence`/`resolveEvidenceView` 无需改动：store.load 409 沿 fail-closed 传播。
+- 反例（smoke 篡改 6：跨目录重放，`P3t_replay_*` 5 断言）：把已验证 `fomc_2026_07` 版本目录 + current 指针复制到 `fomc_2099_99` 事件目录（文件自洽、hash/proof 全真实）→ `store.load("fomc_2099_99")` = 409 `read_event_id_mismatch`、不授予 `read_verified`、产品路径非 2xx 阻断、不暴露 `official_facts`。
+- 定向测试：D1 smoke **102/102 PASS**（97 + 5 重放断言）；回归 A1 **106/106**、A2 **PASS**（121）、A4 **25/25**；committed seed store 读路径回归 `read_verified=true`（合法 verified 读取不受影响）；生产 `data/fomc_documents` 零写入。
+- 板 revision 61→62，`last_writer=cursor`，status 保持 `blocked`，`next_actor=human`——**直接交 Human 走查并关闭 D1，不再开启新 Codex 复审轮**。
 - 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
