@@ -7,13 +7,14 @@ updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 63
+umbrella_acceptance: EVENT_POLICY_INTELLIGENCE_V1
+revision: 64
 turn: 1
 next_actor: 'human'
 status: 'done'
 max_turns: 2
 last_writer: 'cursor'
-written_at: '2026-08-05T06:54:19.913Z'
+written_at: '2026-08-05T07:20:00.000Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,7 +25,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.2 Batch D1
 
-> 当前口令：**rev63 · D1 已由 Human 验收 `POLICY_REAL_USE_D1` 并关闭（done / human，转入归档）**
+> 当前口令：**rev64 · V4.2 六子机制仍全部 PASS，Human 声明 `EVENT_POLICY_INTELLIGENCE_V1` 并归档（done / human，V4.2 产品主线收口）**
 
 ## 1. 当前裁决
 
@@ -34,8 +35,9 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - Cursor（rev58→59）已按最小关闭面执行并关闭这三个反例（业务 tip `9db74dd`）：D1 smoke **PASS 97 / FAIL 0**、浏览器走查 **PASS 35 / FAIL 0**，生产 `data/fomc_documents` 零写入。详见 §4。
 - Human（2026-08-05）收紧审核预算：只做一次最终 Codex 聚焦复审（rev59）；仍未通过时不再自动循环，交 Human 决定接受风险、缩小范围、修订目标或停止扩展。
 - Human（2026-08-05）在 rev61 最终复审 P1-3 CHANGES_REQUIRED 后授权路径 1（极小修复，rev62 关闭跨目录重放），并正式确认 **`POLICY_REAL_USE_D1`** 验收、**关闭 D1**（done / human，rev63，转入归档）。
+- Human（2026-08-05）基于六子机制本轮全部复跑 PASS 与真实使用确认，正式声明 **`EVENT_POLICY_INTELLIGENCE_V1`**（V4.2 总体验收，rev64，转入归档）。
 - 非阻断问题登记技术债。
-- 仅声明 `POLICY_REAL_USE_D1`；`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS` 均未声明.
+- 已声明：`POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`；未声明：`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS`.
 
 ## 2. 基线、授权与边界
 
@@ -45,7 +47,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | D1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_D1_简报接线与真实使用_2026-08-04.md` |
 | HEAD | `9d226a6`（D1 R1 三个事实安全反例 + rev62 跨目录重放 event_id 一致性业务 tip） |
 | 开环基线 | `66614ed` |
-| 已完成 | A1 / A2 / B1 / C1 / D1（`POLICY_REAL_USE_D1` 已验收） |
+| 已完成 | A1 / A2 / B1 / C1 / D1（`POLICY_REAL_USE_D1` 已验收）；V4.2 总验收 `EVENT_POLICY_INTELLIGENCE_V1` 已声明 |
 | change class | `C1` |
 | review | `R1_PRODUCT_ONCE` |
 | status / next_actor | `done / human` |
@@ -714,7 +716,7 @@ research_note.ex_post.status === "READY"
 - [x] 新官方版本出现后任务会重开；
 - [x] 整体操作明显减少人工拼接。
 
-`POLICY_REAL_USE_D1` **已确认**。`EVENT_POLICY_INTELLIGENCE_V1` **未声明**——只有 V4.2 六项机制仍保持 PASS 且 Human 完成真实使用后才可另行确认。
+`POLICY_REAL_USE_D1` **已确认**。**`EVENT_POLICY_INTELLIGENCE_V1` 已由 Human 声明（2026-08-05）**——六项 V4.2 子机制本轮全部复跑 PASS 且 Human 完成真实使用后正式收口。`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS` 仍**未声明**。
 
 ## 7. 回合历史
 
@@ -945,3 +947,11 @@ research_note.ex_post.status === "READY"
 - 交付：`logs/acceptance/PRD-EVENT-POLICY-15-D1/acceptance_report.md`（`accepted_human` / `acceptance_declared: true`）；计划置 `accepted` / `acceptance_declared: true` / `accepted_at: 2026-08-05`；归档 `docs/ai-collab/闭环归档/V4.2_D1_简报接线与真实使用_PASS_2026-08-05.md`。
 - 板 revision 62→63，`status=done`，`next_actor=human`，`last_writer=cursor`——**D1 关闭，转入归档，不再继续技术验收循环**。
 - 仅声明 `POLICY_REAL_USE_D1`；`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS` 均未声明。是否继续 V4.2 其余扩展由 Human 另行决策并新开执行环。
+
+### R26 · Human 声明 `EVENT_POLICY_INTELLIGENCE_V1` 并归档 V4.2（2026-08-05，rev64）
+
+- Cursor 复跑 V4.2 六机制回归（Human 口令「继续」后）：A1 **106/0**、A4 **25/0**、A2 **PASS**（152）、B1 **136/0**（64+33+20+14+5）、C1 **213/0**（47+32+32+39+63）、D1 smoke **102/0**；生产 `data/fomc_documents` 零写入；双仓 clean；交接板镜像字节一致（91256 = 91256）。
+- Human 基于六子机制全部 PASS 与真实使用确认（D1 `POLICY_REAL_USE_D1`，浏览器走查 35/35），正式声明 **`EVENT_POLICY_INTELLIGENCE_V1`**。
+- 交付：V4.2 总体计划置 `accepted` / `acceptance_declared: true` / `accepted_at: 2026-08-05`；总体验收报告 `logs/acceptance/PRD-EVENT-POLICY-15/acceptance_report.md`；归档 `docs/ai-collab/闭环归档/V4.2_EVENT_POLICY_INTELLIGENCE_验收归档_2026-08-05.md`。
+- 板 revision 63→64，`status=done`，`next_actor=human`——**V4.2 产品主线收口**。
+- 已声明：`POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`；未声明：`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS`。后续 V4.2 扩展由 Human 另行决策并新开执行环。
