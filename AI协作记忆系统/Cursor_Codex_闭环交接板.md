@@ -8,13 +8,13 @@ project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
 umbrella_acceptance: EVENT_POLICY_INTELLIGENCE_V1
-revision: 65
+revision: 66
 turn: 1
 next_actor: 'human'
 status: 'done'
 max_turns: 2
 last_writer: 'cursor'
-written_at: '2026-08-05T08:05:00.000Z'
+written_at: '2026-08-05T08:40:00.000Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -25,7 +25,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.2 Batch D1
 
-> 当前口令：**rev65 · 极小修复 event_id 全链路一致性已定向验证，六机制仍全 PASS，Human 直接验收并归档（done / human，V4.2 正式收尾）**
+> 当前口令：**rev66 · Human 正式验收 rev65（event_id 全链路一致性），V4.2 正式收尾（done / human，闭环完成）**
 
 ## 1. 当前裁决
 
@@ -966,3 +966,11 @@ research_note.ex_post.status === "READY"
 - 交付：归档 `docs/ai-collab/闭环归档/V4.2_rev65_event_id_全链路一致性_极小修复_验收归档_2026-08-05.md`；总体验收报告 `logs/acceptance/PRD-EVENT-POLICY-15/acceptance_report.md` §6 增补 rev65 复验。
 - 板 revision 64→65，`status=done`，`next_actor=human`——**交 Human 直接验收并归档，不再开启新 Codex 复审轮，V4.2 正式收尾**。
 - 已声明：`POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`；未声明：`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS`。
+
+### R28 · Human 正式验收 rev65，V4.2 正式收尾（2026-08-05，rev66）
+
+- Human 于 2026-08-05 正式验收 rev65 极小修复（event_id 全链路一致性，tip `ca7a0da`），指令「验收，V4.2 正式收尾」。
+- 验收事实：D1 smoke **106/0**；六机制回归 A1 **106/0**、A4 **25/0**、A2 **PASS**（152）、B1 **136/0**、C1 **213/0**；生产 `data/fomc_documents` 零写入；双仓 clean；交接板 validate `ok:true`。
+- 归档 `docs/ai-collab/闭环归档/V4.2_rev65_event_id_全链路一致性_极小修复_验收归档_2026-08-05.md` 置 `human_accepted_at: 2026-08-05`；总体验收报告 §6 补记 Human 正式验收。
+- 板 revision 65→66，`status=done`，`next_actor=human`——**V4.2 正式收尾，闭环完成**。
+- 已声明：`POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`；未声明：`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS`。后续是否扩展 V4.2 由 Human 另行决策并新开执行环。
