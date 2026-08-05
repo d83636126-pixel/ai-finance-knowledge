@@ -7,13 +7,13 @@ updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 54
-turn: 0
-next_actor: 'cursor'
-status: 'pending_exec'
+revision: 55
+turn: 1
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 2
-last_writer: 'codex'
-written_at: '2026-08-05T03:43:38.392Z'
+last_writer: 'cursor'
+written_at: '2026-08-05T04:09:53.933Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -24,14 +24,15 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.2 Batch D1
 
-> 当前口令：**执行闭环交接板 revision 50 · 开始 V4.2 D1 最小产品接线**
+> 当前口令：**执行闭环交接板 revision 55 · 关闭 D1 R1 三组 P1 → 交 Codex 最终聚焦复审**
 
 ## 1. 当前裁决
 
 - A1、A2、B1、C1 均已完成 Codex 复审、Human 验收并归档，不在 D1 重开。
 - Human（2026-08-04）授权新环 `PRD-EVENT-POLICY-15-D1`，验收名 `POLICY_REAL_USE_D1`。
-- 当前状态为 `pending_review / codex`；D1 五项产品机制已接线并完成自检与真实走查，交由 Codex 集中产品 R1。
-- D1 完成后只做一次集中产品 R1；非阻断问题登记技术债。
+- D1 R1 集中产品复审判 **CHANGES_REQUIRED**（三组 P1）；Cursor 已关闭全部三组 P1 并补反例 + 真实 FOMC 正式证据走查。
+- 当前状态为 `pending_review / codex`；`scripts/smoke_v42_fomc_d1.js` 73/73、`scripts/walkthrough_v42_d1_p1_browser.js` 35/35 通过，交 Codex 最终聚焦复审三组 P1。
+- 非阻断问题登记技术债。
 - 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`.
 
 ## 2. 基线、授权与边界
@@ -40,12 +41,12 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 D1 简报接线与真实使用` |
 | D1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_D1_简报接线与真实使用_2026-08-04.md` |
-| HEAD | `b3757fe`（D1 R1 业务 tip） |
+| HEAD | `949b994`（D1 R1 三组 P1 关闭业务 tip） |
 | 开环基线 | `66614ed` |
 | 已完成 | A1 / A2 / B1 / C1 |
 | change class | `C1` |
 | review | `R1_PRODUCT_ONCE` |
-| status / next_actor | `pending_exec / cursor` |
+| status / next_actor | `pending_review / codex` |
 | 授权范围 | 现有 8013、每日简报、研究记录、收尾卡的最小接线与真实走查 |
 | 回滚 | 关闭 D1 接线并恢复 `66614ed` 的产品路径；不删除正式事件数据 |
 
@@ -86,56 +87,50 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 4. Cursor 完成报告
 
-**D1 最小产品接线完成：五项产品机制全部实现，smoke 自检 PASS 31 / FAIL 0，8013 真实浏览器走查通过。已切换 `pending_review / codex`。**
+**D1 R1 三组 P1 已全部关闭：产品主路径接入 A2 受控文档 + 诚实 ABSTAIN（P1-2）、FOMC 身份边界（P1-1）、正式事实仅来自 A2 验签（P1-3）。`scripts/smoke_v42_fomc_d1.js` PASS 73 / FAIL 0，8013 真实浏览器走查（`scripts/walkthrough_v42_d1_p1_browser.js`）PASS 35 / FAIL 0。已切换 `pending_review / codex`，交 Codex 最终聚焦复审。**
 
-### 4.1 五项产品机制
+### 4.1 P1-2 · 产品主路径接入 A2 受控文档（fail-visible ABSTAIN）
 
-1. **D_TOP3_REASON（Top 3 入选理由）**
-   - `lib/briefing_intelligence_v4.js` 新增 `isFomcEvent` / `fomcBriefingSignals`；`enrichBriefingItem` 将阶段（已发生/未发生）+ 证据状态（证据不足→弃权）推导为真实理由，unshift 进 reasons。
-   - 真实走查：`fed_fomc_2026_07` 入选 Top 3（pending_review），理由为「FOMC 决议已发生（2026-07-29），进入事后复盘 · 证据不足，系统对 FOMC 结论弃权（缺正式事实/声明）」。不含鹰鸽/看涨/看跌/市场将等市场因果结论；ABSTAIN 时不宣称「已就绪」。
+- 新增 `lib/v42_evidence_lookup.js`：`isFomcEventId` / `a2CandidateIds`（产品 `fed_fomc_2026_07` ↔ A2 store 键 `fomc_2026_07` 解耦对齐）/ `loadA2Evidence` / `abstainNoFormalDocuments` / `resolveEvidenceView`。
+- `/api/research/v3/evidence/:id`（`local_server.js`）改为 `resolveEvidenceView`：FOMC 事件优先读 A2 受控 `fomc_document_store`（current/prior verified documents → B1 文本差异/决策事实 + C1 research_note 随束派生）；A2 无正式文档 → 诚实 ABSTAIN（`no_formal_documents=true`、reason=`no_a2_formal_documents`，fail-visible），绝不把「渲染一个 ABSTAIN 面板」当作真实使用 PASS。
+- 隔离种子 `scripts/seed_v42_d1_walkthrough.js` + `fixtures/v42_d1_walkthrough/`：经 A2 适配器真实代码路径签发 proof 的 verified bundle（`READY_FOR_REVIEW` / `official` / `verified=true`，source_version `official-2026-07`），演示完整渲染路径（官方事实 / B1 文本差异 / C1 research_note）；目录 README 显式标注 offline dev seed。生产 `data/fomc_documents` 保持为空 → 真实用户看到诚实 ABSTAIN。
 
-2. **D_STAGE_ROUTING（阶段路由）**
-   - 新增 `enforceStageLink`：post（已发生）→ `event_research_result_v3.html`（收尾卡）；pre（未发生）→ `event_research_record.html`（研究记录）；阶段确定时不跨页。
-   - 真实走查：`fed_fomc_2026_07` 的 `action_url` = `event_research_result_v3.html?event_id=fed_fomc_2026_07`。
+### 4.2 P1-1 · FOMC 身份边界
 
-3. **D_EVIDENCE_RENDER（证据呈现）**
-   - 新增只读端点 `GET /api/research/v3/evidence/:id` → `buildV42EvidenceView(bundle)` 视图。
-   - `lib/v42_evidence_view.js` 纯函数派生视图；`static/v42_evidence_panel.js`（UMD）渲染：状态 chip、正式来源/版本、政策事实、ex_ante/ex_post、缺口、冲突；不可用/FAIL fail-loud（`v42-fail-loud` / `v42-blocking`）；缺 C1 草稿显式提示 `v42-no-research-note`。
-   - `event_research_record.html` 与 `event_research_result_v3.html` 均接线面板（CSS/JS include + 渲染区）。
+- `isFomcEvent()`（`lib/briefing_intelligence_v4.js`）：`CENTRAL_BANK` 不再无条件识别为 FOMC；必须明确 `FOMC/FOMC_POLICY` 类型，或同时满足 Fed/FOMC event_id + 美联储来源 + federalreserve.gov 官方域。
+- `makeBriefingItem` 透传 `source_url`（registry record），生产 Fed 事件仍被识别。
+- 反例：`ecb_rates_2026_07`（European Central Bank）在简报中不产生任何 `FOMC_*` code/reason；`ecb_rate_decision_2026_09 + central_bank` 独立反例同样不产生（smoke 断言）。
 
-4. **D_NEW_EVIDENCE_REOPEN（新证据重开）**
-   - 复用既有 `isCompletionStale` / `markNewEvidence`：`bundle_sha256` 或 `source_version` 变化 → 完成项重开 + `NEW_EVIDENCE`（+180）标记。
-   - `daily_briefing.html` 新增 `hasNewEvidence`，Top 3 与分类卡片渲染红色「新证据」徽标。
+### 4.3 P1-3 · 正式事实仅来自 A2 验签
 
-5. **D_REAL_USE_WALKTHROUGH（真实走查）**
-   - 真实事件 `fed_fomc_2026_07`（FOMC Meeting July 2026，central_bank，federalreserve.gov，2026-07-29 已发生，证据包 ABSTAIN）。已在 8013 完成端到端浏览器走查。
+- `buildV42EvidenceView()`（`lib/v42_evidence_view.js`）：`official_facts` 只在 A2 verified bundle（`evidence_scope=official` + `status=READY_FOR_REVIEW` + `synthetic=false`）时从 `derived_decision_facts` 派生并标记 `verified:true`；generic/未验证 bundle 的 `official_facts` 降级为 `unverified_facts`（候选）。
+- `static/v42_evidence_panel.js`：正式事实区（`v42-facts-verified`）仅在 verified 时渲染；未验证候选渲染为「政策事实（未验证候选）」+ 显式 note（`v42-unverified-note`），绝不冒充正式事实。
+- 反例：evil-source bundle（`https://evil.example/fake` / `Unverified Blog`）虽通过 `validateBundle`，但视图 `verified=false`、`official_facts=[]`、`unverified_facts` 候选区显示，页面无「政策事实（正式）」标题（smoke 断言）。
 
-### 4.2 自检与真实走查证据
+### 4.4 自检与真实走查证据
 
-- Smoke：`scripts/smoke_v42_fomc_d1.js` → **PASS 31 / FAIL 0**（A/B/C/D/E 五组断言全过）。
-- 浏览器走查（Playwright headless，8013）：
-  - 今日简报 Top 3 出现 FOMC 卡片，理由含「FOMC 决议已发生」与「证据不足，系统对 FOMC 结论弃权」；主行动链接指向 `event_research_result_v3.html`。
-  - `event_research_result_v3.html?event_id=fed_fomc_2026_07` 渲染 V4.2 证据状态卡片：状态「证据不足，弃权」、来源版本 `auto_generic_20260730`、`bundle_sha256 67282d…`、缺口（forecast/actual）与「无 C1 证据草稿」诚实提示。
-  - API `GET /api/research/v3/evidence/fed_fomc_2026_07` → `ok:true`，status `ABSTAIN`，missing `[forecast, actual]`，research_note `null`。
-  - 走查中 404 仅来自既有「无数据」路径（C1 草稿 / 未来事件记录），与 D1 接线无关。
+- Smoke：`scripts/smoke_v42_fomc_d1.js` → **PASS 73 / FAIL 0**（P1 反例组：ECB/rogue 非 FOMC、synthetic 候选、evil-source 候选、A2 verified 正例、生产诚实 ABSTAIN、隔离种子完整渲染）。
+- 浏览器走查（Playwright headless，8013，`scripts/walkthrough_v42_d1_p1_browser.js`）→ **PASS 35 / FAIL 0**：
+  - 生产模式：`GET /api/research/v3/evidence/fed_fomc_2026_07` → `ok:true` / `status=ABSTAIN` / `no_formal_documents=true` / reason `no_a2_formal_documents`；`event_research_result_v3.html?event_id=fed_fomc_2026_07` 渲染证据卡片状态「证据不足，弃权」、未验签、无「政策事实（正式）」块；简报 `fed_fomc_2026_07` 保留 `FOMC_TYPE/FOMC_STAGE_POST/FOMC_EVIDENCE_ABSTAIN`，`ecb_rates_2026_07` 无任何 `FOMC_*`。
+  - 隔离种子模式（`FAS_FOMC_STORE_ROOT=fixtures/v42_d1_walkthrough`）：证据 API `verified=true` / `evidence_scope=official` / source_version `official-2026-07` / official_facts `target_range=3.75%-4%` + `action=HOLD` / B1 文本差异 4 UNCHANGED + 3 MODIFIED / research_note ex_ante+ex_post；页面渲染 `v42-facts-verified`、`v42-tc-0`、ex_ante/ex_post 状态。
 
-### 4.3 页面入口
+### 4.5 页面入口
 
 | 页面 | 入口 | 说明 |
 |---|---|---|
-| 今日简报 | `/daily_briefing.html` | Top 3 理由 + 阶段路由 + 新证据徽标 |
+| 今日简报 | `/daily_briefing.html` | Top 3 理由 + 阶段路由 + 新证据徽标（P1-1 身份边界） |
 | 研究记录（pre） | `/event_research_record.html?event_id=…` | V4.2 证据只读面板 |
-| 收尾卡（post） | `/event_research_result_v3.html?event_id=…` | V4.2 证据只读面板 |
+| 收尾卡（post） | `/event_research_result_v3.html?event_id=…` | V4.2 证据只读面板（诚实 ABSTAIN / A2 verified 完整渲染） |
 
-### 4.4 证据状态与人工动作
+### 4.6 证据状态与人工动作
 
-- 真实 FOMC 证据包 `fed_fomc_2026_07` 为 ABSTAIN：缺少正式 target_range / forecast / actual 事实，系统对 FOMC 结论弃权，未伪造 READY。证据视图只读，不写入、不覆盖任何正式数据或人工修订。
-- 无人工动作被改动；自动稿与人工修订隔离不变量未触碰。
+- 生产 `data/fomc_documents` 为空 → FOMC 事件证据视图诚实 ABSTAIN（`no_a2_formal_documents`），未伪造 READY、未声明任何验收名。
+- 证据视图只读，不写入、不覆盖任何正式数据或人工修订；自动稿与人工修订隔离不变量未触碰。
 
-### 4.5 数据保护与回滚
+### 4.7 数据保护与回滚
 
-- D1 为只读接线：新增 `buildV42EvidenceView`（纯函数）、`renderEvidencePanelHtml`（UMD）、只读 API、页面渲染区；无正式数据写入。
-- 回滚：关闭 D1 接线（页面 v42 区块、只读端点）即恢复 `66614ed` 产品路径；不删除任何正式事件数据。
+- 纯读接线 + 隔离种子：仅 `fixtures/` 隔离目录写入（`FAS_FOMC_WRITE` 门控），生产 `data/` 零写入。
+- 回滚：关闭 v42 接线（只读端点、页面渲染区）即恢复；不删除任何正式事件数据。
 - 受保护不变量（A1/A2/B1/C1 可溯语义、阶段隔离、自动/人工隔离、fail-visible）均未改变。
 
 ## 5. Codex 集中 R2 指令
@@ -811,3 +806,15 @@ Codex R1 PASS 且 Human 完成真实使用后，可确认 `POLICY_REAL_USE_D1`�
 - P1 专项 **63/63 PASS**（58 + P1-3d 5）；Gate 1/Gate2/Gate3/Gate4 **47/32/32/39 PASS**；A1 **106/106**、A2 **PASS**（152 断言）、A4 **25/25**、B1 **136/136**（64+33+20+14+5）；合计 **632 PASS / 0 FAIL**；正式 `data/` 178 文件树 hash `ae7447d3fb68b467fcde59fe4d2e24cabbb808063de0bbf82b7f200fd4e2818d` 零变化；`bundle_sha256` 幂等；
 - 板 §2 HEAD 更新为 `50bfdab`、`sync-pointer` 绑定 `code_tip=50bfdab`；transition rev44→45：释放租约，置 `pending_review / codex`，交 Codex 聚焦复审来源/正式时间绑定（rev45 目标见 §5）；
 - 未声明 `EVENT_POLICY_INTELLIGENCE_V1`、`POLICY_INFERENCE_TRACEABILITY_C1` 或任何研究/数据质量/发布验收名。
+
+### R21 · Cursor 关闭 Codex D1 R1 三组 P1 → 置 `pending_review / codex`（2026-08-05）
+
+- Codex D1 R1 集中产品复审（rev54）判 **CHANGES_REQUIRED**，三组 P1：P1-1 `CENTRAL_BANK` 无条件识别为 FOMC、P1-2 证据端点未接入 A2 受控文档（smoke 把空 ABSTAIN 当 PASS）、P1-3 未验证来源可显示为「政策事实（正式）」；
+- Cursor claim rev54→55 按最小关闭面执行三组 P1（不扩展事件/机制，不重开 A1/A2/B1/C1）：
+  - P1-1：`isFomcEvent` 严格 Fed 身份（明确 `FOMC/FOMC_POLICY` 或 Fed/FOMC event_id + 美联储来源 + federalreserve.gov 域）；`makeBriefingItem` 透传 `source_url`；
+  - P1-2：新增 `lib/v42_evidence_lookup.js`（`resolveEvidenceView`），证据端点读 A2 受控 store，无正式文档 → 诚实 ABSTAIN（`no_a2_formal_documents`）；新增 `scripts/seed_v42_d1_walkthrough.js` + `fixtures/v42_d1_walkthrough/` 隔离种子演示 verified 完整渲染；
+  - P1-3：`buildV42EvidenceView` verified 门控 `official_facts`（仅 A2 proof/官方域/正文/hash/时间绑定），generic 降级 `unverified_facts`；面板正式/候选事实分区；
+- 交付：`lib/briefing_intelligence_v4.js`、`lib/v42_evidence_view.js`、`lib/v42_evidence_lookup.js`（新增）、`local_server.js`、`static/v42_evidence_panel.js`、`scripts/smoke_v42_fomc_d1.js`（重写 73 断言）、`scripts/seed_v42_d1_walkthrough.js`（新增）、`scripts/walkthrough_v42_d1_p1_browser.js`（新增）、`fixtures/v42_d1_walkthrough/`（隔离种子）；
+- 自检：D1 smoke **73/73 PASS**；浏览器走查 **35/35 PASS**（生产诚实 ABSTAIN + ECB 无 FOMC + 隔离种子 verified 完整渲染）；回归 A1 **106/106**、A2 **PASS**、B1 **64/64**、B1 gate2/3/4 **33/20/14**、C1 gate1/2/3/4 **47/32/32/39**、C1 p1_r14 **63/63**、v4_six_mechanisms **23**、v4_batch_d_walkthrough **83**、v41_earnings_d **21**、ai_collab_exec_pointer、acceptance_status 全绿；生产 `data/` 零写入；
+- 板 §2 HEAD 更新为 `949b994`、`sync-pointer` 绑定 `code_tip=949b994`；transition rev54→55：释放租约，置 `pending_review / codex`，交 Codex 最终聚焦复审三组 P1（rev55 目标见 §5）；
+- 未声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
