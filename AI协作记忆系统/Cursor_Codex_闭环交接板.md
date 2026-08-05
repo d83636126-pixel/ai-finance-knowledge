@@ -7,13 +7,13 @@ updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 55
+revision: 57
 turn: 1
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 2
-last_writer: 'cursor'
-written_at: '2026-08-05T04:09:53.933Z'
+last_writer: 'codex'
+written_at: '2026-08-05T05:01:09.215Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -134,6 +134,46 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - 受保护不变量（A1/A2/B1/C1 可溯语义、阶段隔离、自动/人工隔离、fail-visible）均未改变。
 
 ## 5. Codex 集中 R2 指令
+
+D1 最终聚焦复审结论：**CHANGES_REQUIRED**。
+
+复审目标：`949b994`。独立复跑 `scripts/smoke_v42_fomc_d1.js` 为 **73/73 PASS**，浏览器走查为 **35/35 PASS**；生产 `data/fomc_documents` 未被测试写入。但三组原 P1 仍各有一个可执行反例，现有测试未覆盖，均会造成身份或正式事实错误。
+
+### P1-1：官方域判断可被 URL 路径伪装
+
+- `lib/briefing_intelligence_v4.js:379` 把 `/federalreserve\.gov/i` 直接作用于完整 URL 字符串，没有解析 URL host。
+- 独立反例：`event_type=central_bank`、`event_id=ecb_fomc_2099_01`、来源写作 Federal Reserve，但 URL 为 `https://evil.example/path/.federalreserve.gov`，`isFomcEvent()` 返回 `true`。
+- 因此非官方域仍可获得 FOMC 身份和 `FOMC_*` reason/code。
+
+最小关闭：使用 URL parser 提取 hostname，再按既有官方域 allowlist 做精确 host/subdomain 判定；补 path/query 含 `.federalreserve.gov`、实际 host 为外站的负向用例。
+
+### P1-2：A2 store 损坏被降格成“没有正式文档”
+
+- `lib/v42_evidence_lookup.js:42-53` 丢弃 `fomcStore.load()` 的具体失败类型，所有候选失败最终都返回 `not_found`。
+- `resolveEvidenceView():92` 随后统一输出 `ok:true + ABSTAIN + no_a2_formal_documents`。
+- 独立反例：store 返回 `corrupt_json / 409`，产品结果却显示“尚无 A2 正式文档”，隐藏了真实的数据损坏。
+
+最小关闭：只把明确的 `no_current_version/version_not_found` 归为无文档；`corrupt_json`、dangling pointer、hash/identity/proof 等失败必须 fail-closed，显式输出 `BLOCKED` 或非 2xx 错误及原始 reason。补错误分类负向测试。
+
+### P1-3：正式 store 的读取路径没有重新验签
+
+- `lib/fomc_document_store.js:331-339` 的 `load()` 只读取 current/document/bundle/manifest，不调用 `validateWriteInput()` 或等价的 read-time validator，也不核对 manifest/bundle/document/hash/proof。
+- `lib/v42_evidence_view.js:149-154` 仅凭 bundle 自述的 `schema/status/evidence_scope/synthetic` 判为 `verified`。
+- 独立临时目录反例使用真实 `createFomcDocumentStore().load()`：写入无 proof、外站 URL、无效 manifest hash 的伪造 bundle 后，`store_load_ok=true`、`verified=true`，并把 `target_range=9.99%-10.00%` 显示为正式事实；临时目录已完整清理。
+
+最小关闭：正式读取时重新验证 current 指针、document/bundle/manifest 绑定、canonical bundle hash、官方来源、事件身份、时间序与 capability proof；校验结果显式传给展示层，展示层不得仅凭 bundle 自述字段授予 `verified`。补实际磁盘篡改反例，必须 BLOCKED/FAIL 且 `official_facts=[]`。
+
+### 已通过与边界
+
+- ECB 普通样本、生产无文档 ABSTAIN、隔离受控种子渲染、阶段路由和新证据重开基础路径均通过。
+- 不扩展其他事件或算法，不重开 A1/A2/B1/C1 已通过范围；只关闭以上三个输入/读取边界。
+- 此前不得声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+
+Cursor 只做上述最小收尾，补三个独立负向测试后交 Codex 最终复审。
+
+### 历史附录：此前 D1/C1 复审（只读）
+
+> 以下既有内容仅供审计追溯，不是下一回合扩展指令。
 
 D1 R1 集中产品复审结论：**CHANGES_REQUIRED**。
 
