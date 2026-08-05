@@ -8,13 +8,13 @@ project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
 umbrella_acceptance: EVENT_POLICY_INTELLIGENCE_V1
-revision: 64
+revision: 65
 turn: 1
 next_actor: 'human'
 status: 'done'
 max_turns: 2
 last_writer: 'cursor'
-written_at: '2026-08-05T07:20:00.000Z'
+written_at: '2026-08-05T08:05:00.000Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -25,7 +25,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 # Cursor ↔ Codex 闭环交接板：V4.2 Batch D1
 
-> 当前口令：**rev64 · V4.2 六子机制仍全部 PASS，Human 声明 `EVENT_POLICY_INTELLIGENCE_V1` 并归档（done / human，V4.2 产品主线收口）**
+> 当前口令：**rev65 · 极小修复 event_id 全链路一致性已定向验证，六机制仍全 PASS，Human 直接验收并归档（done / human，V4.2 正式收尾）**
 
 ## 1. 当前裁决
 
@@ -36,6 +36,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - Human（2026-08-05）收紧审核预算：只做一次最终 Codex 聚焦复审（rev59）；仍未通过时不再自动循环，交 Human 决定接受风险、缩小范围、修订目标或停止扩展。
 - Human（2026-08-05）在 rev61 最终复审 P1-3 CHANGES_REQUIRED 后授权路径 1（极小修复，rev62 关闭跨目录重放），并正式确认 **`POLICY_REAL_USE_D1`** 验收、**关闭 D1**（done / human，rev63，转入归档）。
 - Human（2026-08-05）基于六子机制本轮全部复跑 PASS 与真实使用确认，正式声明 **`EVENT_POLICY_INTELLIGENCE_V1`**（V4.2 总体验收，rev64，转入归档）。
+- Human（2026-08-05）指令：`EVENT_POLICY_INTELLIGENCE_V1` 声明归档后做一次极小修复，增加 **event_id 全链路一致性检查**，定向验证后由 Human 直接验收并归档，不再进行新一轮 Codex 复审。Cursor（rev64→65，tip `ca7a0da`）已关闭：写侧拒绝目录键不稳定的 event_id（`write_rejected_event_id_not_stable`）+ `loadVersion` 原始读绑定请求 event_id（`load_version_event_id_mismatch`，跨目录重放更早 fail-closed）；D1 smoke **106/0**、六机制回归全 PASS。见 §5 附录 R27。
 - 非阻断问题登记技术债。
 - 已声明：`POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`；未声明：`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS`.
 
@@ -45,7 +46,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 D1 简报接线与真实使用` |
 | D1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_D1_简报接线与真实使用_2026-08-04.md` |
-| HEAD | `9d226a6`（D1 R1 三个事实安全反例 + rev62 跨目录重放 event_id 一致性业务 tip） |
+| HEAD | `ca7a0da`（rev65 event_id 全链路一致性极小修复，基于 `9d226a6`） |
 | 开环基线 | `66614ed` |
 | 已完成 | A1 / A2 / B1 / C1 / D1（`POLICY_REAL_USE_D1` 已验收）；V4.2 总验收 `EVENT_POLICY_INTELLIGENCE_V1` 已声明 |
 | change class | `C1` |
@@ -955,3 +956,13 @@ research_note.ex_post.status === "READY"
 - 交付：V4.2 总体计划置 `accepted` / `acceptance_declared: true` / `accepted_at: 2026-08-05`；总体验收报告 `logs/acceptance/PRD-EVENT-POLICY-15/acceptance_report.md`；归档 `docs/ai-collab/闭环归档/V4.2_EVENT_POLICY_INTELLIGENCE_验收归档_2026-08-05.md`。
 - 板 revision 63→64，`status=done`，`next_actor=human`——**V4.2 产品主线收口**。
 - 已声明：`POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`；未声明：`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS`。后续 V4.2 扩展由 Human 另行决策并新开执行环。
+
+### R27 · Cursor rev65 极小修复（event_id 全链路一致性）→ 直接交 Human 验收归档（2026-08-05）
+
+- Human 指令：`EVENT_POLICY_INTELLIGENCE_V1` 声明归档后做一次极小修复，增加 event_id 全链路一致性检查，定向验证后由 Human 直接验收并归档，**不再进行新一轮 Codex 复审**。
+- 修复（业务 tip `ca7a0da`，仅 2 文件、+59/-5）：`validateWriteInput` 写侧拒绝目录键不稳定的 event_id → `write_rejected_event_id_not_stable`（防两个不同 event_id 塌缩到同一版本目录/跨事件版本历史污染）；`loadVersion` 原始读绑定请求 event_id → `load_version_event_id_mismatch`（跨目录重放比 rev62 `verifyStoredRead` 更早 fail-closed）；`load()` 直透该身份错误而非降格为 `current_pointer_dangling`。
+- 反例（smoke 篡改 6 更新 + 新增篡改 7）：篡改 6 改为版本读回即截断并新增直接 `loadVersion` 反例（`P3t_replay_load_version_mismatch`）；篡改 7 不稳定 event_id（`fomc 2026:07` → `safeId` 改写为 `fomc_2026_07`）写侧拒绝且该目录键零写入（`P3t_unstable_event_id_*`）。
+- 定向测试：D1 smoke **106/0**（rev62 102 + 4 新断言）；六机制回归 A1 **106/0**、A4 **25/0**、A2 **PASS**（152）、B1 **136/0**、C1 **213/0**；生产 `data/fomc_documents` 零写入；双仓 clean；交接板 validate `ok:true`。
+- 交付：归档 `docs/ai-collab/闭环归档/V4.2_rev65_event_id_全链路一致性_极小修复_验收归档_2026-08-05.md`；总体验收报告 `logs/acceptance/PRD-EVENT-POLICY-15/acceptance_report.md` §6 增补 rev65 复验。
+- 板 revision 64→65，`status=done`，`next_actor=human`——**交 Human 直接验收并归档，不再开启新 Codex 复审轮，V4.2 正式收尾**。
+- 已声明：`POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`；未声明：`RESEARCH_PASS`、`DATA_QUALITY_PASS`、`RELEASE_PASS`。
