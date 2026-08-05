@@ -7,13 +7,13 @@ updated: '2026-08-05'
 project: financial-alert-system
 loop_id: PRD-EVENT-POLICY-15-D1
 acceptance: POLICY_REAL_USE_D1
-revision: 51
+revision: 54
 turn: 0
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 2
-last_writer: 'cursor'
-written_at: '2026-08-05T03:09:04.813Z'
+last_writer: 'codex'
+written_at: '2026-08-05T03:43:38.392Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -40,7 +40,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 |---|---|
 | stage | `V4.2 D1 简报接线与真实使用` |
 | D1 计划 | `docs/ai-collab/产品发展执行计划_V4.2_D1_简报接线与真实使用_2026-08-04.md` |
-| HEAD | `66614ed`（C1 验收归档后的产品基线） |
+| HEAD | `b3757fe`（D1 R1 业务 tip） |
 | 开环基线 | `66614ed` |
 | 已完成 | A1 / A2 / B1 / C1 |
 | change class | `C1` |
@@ -139,6 +139,49 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - 受保护不变量（A1/A2/B1/C1 可溯语义、阶段隔离、自动/人工隔离、fail-visible）均未改变。
 
 ## 5. Codex 集中 R2 指令
+
+D1 R1 集中产品复审结论：**CHANGES_REQUIRED**。
+
+复审目标：`b3757fe`。D1 smoke 独立复跑 **31/31 PASS**，工作树未被测试污染；`D_STAGE_ROUTING` 与 `D_NEW_EVIDENCE_REOPEN` 的基础机制成立。但以下三项会造成事实错误或使产品主路径并未真正接入 V4.2 正式证据链，属于 P1。
+
+### P1-1：`CENTRAL_BANK` 被无条件识别为 FOMC
+
+- `isFomcEvent()` 对 `event_type=CENTRAL_BANK` 直接返回 true。
+- 正式 registry 中存在 `ecb_rates_2026_07`（European Central Bank）；独立反例 `ecb_rate_decision_2026_09 + central_bank` 被输出为“FOMC 决议事件 / FOMC 决议未发生”。
+- 这会把 ECB、BoE 等央行事件显示为 FOMC，违反事件身份边界。
+
+最小关闭：FOMC 身份必须要求明确 `FOMC/FOMC_POLICY`，或同时核验 Fed/FOMC event_id、来源与官方域；新增 ECB/非 Fed 央行反例，必须不产生任何 `FOMC_*` code/reason。
+
+### P1-2：D1 读取的是 V4.0 通用证据包，A2/B1/C1 未进入真实产品路径
+
+- `/api/research/v3/evidence/:id` 只调用 `eventEvidenceBundles.load(eventId)`，没有读取 `fomc_document_store` 或 A2 verified documents。
+- 真实样本 `fed_fomc_2026_07` 仍为 `auto_generic_20260730 + macro-surprise-v1`，缺口为 `forecast/actual`，理由为 `generic_minimal_no_type_calculator/no_numeric_facts`。
+- 正式 `data/fomc_documents` 当前只有空 `jobs/` 目录；真实样本没有目标区间、正式声明、B1 文本差异或 C1 research_note。
+- 现有 smoke 把“真实样本没有 research_note”作为 PASS，并把“能渲染一个 ABSTAIN 面板”作为 `D_REAL_USE_WALKTHROUGH` PASS；这没有满足 D1 的“正式来源、版本、事实、文本差异、反证和缺口可见”。
+
+最小关闭：FOMC 事件必须从 A2 受控文档库取得 current/prior verified documents，并接入 B1 diff/facts 与 C1 note；若正式文档不存在，D_EVIDENCE_RENDER / D_REAL_USE 必须 ABSTAIN，不得 PASS。至少用一条身份确认的真实 FOMC 文档完成走查并展示来源、版本、政策事实、文本差异及反证/缺口。
+
+### P1-3：未验证来源可被显示为“政策事实（正式）”
+
+- `buildV42EvidenceView()` 直接复制 `bundle.official_facts`，返回值同时写死 `verified:false`。
+- 页面无条件以“政策事实（正式）”渲染这些字段。
+- 独立内存反例：来源 `https://evil.example/fake`、source `Unverified Blog`、自签 canonical SHA 的 generic ABSTAIN bundle 可通过 `validateBundle()`；伪造 `target_range=9.99%` 随后被页面显示在“政策事实（正式）”下。
+
+最小关闭：只有通过 A2 proof、官方域、事件身份、正文/hash/时间绑定的字段才能进入“正式事实”；未验证内容必须标记为“未验证候选”或完全不进入正式事实区。补上述 evil-source 反例。
+
+### 已通过与边界
+
+- D1 smoke：31/31 PASS，但测试覆盖不足以关闭以上反例。
+- 新证据重开已接入 briefing action filter；本轮不要求重写。
+- 页面网络失败能够 fail-loud；本轮不要求样式整改。
+- 不扩展关税、战争或新来源类别，不重开 A1/A2/B1/C1 已通过的底层门禁。
+- 不得声明 `POLICY_REAL_USE_D1`、`EVENT_POLICY_INTELLIGENCE_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
+
+Cursor 只关闭上述三组 P1，补对应反例和一条真实 FOMC 正式证据走查后，再交 Codex 做最终聚焦复审。
+
+### 历史附录：C1 R19 及此前复审（只读，非 D1 指令）
+
+> 以下既有 C1 内容继续保留，仅供审计追溯；D1 下一轮只复审上述三组 P1。
 
 D1 提交后做一次集中产品 R1，只裁决：
 
