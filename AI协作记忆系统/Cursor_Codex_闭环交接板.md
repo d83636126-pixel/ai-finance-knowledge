@@ -8,16 +8,16 @@ project: financial-alert-system
 loop_id: PRD-EVENT-AUTOMATION-16
 acceptance: EVENT_RESEARCH_AUTOMATION_V1
 umbrella_acceptance: EVENT_RESEARCH_AUTOMATION_V1
-revision: 7
+revision: 8
 turn: 1
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'human'
+status: 'blocked'
 max_turns: 2
 last_writer: 'codex'
-written_at: '2026-08-06T04:52:17.280Z'
-lease_owner: 'codex-v43-final-20260806'
-lease_actor: 'codex'
-lease_expires_at: '2026-08-06T05:37:17.280Z'
+written_at: '2026-08-06T05:03:39.130Z'
+lease_owner: ''
+lease_actor: ''
+lease_expires_at: ''
 code_root: 'F:\financial-alert-system'
 vault_note: AI协作记忆系统/Cursor_Codex_闭环交接板.md
 repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
@@ -138,6 +138,64 @@ rev3 / 2026-08-06。Work A–D 单一产品切片完成，交 Codex 唯一一次
 - 不新增后台调度、不联网、不接外部来源；`research_claim / data_quality_claim / release_claim` 均为 `prohibited`。
 
 ## 5. Codex 集中复审
+
+### 最终集中复审裁决：BLOCKED（交 Human 决策，不再自动延长技术循环）
+
+复审目标：业务 tip `6cf6480`；交接绑定 tip `4ab78a8`。
+
+#### 已确认通过
+
+- Work A/B/C/D 独立复跑：`145 + 100 + 28 + 59 = 332 PASS / 0 FAIL`。
+- 产品浏览器证明：`54 PASS / 0 FAIL`；人工触发入口、例外卡片、重开、写闸门和既有正式数据字节保护均通过。
+- 相邻回归：V4.0 `23/0`、V4.1 `21/0`、V4.2 D1 `106/0`。
+- 交接板 HEAD 与执行指针已绑定 `6cf6480`；后台调度、外部网络和越界声明均未开启。
+- `EXCEPTION_ROUTING` 与当前六条 ABSTAIN 样本的产品可见性通过；`HUMAN_EFFORT_REDUCTION` 仍诚实为 `ABSTAIN`。
+
+#### 最终独立反例
+
+1. **正式财报来源仍可由普通字段伪造（P1-1 未关闭）**
+
+输入仅提供 `source_version='earnings_official_forged'`、`source_refs.kind='official_ir_or_sec'`、恶意域 URL、任意非空 `official_facts` 和自报 `deterministic_metrics.status='READY'`，没有受控来源证明、绑定文件哈希或可信域校验；`judgeAutoEligibility()` 仍返回：
+
+```json
+{"evidence_class":"UNKNOWN_NOT_FORMAL","eligible":true,"status":"eligible"}
+```
+
+这同时产生内部矛盾：证据类别明确是 `UNKNOWN_NOT_FORMAL`，却被授予 eligible。`lib/v43_formal_authority.js` 的财报路径是新写的字段检查，不是对 `earnings_official_source` 受控产物的不可伪造绑定；缺失 bundle `scheduled_at` 也不会阻断。
+
+2. **正常自动路径结构性不可达（P1-2/P1-4 未关闭）**
+
+即便构造资格 PASS、确定性分析 READY、真实草稿存在且哈希存在的上下文，`buildAutomationRun()` 仍把 `EVIDENCE_REFRESH` 无条件写成 `ABSTAIN`，最终状态必为 `ABSTAIN`。因此现有“一键编排”只读取现状并写运行记录/例外队列，没有执行刷新、分析或草稿生成；未来即便获得正式合格证据，也无法形成 PASS 正常路径，三个减负门槛不是“本批样本暂不可测”，而是当前实现结构上不可测。
+
+3. **损坏运行索引在产品 API 层被吞掉（P1-2/P1-3 未关闭）**
+
+在隔离运行根把 `automation_runs/index.json` 置为损坏 JSON 后：
+
+- `GET /api/v43/status` → HTTP 200、`ok:true`、`run_count:0`；
+- `GET /api/v43/exceptions` → HTTP 200、`ok:true`、空队列。
+
+底层 store 已正确返回 `corrupt_run_index`，但 `getV43Status()` / `v43LatestRuns()` 把失败替换为空数组，页面会把数据损坏显示成“正常且无记录”，违反失败可见和产品连续性。
+
+#### 六子机制最终裁决
+
+| 子机制 | 裁决 |
+|---|---|
+| `AUTO_ELIGIBILITY` | **FAIL** |
+| `PIPELINE_ORCHESTRATION` | **FAIL** |
+| `EXCEPTION_ROUTING` | **PASS（当前六条 ABSTAIN 样本）** |
+| `HUMAN_EFFORT_REDUCTION` | **ABSTAIN** |
+| `REVISION_AUDIT` | **PASS（现有隔离证据）** |
+| `PRODUCT_CONTINUITY` | **FAIL（损坏索引被显示为空状态）** |
+
+#### 状态与边界
+
+本轮是约定的最终集中复审；不能再自动返回 Cursor 开启新技术循环。按交接板 R1 最小修复边界，现转 `blocked / human`：
+
+- 不得声明 `EVENT_RESEARCH_AUTOMATION_V1`；
+- 不得声明 `RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`；
+- Human 需在“另行授权一次明确修订 / 将当前成果降格为例外可见性切片 / 停止 V4.3 扩展”之间决策。
+
+当前可保留成果：每日简报入口、只读运行/例外 API、默认拒绝写闸门、当前六条 ABSTAIN 路由、数据保护与相邻回归。
 
 ### R1 裁决：CHANGES_REQUIRED
 
