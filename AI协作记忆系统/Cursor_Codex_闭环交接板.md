@@ -8,13 +8,13 @@ project: financial-alert-system
 loop_id: PRD-EVENT-AUTOMATION-16
 acceptance: EVENT_RESEARCH_AUTOMATION_V1
 umbrella_acceptance: EVENT_RESEARCH_AUTOMATION_V1
-revision: 3
+revision: 5
 turn: 1
-next_actor: 'codex'
-status: 'pending_review'
+next_actor: 'cursor'
+status: 'pending_exec'
 max_turns: 2
-last_writer: 'cursor'
-written_at: '2026-08-06T03:11:54.122Z'
+last_writer: 'codex'
+written_at: '2026-08-06T03:32:01.218Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -138,6 +138,81 @@ rev3 / 2026-08-06。Work A–D 单一产品切片完成，交 Codex 唯一一次
 - 不新增后台调度、不联网、不接外部来源；`research_claim / data_quality_claim / release_claim` 均为 `prohibited`。
 
 ## 5. Codex 集中复审
+
+### R1 裁决：CHANGES_REQUIRED
+
+复审目标：业务 tip `e1cbb3a`（开环基线 `53d4e44`）。
+
+#### 已确认通过
+
+- Work A/B/C/D smoke 独立复跑：`128 + 73 + 28 + 59 = 288 PASS / 0 FAIL`。
+- 相邻回归：V4.0 `23/0`、V4.1 `21/0`、V4.2 D1 `106/0`。
+- 六条样本三类各两条；当前六条均诚实进入 `ABSTAIN`，没有把 fixture/development-only 显示为正式事实。
+- registry 与六份 bundle 冻结哈希全部匹配；正式 `automation_runs` 为 6 条；未发现受保护数据被改写。
+- 当前例外队列对六条非正式证据的路由可重放。
+
+#### 六子机制裁决
+
+| 子机制 | Codex 裁决 | 说明 |
+|---|---|---|
+| `AUTO_ELIGIBILITY` | **FAIL** | 正式资格可由字符串前缀伪造，缺失确定性分析状态仍可 eligible。 |
+| `PIPELINE_ORCHESTRATION` | **FAIL** | 当前是状态模拟器；草稿未生成、run 写入失败仍可报告 PASS/待确认。 |
+| `EXCEPTION_ROUTING` | **PASS（当前六条）** | 六条 ABSTAIN 均进入单一例外队列；不覆盖未知/FAIL 路由的后续修复。 |
+| `HUMAN_EFFORT_REDUCTION` | **ABSTAIN** | `eligible_count=0`，三项正式减负指标均不可测。 |
+| `REVISION_AUDIT` | **FAIL** | AutomationRun 不约束阶段集合、最终状态和 requires_human 一致性；损坏索引会被静默覆盖。 |
+| `PRODUCT_CONTINUITY` | **FAIL** | 本次 diff 未接 `local_server.js`、`daily_briefing.html` 或正式只读 API，用户无法从产品入口运行或重开查看。 |
+
+#### P1-1：正式资格权威绑定 fail-open
+
+独立反例：`source_version='official-forged'`、`development_only=true`、`deterministic_metrics={}` 的 bundle 被判定为：
+
+```json
+{"evidence_class":"OFFICIAL_FORMAL","eligible":true,"status":"eligible"}
+```
+
+原因：`lib/v43_auto_eligibility.js` 仅凭 `official-` 前缀认定正式来源；没有调用宏观、财报、FOMC 既有权威校验器，也没有要求显式 `deterministic_metrics.status === 'READY'`、正式来源证明、时间/身份/质量约束或 `development_only !== true`。
+
+关闭要求：按事件类型绑定既有已批准的 authority/proof 校验；前缀只能作为展示字段，不能授予资格。缺失或未知分析状态必须 `ABSTAIN/BLOCKED`。补入上述伪造反例。
+
+#### P1-2：编排与运行记录可以声明未发生的成功
+
+独立反例 A：draft store 返回 `not_found`，run store 返回 `disk_full`，结果仍为：
+
+- `DRAFT_GENERATION=PASS`，reason 为“草稿已生成”；
+- `COMPLETION=PASS`，reason 为“AutomationRun 已写入”；
+- `final_status=PASS`，`pending_confirm_count=1`。
+
+独立反例 B：`validateAutomationRun()` 接受只有一个 `ELIGIBILITY=BLOCKED` 阶段、但 `final_status=PASS / requires_human=false` 的记录。
+
+独立反例 C：损坏的 `automation_runs/index.json` 被当作空索引并在下一次写入时静默覆盖。
+
+关闭要求：
+
+1. 每个阶段只有在真实 handler 返回并验证输出引用/哈希后才能 PASS；未实际调用时必须显式 `NOT_RUN/ABSTAIN`，不得写“已生成”。
+2. run 写失败必须使本次结果 `FAIL`，不得进入待确认；`run_count` 只统计成功持久化记录。
+3. AutomationRun 必须包含且仅包含六个有序唯一阶段；最终状态按 `FAIL/BLOCKED > ABSTAIN > PASS` 派生，`requires_human` 与之绑定。
+4. 损坏 run/index 必须 fail-closed，不得重置、覆盖或丢失旧记录。
+
+#### P1-3：没有接入用户可使用的产品路径
+
+业务 diff 只增加 `lib/`、`scripts/` 与验收 JSON；没有修改 `local_server.js`、`daily_briefing.html` 或其他正式页面/API。当前“一键”只能从命令行运行，例外队列和 AutomationRun 也无法从每日简报查看，因此没有满足计划 §1、§3.1、Work B/D 的产品目标。
+
+关闭要求：在不启用后台调度的边界内补最小人工触发入口、只读运行状态/例外 API 与每日简报可见路径；真实浏览器证明运行、异常、重开和人工内容保留。不得扩展新数据源或重写页面。
+
+#### P1-4：最终验收不可测，且交接 tip 未绑定
+
+- 正式报告明确 `eligible_count=0`、`HUMAN_EFFORT_REDUCTION=ABSTAIN`；计划 §6 要求样本不足不得降低目标补 PASS。因此当前不能转 `done/human`，也不得声明 `EVENT_RESEARCH_AUTOMATION_V1`。
+- 交接板 §4 指向 `e1cbb3a`，但 `HEAD` 行与执行指针仍为 `53d4e44`；`validate ok` 只证明镜像互相一致，不证明绑定本次业务 tip。
+
+关闭要求：不降低 80%/≤2/≥70% 门槛。必须至少形成可测的正式合格样本并产生真实产品操作记录；若现有授权下无法取得正式证据，保留 ABSTAIN 并在最终复审后交 Human 决定，不得伪造通过。同时把交接板 `HEAD`/执行指针绑定实际修复 tip。
+
+#### 最小修复边界
+
+- 只修上述四组 P1；不增加后台调度、外部来源、新事件类型、模型政策或研究判定。
+- 保留已经通过的六条 ABSTAIN 例外路由和数据保护证据。
+- 这是审核预算内唯一一次最小修复。修复后交 Codex 最终集中复审；若减负指标仍不可测，则停止技术循环并交 Human。
+
+本轮不得声明 `EVENT_RESEARCH_AUTOMATION_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
 
 只在 Work A–D 完整产品切片交审后执行。聚焦：
 
