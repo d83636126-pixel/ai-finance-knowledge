@@ -8,13 +8,13 @@ project: financial-alert-system
 loop_id: PRD-EVENT-AUTOMATION-16
 acceptance: EVENT_RESEARCH_AUTOMATION_V1
 umbrella_acceptance: EVENT_RESEARCH_AUTOMATION_V1
-revision: 5
+revision: 6
 turn: 1
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 2
-last_writer: 'codex'
-written_at: '2026-08-06T03:32:01.218Z'
+last_writer: 'cursor'
+written_at: '2026-08-06T04:22:02.868Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -35,7 +35,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 - 首批样本锁定为宏观、财报、FOMC 各两条，见 §2 和 `fixtures/v43/v43_work_a_sample_manifest_v1.json`。
 - 不启用后台定时调度；不新增外部来源；不改变现有研究、数据质量或发布结论。
 - Work A–D 是同一个产品切片，不逐包审核。全部完成后只做一次 Codex 集中复审；仅真正阻断项允许一次最小修复和最终复审。
-- **Cursor（rev3）已完成 Work A–D 完整产品切片并交审**（业务 tip 见 §3.6；本板 status=`pending_review / codex`）。隔离自检：Work A **128/0**、Work B **73/0**、Work C **28/0**、Work D **59/0**；相邻回归 V4.0 23/23+12/12、V4.1 OK、V4.2 a1 0 FAIL / d1 106/0 保持通过。六条正式 `AutomationRun` 已按 §2 授权写面写入正式 `data/automation_runs/`（幂等重跑零新增）。详见 §4。
+- **Cursor（rev6）已关闭 Codex R1 四组 P1 并交最终集中复审**（修复 tip=`6cf6480`，见 §2 HEAD；本板 status=`pending_review / codex`）。修复后自检：Work A **145/0**、Work B **100/0**、Work C **28/0**、Work D **59/0**；相邻回归 V4.0/V4.1/V4.2 保持通过；P1-3 真实浏览器证明 **54/54**。P1-1/P1-2 均为 fail-closed 绑定 + 反例；P1-3 产品路径接入 daily_briefing + 只读 API + 人工触发；P1-4 阈值未降低、0 合格样本保持 ABSTAIN、HEAD/执行指针绑定修复 tip。详见 §4.6 与 §5 R2。
 - 本轮 0 条合格样本（六条均无已批准正式证据）→ `HUMAN_EFFORT_REDUCTION` 结论为 `ABSTAIN`（按计划 §6 不降低目标补成 PASS）。未声明 `EVENT_RESEARCH_AUTOMATION_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
 
 ## 2. 范围、基线与不变量
@@ -43,7 +43,7 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 | 字段 | 值 |
 |---|---|
 | stage | `V4.3 自动化运营与反馈校准 · Work A–D` |
-| HEAD | `53d4e44` |
+| HEAD | `6cf6480` |
 | 开环基线 | `1ea3fd6` |
 | 计划 | `docs/ai-collab/产品发展执行计划_V4.3_自动化运营与反馈校准_2026-08-06.md` |
 | 验收合同 | `docs/ai-collab/V4.3_Work_A_开环与验收合同_2026-08-06.md` |
@@ -214,6 +214,17 @@ rev3 / 2026-08-06。Work A–D 单一产品切片完成，交 Codex 唯一一次
 
 本轮不得声明 `EVENT_RESEARCH_AUTOMATION_V1`、`RESEARCH_PASS`、`DATA_QUALITY_PASS` 或 `RELEASE_PASS`。
 
+#### R2 修复完成记录（Cursor · rev6 · 交 Codex 最终集中复审）
+
+修复 tip `6cf6480`，开环基线不变（`1ea3fd6`）。四组 P1 全部关闭：
+
+- **P1-1 正式资格权威绑定（fail-closed）**：`official-` 前缀仅为展示字段，不再授予资格；按事件类型绑定既有已批准 authority/proof 校验器（FOMC=固定 Ed25519 公钥验签、财报=`earnings_official_`+`official_ir_or_sec`+official_facts、就业=`bls_empsit_archive`+BLS 官方域精确匹配+`official_archive`+official_facts）；要求 `deterministic_metrics.status === 'READY'`、`development_only !== true`，时间/身份/冲突 fail-closed；缺失/未知分析 → BLOCKED。新增反例：`official-forged` 前缀、`bls.gov` 子串伪装域名（`bls.gov.evil.com`）、空分析均不可 eligible。
+- **P1-2 编排与运行记录（fail-closed）**：各阶段仅真实 handler 返回并验证输出引用/哈希后才 PASS，未调用显式 ABSTAIN/BLOCKED；run 写失败（含写盘抛错 ENOSPC/EPERM）→ 本次结果 FAIL、`requires_human=true`、不进入待确认、`run_count` 只计成功持久化；AutomationRun 严格六阶段有序唯一 + `final_status` 按 FAIL>BLOCKED>ABSTAIN>PASS 派生 + `requires_human` 绑定；损坏 run/index fail-closed，幂等分支校验 index 并自愈孤儿 run 记录。新增反例：写抛错 → `run_write_failed/500` 不崩溃不误报、孤儿记录重试自愈入 index。
+- **P1-3 产品路径**：只读 `GET /api/v43/status · /runs · /runs/:id · /exceptions` + 写闸门 `POST /api/v43/run-daily`（未授权 403 `write_gate_denied`、只读预览零持久化）；daily_briefing V4.3 区块渲染运行数/例外队列/触发按钮。Playwright 真实浏览器证明 54/54：未授权闸门、浏览器点击运行 6 条、例外队列、kill 重启同 run 根重开可见、正式 store 字节级幂等（零新增）、registry/automation_runs/human 记录与六样本 bundle+draft 字节一致。
+- **P1-4 验收边界**：减负阈值 80%/≤2/≥70% 未降低；本轮 0 合格样本 → `HUMAN_EFFORT_REDUCTION=ABSTAIN`（不伪造通过，最终复审后交 Human 决定）；交接板 HEAD/执行指针绑定修复 tip `6cf6480`。
+
+自检：Work A 145/0、B 100/0、C 28/0、D 59/0；V4.0/V4.1/V4.2 相邻回归保持通过；`smoke_core_path_urls` 99%、`smoke_ai_collab_exec_pointer` ok。正式 `data/` 树 hash 不变（registry/automation_runs/human 记录与六样本 bundle+draft 字节一致）。现交 Codex 最终集中复审。
+
 只在 Work A–D 完整产品切片交审后执行。聚焦：
 
 1. `AUTO_ELIGIBILITY`：身份、阶段、正式来源和版本判断 fail-closed；
@@ -235,3 +246,5 @@ PASS 后转 `done / human` 做产品验收；CHANGES_REQUIRED 只允许真正阻
 - rev1 / 2026-08-06 / Human：明确授权开启 V4.3；锁定六条样本、正式读写面和“不启用后台调度”边界；交 Cursor 连续完成 Work A–D。
 - rev2 / 2026-08-06 / Human：固定开环业务 tip 并交 Cursor（Work A 首步）。
 - rev3 / 2026-08-06 / Cursor：完成 Work A–D 单一产品切片；隔离自检 A 128/0、B 73/0、C 28/0、D 59/0，相邻回归 V4.0/V4.1/V4.2 保持通过；正式写入六条 AutomationRun（幂等）；本板交 `pending_review / codex` 做唯一一次集中复审。未声明任何验收名。
+- rev5 / 2026-08-06 / Codex：R1 裁决 CHANGES_REQUIRED，四组 P1（权威绑定 fail-open / 编排与运行记录可声明未发生成功 / 无产品路径 / 验收不可测 + HEAD 未绑定）需唯一一次最小修复；允许一次最小修复后交 Codex 最终集中复审。
+- rev6 / 2026-08-06 / Cursor：关闭四组 P1（P1-1/P1-2 fail-closed 绑定 + 反例、P1-3 只读 API + 人工触发 + daily_briefing 可见路径 + 真实浏览器证明 54/54、P1-4 阈值未降低 0 合格样本保持 ABSTAIN）；修复自检 A 145/0、B 100/0、C 28/0、D 59/0、browser proof 54/54；提交修复 tip `6cf6480` 并绑定交接板 HEAD/执行指针；本板交 `pending_review / codex` 最终集中复审。未声明任何验收名。
