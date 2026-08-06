@@ -8,13 +8,13 @@ project: financial-alert-system
 loop_id: PRD-EVENT-AUTOMATION-16
 acceptance: EVENT_RESEARCH_AUTOMATION_V1
 umbrella_acceptance: EVENT_RESEARCH_AUTOMATION_V1
-revision: 8
-turn: 1
-next_actor: 'human'
-status: 'blocked'
-max_turns: 2
-last_writer: 'codex'
-written_at: '2026-08-06T05:03:39.130Z'
+revision: 9
+turn: 2
+next_actor: 'cursor'
+status: 'pending_exec'
+max_turns: 3
+last_writer: 'human'
+written_at: '2026-08-06T05:17:57.931Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -66,16 +66,14 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 ## 3. Cursor 当前执行指令
 
-1. 领取本板 revision 1。
-2. 先完成 Work A：以锁定清单形成可复算的人工动作/空白手填 baseline，并实现候选 `AutomationRun`、`HumanDecisionRecord` schema 与隔离 store；不得接正式 API、页面或 `data/`。
-3. Work A 隔离自检通过后直接连续推进 Work B–D，不为内部工作包另开复审环：
-   - Work B：复用既有三类入口的一键编排与统一例外队列；
-   - Work C：自动稿/人工稿差异和只读校准摘要；
-   - Work D：六条样本真实产品走查与人工减负量化。
-4. 正式接线只允许本板 §2 已授权写面；外部网络、正式后台调度、新来源、新阈值或自动修改规则必须停下交 Human。
-5. 测试全部使用临时数据根并证明正式 registry、六份 bundle 与当前草稿哈希不变。
-6. 全切片完成后提交业务 tip，并将本板交 `pending_review / codex` 做唯一一次集中复审。
+Human 于 2026-08-06 特批 **一次最小收尾修订**。只允许关闭 Codex 最终复审的三项阻断，不得扩展 V4.3 范围：
 
+1. 财报正式资格必须绑定不可由普通 bundle 字段伪造的既有受控来源产物；同时关闭 `UNKNOWN_NOT_FORMAL + eligible=true`、缺失/非法 `scheduled_at` 和恶意来源域反例。
+2. 正常自动路径必须可达：对已经存在且仍有效的正式缓存，`EVIDENCE_REFRESH` 需调用/验证真实既有 handler 或明确的缓存复用契约，不能无条件 ABSTAIN；不得用模拟 PASS 代替刷新、分析或草稿处理。
+3. `automation_runs/index.json` 损坏时，`/api/v43/status`、`/runs`、`/exceptions` 必须 fail-loud，返回明确非 2xx 错误；页面显示存储损坏，不得显示正常 0 条。
+4. 补入上述三个独立负向/正常路径用例，复跑现有 V4.3 332 项、浏览器 54 项、相邻回归 150 项，并证明正式数据哈希不变。
+5. 只提交本次必要业务文件；不新增来源、不联网、不启用后台调度、不改减负阈值、不写 HumanDecisionRecord、不声明任何验收名。
+6. 完成后绑定实际修复 tip，交 Codex 做一次最终聚焦复审；不得再自动开启技术循环。
 ## 4. Cursor 完成报告
 
 rev3 / 2026-08-06。Work A–D 单一产品切片完成，交 Codex 唯一一次集中复审。
@@ -306,3 +304,4 @@ PASS 后转 `done / human` 做产品验收；CHANGES_REQUIRED 只允许真正阻
 - rev3 / 2026-08-06 / Cursor：完成 Work A–D 单一产品切片；隔离自检 A 128/0、B 73/0、C 28/0、D 59/0，相邻回归 V4.0/V4.1/V4.2 保持通过；正式写入六条 AutomationRun（幂等）；本板交 `pending_review / codex` 做唯一一次集中复审。未声明任何验收名。
 - rev5 / 2026-08-06 / Codex：R1 裁决 CHANGES_REQUIRED，四组 P1（权威绑定 fail-open / 编排与运行记录可声明未发生成功 / 无产品路径 / 验收不可测 + HEAD 未绑定）需唯一一次最小修复；允许一次最小修复后交 Codex 最终集中复审。
 - rev6 / 2026-08-06 / Cursor：关闭四组 P1（P1-1/P1-2 fail-closed 绑定 + 反例、P1-3 只读 API + 人工触发 + daily_briefing 可见路径 + 真实浏览器证明 54/54、P1-4 阈值未降低 0 合格样本保持 ABSTAIN）；修复自检 A 145/0、B 100/0、C 28/0、D 59/0、browser proof 54/54；提交修复 tip `6cf6480` 并绑定交接板 HEAD/执行指针；本板交 `pending_review / codex` 最终集中复审。未声明任何验收名。
+- rev9 / 2026-08-06 / Human：特批一次最小收尾修订，仅关闭财报权威绑定、正常自动路径可达、损坏索引产品 fail-loud 三项阻断；不扩展范围，修复后仅做一次最终聚焦复审。
