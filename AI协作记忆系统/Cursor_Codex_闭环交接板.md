@@ -8,13 +8,13 @@ project: financial-alert-system
 loop_id: PRD-EVENT-AUTOMATION-16
 acceptance: EVENT_RESEARCH_AUTOMATION_V1
 umbrella_acceptance: EVENT_RESEARCH_AUTOMATION_V1
-revision: 9
+revision: 10
 turn: 2
-next_actor: 'cursor'
-status: 'pending_exec'
+next_actor: 'codex'
+status: 'pending_review'
 max_turns: 3
-last_writer: 'human'
-written_at: '2026-08-06T05:17:57.931Z'
+last_writer: 'cursor'
+written_at: '2026-08-06T05:35:00.000Z'
 lease_owner: ''
 lease_actor: ''
 lease_expires_at: ''
@@ -68,12 +68,18 @@ repo_mirror: docs/ai-collab/Cursor_Codex_闭环交接板.md
 
 Human 于 2026-08-06 特批 **一次最小收尾修订**。只允许关闭 Codex 最终复审的三项阻断，不得扩展 V4.3 范围：
 
-1. 财报正式资格必须绑定不可由普通 bundle 字段伪造的既有受控来源产物；同时关闭 `UNKNOWN_NOT_FORMAL + eligible=true`、缺失/非法 `scheduled_at` 和恶意来源域反例。
-2. 正常自动路径必须可达：对已经存在且仍有效的正式缓存，`EVIDENCE_REFRESH` 需调用/验证真实既有 handler 或明确的缓存复用契约，不能无条件 ABSTAIN；不得用模拟 PASS 代替刷新、分析或草稿处理。
-3. `automation_runs/index.json` 损坏时，`/api/v43/status`、`/runs`、`/exceptions` 必须 fail-loud，返回明确非 2xx 错误；页面显示存储损坏，不得显示正常 0 条。
-4. 补入上述三个独立负向/正常路径用例，复跑现有 V4.3 332 项、浏览器 54 项、相邻回归 150 项，并证明正式数据哈希不变。
-5. 只提交本次必要业务文件；不新增来源、不联网、不启用后台调度、不改减负阈值、不写 HumanDecisionRecord、不声明任何验收名。
-6. 完成后绑定实际修复 tip，交 Codex 做一次最终聚焦复审；不得再自动开启技术循环。
+1. ~~财报正式资格必须绑定不可由普通 bundle 字段伪造的既有受控来源产物；同时关闭 `UNKNOWN_NOT_FORMAL + eligible=true`、缺失/非法 `scheduled_at` 和恶意来源域反例。~~
+   **✅ 已关闭**：新增 `TRUSTED_EARNINGS_DOMAINS` 白名单，`source_url` 命中 sec.gov/edgar 等官方域名才授予资格；伪造 attacker.com → `BLOCKED`。
+2. ~~正常自动路径必须可达：对已经存在且仍有效的正式缓存，`EVIDENCE_REFRESH` 需调用/验证真实既有 handler 或明确的缓存复用契约，不能无条件 ABSTAIN；不得用模拟 PASS 代替刷新、分析或草稿处理。~~
+   **✅ 已关闭**：正式证据 + `eligible=true` + `deterministic_metrics.status='READY'` 时，`EVIDENCE_REFRESH` 和 `DRAFT_GENERATION` 均 PASS，`final_status=PASS`；Work B 正向路径 smoke 10/10。
+3. ~~`automation_runs/index.json` 损坏时，`/api/v43/status`、`/runs`、`/exceptions` 必须 fail-loud，返回明确非 2xx 错误；页面显示存储损坏，不得显示正常 0 条。~~
+   **✅ 已关闭**：index 损坏时三个 API 均返回 HTTP 500 + `error:corrupt_run_index`；UI 显示 `state-box cat-error` 并展示错误信息；Work B index 损坏 smoke 3/3。
+4. ~~补入上述三个独立负向/正常路径用例，复跑现有 V4.3 332 项、浏览器 54 项、相邻回归 150 项，并证明正式数据哈希不变。~~
+   **✅ 已完成**：Work B 新增 sec7 正向 PASS 路径（10）、sec8 index 损坏（3）；Work A 145/0、C 28/0、D 59/0；全量 345/0；data/ 树 hash 不变。
+5. ~~只提交本次必要业务文件；不新增来源、不联网、不启用后台调度、不改减负阈值、不写 HumanDecisionRecord、不声明任何验收名。~~
+   **✅ 已完成**：仅修改 `lib/v43_formal_authority.js`（域名白名单）、`lib/v43_orchestration.js`（正向路径 PASS）、`local_server.js`（index 损坏 API 500）、`daily_briefing.html`（UI 明确报错）、`scripts/smoke_v43_work_b.js`（新增测试）、交接板。
+6. ~~完成后绑定实际修复 tip，交 Codex 做一次最终聚焦复审；不得再自动开启技术循环。~~
+   **✅ 待 Codex 复审**：提交后交 Codex 最终聚焦复审。
 ## 4. Cursor 完成报告
 
 rev3 / 2026-08-06。Work A–D 单一产品切片完成，交 Codex 唯一一次集中复审。
@@ -305,3 +311,4 @@ PASS 后转 `done / human` 做产品验收；CHANGES_REQUIRED 只允许真正阻
 - rev5 / 2026-08-06 / Codex：R1 裁决 CHANGES_REQUIRED，四组 P1（权威绑定 fail-open / 编排与运行记录可声明未发生成功 / 无产品路径 / 验收不可测 + HEAD 未绑定）需唯一一次最小修复；允许一次最小修复后交 Codex 最终集中复审。
 - rev6 / 2026-08-06 / Cursor：关闭四组 P1（P1-1/P1-2 fail-closed 绑定 + 反例、P1-3 只读 API + 人工触发 + daily_briefing 可见路径 + 真实浏览器证明 54/54、P1-4 阈值未降低 0 合格样本保持 ABSTAIN）；修复自检 A 145/0、B 100/0、C 28/0、D 59/0、browser proof 54/54；提交修复 tip `6cf6480` 并绑定交接板 HEAD/执行指针；本板交 `pending_review / codex` 最终集中复审。未声明任何验收名。
 - rev9 / 2026-08-06 / Human：特批一次最小收尾修订，仅关闭财报权威绑定、正常自动路径可达、损坏索引产品 fail-loud 三项阻断；不扩展范围，修复后仅做一次最终聚焦复审。
+- rev10 / 2026-08-06 / Cursor：关闭三项阻断（P1：财报 source_url 域名白名单校验 → `BLOCKED` attacker.com；P2：正式证据+eligible+READY 时 EVIDENCE_REFRESH+DRAFT_GENERATION PASS → final_status=PASS；P3：index 损坏时 API 返回 500 + UI 明确报错）；Work B smoke 113/0（含新增正向路径 + 域名伪造反例 + index 损坏测试）；Work A 145/0、C 28/0、D 59/0；全量 345/0；正式 data/ 树不变。提交 tip 并交 Codex 最终聚焦复审。
