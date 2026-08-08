@@ -1,7 +1,7 @@
 # Validation Gate Specification
 
 > [!abstract] 规格说明
-> 定义 V5 Agent 系统的验证门禁机制和实现规范。
+> 定义 AGP-0.1 Agent 系统的验证门禁机制和实现规范。
 
 ---
 
@@ -163,7 +163,7 @@ interface GateResult {
 
 ## 6. 关联
 
-- [[V5-Agent-Governance-Protocol-RFC]]
-- [[ADR-002-Evidence-Graph]]
-- [[Task-Contract-Spec]]
-- [[Handoff-Protocol-Spec]]
+- [[AGP-0.1-Protocol-RFC]]
+- [[ADR/ADR-002-Evidence-Graph]]
+- [[SPEC/Task-Contract-Spec]]
+- [[SPEC/Handoff-Protocol-Spec]]

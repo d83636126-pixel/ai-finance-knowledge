@@ -69,6 +69,6 @@ interface Lease {
 
 ## 关联
 
-- 父 RFC：[[V5-Agent-Governance-Protocol-RFC]]
+- 父 RFC：[[AGP-0.1-Protocol-RFC]]
 - 相关 ADR：[[ADR-001-Agent-Identity]], [[ADR-002-Evidence-Graph]]
-- 规格文档：[[Task-Contract-Spec]], [[Handoff-Protocol-Spec]]
+- 规格文档：[[SPEC/Task-Contract-Spec]], [[SPEC/Handoff-Protocol-Spec]]

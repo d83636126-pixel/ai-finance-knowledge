@@ -155,9 +155,9 @@ async function acceptHandoff(handoff_id: string, token: string): Promise<void> {
 
 ## 7. 关联
 
-- [[V5-Agent-Governance-Protocol-RFC]]
-- [[ADR-001-Agent-Identity]]
-- [[ADR-002-Evidence-Graph]]
-- [[ADR-003-Lease-Model]]
-- [[Task-Contract-Spec]]
-- [[Validation-Gate-Spec]]
+- [[AGP-0.1-Protocol-RFC]]
+- [[ADR/ADR-001-Agent-Identity]]
+- [[ADR/ADR-002-Evidence-Graph]]
+- [[ADR/ADR-003-Lease-Model]]
+- [[SPEC/Task-Contract-Spec]]
+- [[SPEC/Validation-Gate-Spec]]

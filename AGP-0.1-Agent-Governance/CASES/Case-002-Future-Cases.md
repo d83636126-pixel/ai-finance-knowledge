@@ -52,8 +52,8 @@
 
 ## 关联规范
 
-- [[Validation-Gate-Spec]]
-- [[ADR-002-Evidence-Graph]]
+- [[SPEC/Validation-Gate-Spec]]
+- [[ADR/ADR-002-Evidence-Graph]]
 ```
 
 ---
@@ -62,23 +62,23 @@
 
 1. **多 Agent 协作中的交接失败**
    - 场景：Agent A 交接给 Agent B 时上下文丢失
-   - 关键规范：[[Handoff-Protocol-Spec]]
+   - 关键规范：[[SPEC/Handoff-Protocol-Spec]]
 
 2. **证据图谱中的循环依赖**
    - 场景：结论依赖自身作为证据
-   - 关键规范：[[ADR-002-Evidence-Graph]]
+   - 关键规范：[[ADR/ADR-002-Evidence-Graph]]
 
 3. **租约超时导致的级联失败**
    - 场景：关键任务超时未正确释放
-   - 关键规范：[[ADR-003-Lease-Model]]
+   - 关键规范：[[ADR/ADR-003-Lease-Model]]
 
 4. **身份伪造攻击**
    - 场景：恶意 Agent 伪装合法身份
-   - 关键规范：[[ADR-001-Agent-Identity]]
+   - 关键规范：[[ADR/ADR-001-Agent-Identity]]
 
 5. **策略违规的误判**
    - 场景：合法操作被错误标记为违规
-   - 关键规范：[[Validation-Gate-Spec]]
+   - 关键规范：[[SPEC/Validation-Gate-Spec]]
 
 ---
 

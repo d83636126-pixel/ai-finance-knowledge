@@ -5,7 +5,7 @@
 > - **标题**：Agent 身份规范
 > - **状态**：草稿
 > - **决策日期**：2026-08-07
-> - **影响范围**：所有 V5 Agent
+> - **影响范围**：所有 AGP-0.1 Agent
 
 ---
 
@@ -18,7 +18,7 @@
 
 ## 决策
 
-每个 V5 Agent 必须实现以下身份规范：
+每个 AGP-0.1 Agent 必须实现以下身份规范：
 
 ### 1. 唯一标识符 (UUID)
 
@@ -70,5 +70,5 @@ Identity = Base64(HMAC-SHA256(agent_id + version + snapshot_hash, secret_key))
 
 ## 关联
 
-- 父 RFC：[[V5-Agent-Governance-Protocol-RFC]]
+- 父 RFC：[[AGP-0.1-Protocol-RFC]]
 - 相关 ADR：[[ADR-002-Evidence-Graph]], [[ADR-003-Lease-Model]]

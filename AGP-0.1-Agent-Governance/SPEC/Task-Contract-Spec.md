@@ -106,9 +106,9 @@ enum TaskType {
 
 ## 5. 关联
 
-- [[V5-Agent-Governance-Protocol-RFC]]
-- [[ADR-001-Agent-Identity]]
-- [[ADR-002-Evidence-Graph]]
-- [[ADR-003-Lease-Model]]
-- [[Validation-Gate-Spec]]
-- [[Handoff-Protocol-Spec]]
+- [[AGP-0.1-Protocol-RFC]]
+- [[ADR/ADR-001-Agent-Identity]]
+- [[ADR/ADR-002-Evidence-Graph]]
+- [[ADR/ADR-003-Lease-Model]]
+- [[SPEC/Validation-Gate-Spec]]
+- [[SPEC/Handoff-Protocol-Spec]]

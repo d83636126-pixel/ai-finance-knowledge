@@ -61,6 +61,6 @@ Edge {
 
 ## 关联
 
-- 父 RFC：[[V5-Agent-Governance-Protocol-RFC]]
+- 父 RFC：[[AGP-0.1-Protocol-RFC]]
 - 相关 ADR：[[ADR-001-Agent-Identity]], [[ADR-003-Lease-Model]]
-- 规格文档：[[Validation-Gate-Spec]]
+- 规格文档：[[SPEC/Validation-Gate-Spec]]

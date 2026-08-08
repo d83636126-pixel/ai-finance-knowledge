@@ -1,7 +1,7 @@
-# V5 Agent Governance Protocol RFC
+# AGP-0.1 Agent Governance Protocol RFC
 
 > [!abstract] 摘要
-> V5 是一套面向 AI Agent 工程治理的规范框架，涵盖身份认证、证据图谱、任务契约、验证门禁和交接协议。
+> AGP-0.1 是一套面向 AI Agent 工程治理的规范框架，涵盖身份认证、证据图谱、任务契约、验证门禁和交接协议。
 
 ## 一、目标与动机
 
@@ -63,19 +63,19 @@
 ## 三、目录结构
 
 ```
-V5-Agent-Governance/
-├── V5-Agent-Governance-Protocol-RFC.md    # 本文件
-├── ADR/                                      # 架构决策记录
+AGP-0.1-Agent-Governance/
+├── AGP-0.1-Protocol-RFC.md              # 本文件
+├── ADR/                                   # 架构决策记录
 │   ├── ADR-001-Agent-Identity.md
 │   ├── ADR-002-Evidence-Graph.md
 │   └── ADR-003-Lease-Model.md
-├── SPEC/                                     # 详细规格
+├── SPEC/                                  # 详细规格
 │   ├── Task-Contract-Spec.md
 │   ├── Validation-Gate-Spec.md
 │   └── Handoff-Protocol-Spec.md
-└── CASES/                                    # 案例库
+└── CASES/                                 # 案例库
     ├── Case-001-Execution-Pointer-Mismatch.md
-    └── Case-002-未来案例.md
+    └── Case-002-Future-Cases.md
 ```
 
 ## 四、验证门禁
@@ -100,12 +100,12 @@ V5-Agent-Governance/
 
 ## 五、关联
 
-- [[ADR-001-Agent-Identity|Agent 身份规范]]
-- [[ADR-002-Evidence-Graph|证据图谱规范]]
-- [[ADR-003-Lease-Model|租约模型规范]]
-- [[Task-Contract-Spec|任务契约规格]]
-- [[Validation-Gate-Spec|验证门禁规格]]
-- [[Handoff-Protocol-Spec|交接协议规格]]
+- [[ADR/ADR-001-Agent-Identity|Agent 身份规范]]
+- [[ADR/ADR-002-Evidence-Graph|证据图谱规范]]
+- [[ADR/ADR-003-Lease-Model|租约模型规范]]
+- [[SPEC/Task-Contract-Spec|任务契约规格]]
+- [[SPEC/Validation-Gate-Spec|验证门禁规格]]
+- [[SPEC/Handoff-Protocol-Spec|交接协议规格]]
 
 ## 六、状态
 

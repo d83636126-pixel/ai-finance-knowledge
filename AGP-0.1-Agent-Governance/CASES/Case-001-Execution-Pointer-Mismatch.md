@@ -157,5 +157,5 @@ interface ExecutionEvidence {
 
 ## 关联规范
 
-- [[Validation-Gate-Spec|验证门禁规格]]
-- [[ADR-002-Evidence-Graph|证据图谱规范]]
+- [[SPEC/Validation-Gate-Spec|验证门禁规格]]
+- [[ADR/ADR-002-Evidence-Graph|证据图谱规范]]
