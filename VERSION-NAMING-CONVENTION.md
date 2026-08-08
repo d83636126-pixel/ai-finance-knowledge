@@ -8,7 +8,7 @@
 
 ## 一、核心原则
 
-1. **版本号不带前缀字母**：`V5.0` → `5.0`，`V4.3` → `4.3`
+1. **协议命名空间禁止 V 前缀**：Agent Governance Protocol 独立为 `AGP-0.1` 命名空间，与产品 `V4.3`/`V5.0` 隔离
 2. **不同命名空间严格隔离**：Product / Protocol / Document / Revision 各自独立
 3. **文件名即身份**：文件名改变时，同步更新所有引用它的链接
 4. **日期辅助定位**：历史版本文件名附加日期后缀 `_YYYY-MM-DD`
@@ -23,20 +23,24 @@
 > 适用于：`financial-alert-system` 等**产品**的正式发布版本
 
 ```
-<产品名>_<版本号>_<日期>.md
-示例：financial-alert-system_4.4_2026-08-01.md
-      financial-alert-system_5.0_2026-09-01.md
+<产品名>-<版本号>.md
+示例：financial-alert-system_V4.4.md
+      financial-alert-system_V5.0.md
 ```
 
 - 主版本号表示重大架构变更
 - 次版本号表示功能迭代
 - 补丁版本号表示热修复
 
+**允许并推荐使用 `V` 前缀**：`V4.4`、`V5.0` 是产品的正式版本标识，与协议命名空间 `AGP-0.1` 已完全隔离，不会产生命名冲突。
+
 ---
 
 ### 命名空间 B：Protocol Version（协议版本）
 
 > 适用于：**跨系统治理规范**，如 Agent 治理协议
+
+**协议命名空间禁止 V 前缀**，以明确区分于产品版本。
 
 ```
 <协议缩写>-<主版本>.<次版本>/<子文档>
@@ -60,14 +64,20 @@
 
 > 适用于：单个文档的内部修订历史
 
-```
-<文档名>_rev<修订号>_<日期>.md
-示例：需求拆分_rev1_2026-07-10.md
-      需求拆分_rev2_2026-07-15.md
-```
+**两层结构**：
 
-- 同一文档每次重大修订递增修订号
-- 旧版本归档，不删除
+**① Canonical Live Document（权威当前文档）**
+- 文件名保持稳定，不含 `_revN` 后缀
+- 当前权威文档：`需求拆分.md`
+- 内部 frontmatter 记录修订号：`revision: 3`
+- 供 Obsidian 双向链接和 Agent 定位使用
+
+**② Archive Snapshot（归档快照）**
+- 需要保存历史快照时，复制为归档文件
+- 格式：`<文档名>_rev<修订号>_<日期>.md`
+- 示例：`需求拆分_rev2_2026-08-08.md`
+
+这样保持 Obsidian 稳定链接的同时，Git 历史和审计需求通过归档文件满足。
 
 ---
 
@@ -90,11 +100,12 @@
 
 | ❌ 错误模式 | 原因 | ✅ 正确做法 |
 |-----------|------|-----------|
-| `V5-Agent-Governance/` | V 前缀混用 | `AGP-0.1-Agent-Governance/` |
-| `V5-Agent-Governance-Protocol-RFC.md` | V 前缀在文件名 | `AGP-0.1-Protocol-RFC.md` |
-| `产品发展执行计划_V2_...` | V 前缀在正文版本引用 | `产品发展执行计划_2_...` 或直接写 `V2` 表示语义版本（允许） |
-| `version: V1.1` | V 前缀在 frontmatter | `version: "1.1"` |
+| `V5-Agent-Governance/` | 协议命名空间混用 V 前缀 | `AGP-0.1-Agent-Governance/` |
+| `V5-Agent-Governance-Protocol-RFC.md` | 协议命名空间使用 V 前缀 | `AGP-0.1-Protocol-RFC.md` |
+| `version: V1.1`（frontmatter） | frontmatter 使用 V 前缀 | `version: "1.1"` |
 | `index_v2_final.md` | 多重后缀 | `index_v2.md`（日期单独存储） |
+
+> **注意**：产品版本（如 `V4.4`、`V5.0`）使用 `V` 前缀是**允许且推荐**的，这与协议命名空间 `AGP-0.1` 已完全隔离。
 
 ---
 
@@ -107,6 +118,7 @@
    - 文件系统层面的文件名
    - 所有引用该文件的 `[[双向链接]]`
    - 所有引用该文件的 URL
+   - Canonical 文档的 `revision` frontmatter（如有变更）
 
 ---
 
@@ -131,6 +143,7 @@
 | 日期 | 操作 | 影响文件 |
 |------|------|---------|
 | 2026-08-07 | `V5-Agent-Governance/` → `AGP-0.1-Agent-Governance/` | 9 个文件 |
+| 2026-08-08 | 修正命名规范：恢复产品版本 V 前缀，区分 Canonical / Archive 两层文档修订结构 | VERSION-NAMING-CONVENTION.md |
 
 ---
 
